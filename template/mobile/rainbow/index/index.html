@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no">
+		<link rel="stylesheet" href="__CSS__/swiper.min.css" />
+		<title></title>
+	</head>
+<body>
+	<div class="header">
+		<div class="searchDiv">
+			<img src="__IMG__/search.png" class="searchIcon">
+			<input type="text"  class="searchInput"/>
+		</div>
+	</div>
+	<div style="width: 100%;height: 1rem;"></div>
+	<div class="bannerDiv">
+		<div class="bannerbox">
+			<div class="swiper-container swiper-containerA">
+		        <div class="swiper-wrapper">
+		             <adv pid ="9" limit="5" item="v">
+			            <div class="swiper-slide">
+			             	<a href="{$v.ad_link}">
+			            		<img src="{$v[ad_code]}" title="{$v[title]}" style="{$v[style]}" >
+			            	 </a>
+			            </div>
+		             </adv>
+		        </div>
+		        <!-- Add Pagination -->
+		        <div class="swiper-pagination swiper-paginationA"></div>
+		    </div>
+		</div>
+	</div>
+	
+	<div class="iconBox">
+		<div class="swiper-container swiper-containerB">
+	        <div class="swiper-wrapper">
+	            <div class="swiper-slide">
+	            	<a href="/mobile/index/adv_list">
+	            		<img src="__IMG__/1.png">
+	            		<span>每日新品</span>
+	            	</a>
+	            	<a href="###">
+	            		<img src="__IMG__/2.png">
+	            		<span>每日新品</span>
+	            	</a>
+	            	<a href="###">
+	            		<img src="__IMG__/3.png">
+	            		<span>每日新品</span>
+	            	</a>
+	            	<a href="###">
+	            		<img src="__IMG__/4.png">
+	            		<span>每日新品</span>
+	            	</a>
+	            	<a href="###">
+	            		<img src="__IMG__/5.png">
+	            		<span>每日新品</span>
+	            	</a>
+	            	<a href="###">
+	            		<img src="__IMG__/6.png">
+	            		<span>每日新品</span>
+	            	</a>
+	            	<a href="###">
+	            		<img src="__IMG__/7.png">
+	            		<span>每日新品</span>
+	            	</a>
+	            	<a href="###">
+	            		<img src="__IMG__/8.png">
+	            		<span>每日新品</span>
+	            	</a>
+	            	<a href="###">
+	            		<img src="__IMG__/9.png">
+	            		<span>每日新品</span>
+	            	</a>
+	            	<a href="###">
+	            		<img src="__IMG__/10.png">
+	            		<span>每日新品</span>
+	            	</a>
+	            </div>
+	            <div class="swiper-slide">
+	            	<a href="###">
+	            		<img src="__IMG__/11.png">
+	            		<span>每日新品</span>
+	            	</a>
+	            	<a href="###">
+	            		<img src="__IMG__/12.png">
+	            		<span>每日新品</span>
+	            	</a>
+	            	<a href="###">
+	            		<img src="__IMG__/13.png">
+	            		<span>每日新品</span>
+	            	</a>
+	            	<a href="###">
+	            		<img src="__IMG__/14.png">
+	            		<span>每日新品</span>
+	            	</a>
+	            	<a href="###">
+	            		<img src="__IMG__/15.png">
+	            		<span>每日新品</span>
+	            	</a>
+	            	<a href="###">
+	            		<img src="__IMG__/16.png">
+	            		<span>每日新品</span>
+	            	</a>
+	            	<a href="###">
+	            		<img src="__IMG__/17.png">
+	            		<span>每日新品</span>
+	            	</a>
+	            	<a href="###">
+	            		<img src="__IMG__/18.png">
+	            		<span>每日新品</span>
+	            	</a>
+	            </div>
+	        </div>
+	        <!-- Add Pagination -->
+	        <div class="swiper-pagination swiper-paginationB"></div>
+		</div>		
+	</div>
+	
+	<div class="link1">
+		<a href="###">立即抢购   》</a>
+	</div>
+	<div class="linkBox">
+		
+		
+		
+		
+		<div  class="div a1">
+		 	<adv pid ="2" limit="1" item="v">
+				<img src="{$v[ad_code]}" title="{$v[title]}">
+				<a href="{$v[ad_link]}" class="linkBtn1">立即投放</a>
+			</adv>
+		</div>
+		<div  class="div a2">
+			<adv pid ="537" limit="1" item="v">
+				<img  src="{$v[ad_code]}" title="{$v[title]}">
+				<a href="{$v[ad_link]}" class="linkBtn2">GO 开聊吧</a>
+			</adv>
+		</div>
+		<div class="div a3">
+			<adv pid ="538" limit="1" item="v">
+				<img  src="{$v[ad_code]}" title="{$v[title]}">
+				<a href="{$v[ad_link]}" class="linkBtn3">了解一下</a>
+			</adv>
+		</div>
+		<adv pid ="541" limit="1" item="v">
+			<a href="{$v[ad_link]}" class="a4">
+				<img src="{$v[ad_code]}">
+			</a>
+		</adv>
+		
+		<div class="linkList">
+			<volist name="favourite_goods" id="v">
+				<a href="/Mobile/Goods/goodsInfo/id/{$v[goods_id]}">
+					<img src="{$v.original_img}">
+				</a>
+			</volist>
+		</div>
+	</div>
+    <div class="link2">
+    	<adv pid ="539" limit="4" item="v">
+	    	<a href="{$v['ad_link']}" class="a9">
+	    		<img src="{$v[ad_code]}">
+	    	</a>
+    	</adv>
+    </div>
+    <adv pid ="540" limit="1" item="v">
+	    <a href="{$v['ad_link']}" class="link3">
+	    	<img src="{$v[ad_code]}">
+	    </a>
+    </adv>
+    <div class="lists">
+        <div class="swiper-container swiper-containerC">
+	        <div class="swiper-wrapper">
+	            <volist name="hot_goods" id="v">
+		            <div class="swiper-slide">
+		            	<a href="/Mobile/Goods/goodsInfo/id/{$v.goods_id}" style="width:120px;">
+		            		<img style="width:120px;height:115px;" src="{$v.original_img}">
+		            		<p class="proName">{$v.goods_name}</p>
+		            		<p class="proPrice">¥{$v.shop_price}</p>
+		            	</a>
+		            </div>
+	            </volist>
+	        </div>
+	        <!-- Add Pagination -->
+	        <div class="swiper-pagination swiper-paginationC"></div>
+	    </div>
+    </div>
+    <div class="titles">
+    	<img src="__IMG__/title.png">
+    </div>
+    <div class="list1">
+    	<volist name="new_goods" id="v">
+		    	<div class="proList">
+		    		<img src="{$v.original_img}" class="pros">
+		    		<p class="proName1">{$v.goods_name}</p>
+		    		<div class="prices">
+		    			<img src="__IMG__/d.png">
+		    			<span class="price1">¥{$v.shop_price}</span>
+		    			<span class="price2">¥{$v.market_price}</span>
+		    		</div>
+		    		<div class="lineBox">
+		    		   <div class="line">
+		    		   	 <div class="line1"></div>
+		    		   </div>
+		    		   <span class="bf">{$v.sales_sum}件</span>
+		    		</div>
+		    		<a href="###" class="buy">
+		    			<img src="__IMG__/buy.png">
+		    		</a>
+		    	</div>
+    	</volist>
+    </div>
+    <div style="width: 100%;height: 1.8rem;"></div>
+    <a href="###" class="link4">
+    	<img src="__IMG__/banner10.png">
+    </a>
+    <div class="footer">
+    	<a href="###">
+    		<img src="__IMG__/a1.png">
+    		<span>首页</span>
+    	</a>
+    	<a href="###">
+    		<img src="__IMG__/a2.png">
+    		<span>赚钱</span>
+    	</a>
+    	<a href="###">
+    		<img src="__IMG__/a3.png">
+    		<span>购物车</span>
+    	</a>
+    	<a href="###">
+    		<img src="__IMG__/a4.png">
+    		<span>我的</span>
+    	</a>
+    </div>
+</body>
+<script type="text/javascript" src="js/jquery-3.2.1.min.js" ></script>
+<script type="text/javascript" src="__IMG__/swiper.min.js" ></script>
+<script>
+    var swiperA = new Swiper('.swiper-containerA', {
+        pagination: '.swiper-paginationA',
+        paginationClickable: true
+    });
+    var swiperB = new Swiper('.swiper-containerB', {
+        pagination: '.swiper-paginationB',
+        paginationClickable: true
+    });
+    var swiperC = new Swiper('.swiper-containerC', {
+        pagination: '.swiper-paginationC',
+        slidesPerView: 3,
+        spaceBetween: 10     
+    });
+</script>
+</html>

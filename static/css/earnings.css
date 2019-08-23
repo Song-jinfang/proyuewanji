@@ -1,0 +1,227 @@
+    html {
+		width: 100%;
+		font-size: calc(100vw/7.5);
+		font-size: -webkit-calc(100vw/7.5);
+		-webkit-text-size-adjust: 100%;
+	}
+	body{
+		width:100%;
+		background: #ececeb;
+	}
+	*{
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+		-webkit-tap-highlight-color: transparent;
+	}
+	ul,li{
+		list-style: none;
+	}
+	img{
+		display: block;
+	}
+	.header{
+		width: 100%;
+		height: 0.95rem;
+		line-height: 0.95rem;
+		text-align: center;
+		font-size: 0.3rem;
+		position: relative;
+		background: #000;
+		color: #fff;
+	}
+	.back{
+		width: 0.2rem;
+		height: 0.32rem;
+		position: absolute;
+		left: 0.2rem;
+		top: 50%;
+		margin-top: -0.16rem;
+	}
+	
+	.tab{
+		width: 6.8rem;
+		height: 1.25rem;
+		background: #fff;
+		border-radius:8px;
+		margin: auto;
+		display: flex;
+		display: -webkit-flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 0 0.3rem;
+		margin-top: 0.3rem;
+	}
+	.tab a{
+		display: block;
+		text-decoration: none;
+		color: #000;
+	}
+	.tab .curr{
+		color: #c29700;
+	}
+	.tab a p{
+		width: 100%;
+		text-align: center;
+		line-height: 0.4rem;
+	}
+	.tab a p:nth-child(1){
+		font-size: 0.3rem;
+	}
+	.tab a p:nth-child(1) font{
+		font-size: 0.26rem;
+	}
+	.tab a p:nth-child(2){
+		font-size: 0.28rem;
+	}
+	.tab span{
+		display: block;
+		width: 1px;
+		height: 0.6rem;
+		background: #787575;
+	}
+	.list{
+		width: 6.8rem;
+		margin: auto;
+		height: auto;
+	}
+	.orderLists{
+		width: 100%;
+		padding: 0.1rem;
+		background: #e4e0c9;
+		border-radius:8px ;
+		margin-top: 0.3rem;
+		position: relative;
+	}
+	.orderTitle{
+		width: 100%;
+		font-size: 0.26rem;
+		line-height: 0.3rem;
+		margin-top: 0.1rem;
+	}
+	.orderTitle font{
+		font-size: 0.18rem;
+	}
+	.form{
+		width: 100%;
+		height: auto;
+		background: #fff;
+		border-radius: 8px;
+		margin-top: 0.13rem;
+	}
+	.dayBox{
+		width: 100%;
+		padding: 0 0.35rem;
+		display: flex;
+		display: -webkit-flex;
+		flex-wrap: wrap;
+		border-bottom: 1px solid #cdcfcd;
+	}
+	.dayBox1{
+		width: 100%;
+		padding: 0 0.35rem;
+		display: flex;
+		display: -webkit-flex;
+	}
+	.div,.div1{
+		width: 50%;
+		height: 0.7rem;
+		display: flex;
+		display: -webkit-flex;
+		justify-content: space-between;
+		align-items: center;
+		padding-right: 0.2rem;
+		position: relative;
+	}
+	.dayBox .div:nth-child(1){
+		border-right: 1px solid #cdcfcd;
+		border-bottom: 1px solid #cdcfcd;
+	}
+	.dayBox .div:nth-child(2){
+		border-bottom: 1px solid #cdcfcd;
+		padding-left: 0.2rem;
+	}
+	.dayBox .div:nth-child(3){
+		border-top: 1px solid #cdcfcd;
+		border-right: 1px solid #cdcfcd;
+		margin-top: 1px;		
+	}
+	.dayBox .div:nth-child(4){
+		padding-left: 0.2rem;
+		margin-top: 1px;
+		border-top: 1px solid #cdcfcd;
+	}
+	.div font{
+		font-size: 0.26rem;
+	}
+	.div1 font{
+		font-size: 0.26rem;
+	}
+	.btn{
+		width: 1.4rem;
+		height: 0.4rem;
+		border-radius: 4px;
+		display: flex;
+		display: -webkit-flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 0.24rem;
+	}
+	.btn1{
+		width: 1.6rem;
+		height: 0.4rem;
+		border-radius: 4px;
+		display: flex;
+		display: -webkit-flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 0.24rem;
+		background: #d1d2d1;
+		color: #fff;
+	}
+	.btnGreen{
+		background: #1e8706;
+		color: #fff;
+	}
+	.btnBlack{
+		background: #000;
+		color: #fff;
+	}
+	.btnGray{
+		background: #d1d2d1;
+		color: #000;
+	}
+	.scoreDiv{
+		width: 100%;
+		height: auto;
+		padding-top: 0.2rem;
+	}	
+	.scoreTitle{
+		width: 100%;
+		font-size: 0.26rem;
+		line-height: 0.3rem;
+		padding: 0 0.35rem;
+	}
+	.links{
+		position: absolute;
+		display: block;
+		width: 0.33rem;
+		height: 0.33rem;
+		background: url(images/q.png) no-repeat;
+		background-size: 100% 100%;
+		z-index: 5;
+		top: 0rem;
+		right: 0rem;
+	}
+	.text{
+		width: 6.8rem;
+		margin: auto;
+		height: auto;
+		font-size: 0.24rem;
+		line-height: 0.36rem;
+		color: #020202;
+		margin-top: 0.2rem;
+	}
+	.text p{
+		margin-top: 0.1rem;
+	}	

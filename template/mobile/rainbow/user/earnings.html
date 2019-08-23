@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no">
+		<title></title>
+		<link rel="stylesheet" href="__CSS__/earnings.css" />
+	</head>
+	<body>
+	<div class="header">
+	    <a id="[back]" <php> if(request()->action() == 'earnings'){ </php>  href="{:U('User/index')}" <php> }else{ </php> href="[href]" <php> } </php> ><img src="__IMG__/back.png" class="back" ></a>详情
+	</div>
+		<div class="tab">
+			<a href="###" class="curr">
+				<p>267<font>(元)</font></p>
+			    <p>商品返现</p>
+			</a>
+			<span></span>
+			<a href="###">
+				<p>267<font>(元)</font></p>
+			    <p>任务收益</p>
+			</a>
+			<span></span>
+			<a href="###">
+				<p>267<font>(元)</font></p>
+			    <p>豆豆交易收益</p>
+			</a>
+		</div>
+		<div class="list">
+		<volist name="orderList" id="v">
+			<div class="orderLists">
+				<p class="orderTitle">①订单号：{$v.order_sn} <font>订单日期{$v.add_time}</font></p>
+				<div class="form">
+					<div class="dayBox">
+						<div class="div">
+							<font>第1天</font>
+							<span class="btn btnGreen">{$v.add_time}</span>
+						</div>
+						<div class="div">
+							<font>第7天</font>
+							<if condition="$v.seven_status eq 1">
+								<span class="btn btnBlack">领取</span>
+							<else/>
+								<span class="btn btnGray">{$v.seven_days}</span>
+							</if>
+						</div>
+						<div class="div">
+							<font>第14天</font>
+							<if condition="$v.fourteen_days eq 1">
+								<span class="btn btnBlack">领取</span>
+							<else/>
+								<span class="btn btnGray">{$v.fourteen_days}</span>
+							</if>
+						</div>
+						<div class="div">
+							<font>第21天</font>
+							<if condition="$v.twenty_one_days eq 1">
+								<span class="btn btnBlack">领取</span>
+							<else/>
+								<span class="btn btnGray">{$v.twenty_one_days}</span>
+							</if>
+						</div>
+					</div>
+					<div class="scoreDiv">
+						<p class="scoreTitle">做任务送积分</p>
+						<div class="dayBox1">
+							<div class="div1">
+								<font>第14天</font>
+								<span class="btn1">已赚13个积分</span>
+							</div>
+							<div class="div1">
+								<font></font>
+							    <span class="btn btnGreen">去做任务</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</volist>
+
+			
+		</div>
+		<div class="text">
+			<p>释:商品返现规则：从下单日期开始，第七天可返商品消费价格的50% 第14天可返20%第21天可通过任务返余下的20%</p>
+			<p>做任务送积分是送您当前订单金额的1%，积分可当现金抵用卷使用 规则：订单生成那天起 1—28天 当日做了任务才有当日积分 积分是累计到第28天12个小时以内才能提用</p>
+		</div>
+	</body>
+</html>

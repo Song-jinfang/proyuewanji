@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	
+	<meta name="viewport" content="width=device-width" viewport-fit="cover">
+    
+    <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <title>抽奖</title>
+    <style>
+/* 		#imgfile{
+			padding: 5px 10px;
+            background: #00b0f0;
+            color: #FFF;
+            border: none;
+            border-radius: 5px;
+		} */
+		
+		.file {
+		    position: relative;
+		    display: inline-block;
+		    background: #D0EEFF;
+		    border: 1px solid #99D3F5;
+		    border-radius: 4px;
+		    padding: 4px 12px;
+		    overflow: hidden;
+		    color: #1E88C7;
+		    text-decoration: none;
+		    text-indent: 0;
+		    line-height: 20px;
+		}
+		.file input {
+		    position: absolute;
+		    font-size: 100px;
+		    right: 0;
+		    top: 0;
+		    opacity: 0;
+		}
+		.file:hover {
+		    background: #AADFFD;
+		    border-color: #78C3F3;
+		    color: #004974;
+		    text-decoration: none;
+		}
+		
+</style>
+<a href="javascript:;" class="file">选择文件
+    <input type="file" name="imgfile" id="imgfile">
+</a>
+		<!-- <div><input type="file"  class="file-btn" name="imgfile" id="imgfile"  multiple="multiple"/>
+		</div> -->
+<!-- <input type="file" accept="video/*"  name="imgfile"  id="imgfile" capture="camcorder">  -->
+<script>
+				$("#imgfile").change(function(){
+					var fileName = $('#imgfile').val().split('\\'); //得到文件名数组
+					// fileName2 = fileName[fileName.length-1]; // 获得文件名
+				    filePath = $('#imgfile').val().toLowerCase().split(".");
+			
+				    fileType =  filePath[filePath.length - 1]; //获得文件结尾的类型如 zip rar 这种写法确保是最后的
+				    if(!(fileType == "png" || fileType == "jpg" || fileType == "gif"|| fileType == "mp4"|| fileType == "flv")){
+				    	alert('文件格式有误');
+				    }
+					var fileSize =  document.getElementById('imgfile').files[0]; //获得文件大小；
+					if(fileSize.size > 10485760){
+						alert('上传错误！请上传不超过10M的文件');return false;
+					}
+                    var data = new FormData();
+                    $.each($('#imgfile')[0].files, function(i, file) {
+                        data.append('upload_file'+i, file);
+                    });
+                    $.ajax({
+                        url:'ajaxFileUpload',
+                        type:'POST', 
+                        data:data,
+						dataType :"json",
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success:function(data){
+							if(data.status == 1){
+								alert(data.img);
+							}
+                        },
+                        error:function(){
+                            alert('上传出错');
+                        }
+                    });
+                });
+</script>
