@@ -84,7 +84,7 @@ class User extends MobileBase
     public function earnings(){
         $param = I('get.');
         $p = $param['p']?$param['p']:'1';
-        $orderList = M('order')->field("order_id,order_sn,FROM_UNIXTIME(add_time,'%Y.%m.%d') add_time,seven_days,fourteen_days,twenty_one_days,twenty_eight_days")->where('user_id = '.$this->user_id .' and pay_status = 1')->order('order_id','desc')->select();
+        $orderList = M('order')->field("order_id,order_point,order_sn,FROM_UNIXTIME(add_time,'%Y.%m.%d') add_time,seven_days,fourteen_days,twenty_one_days,twenty_eight_days")->where('user_id = '.$this->user_id .' and pay_status = 1')->order('order_id','desc')->select();
          $time = time();
          foreach($orderList as $k=>$v){
              if($v['seven_days']){
@@ -113,6 +113,12 @@ class User extends MobileBase
                         $orderList[$k]['twenty_one_days'] = '已过期';
                     }
                  }
+             }
+             $orderList[$k]['adv_task'] = 1;
+             $time = strtotime(date('Y-m-d'));
+             $user_task_count = M('user_task')->where('user_id='.$this->user_id.' and order_id='.$v['order_id'].' and add_time >'.$time)->count();
+             if($user_task_count > 0){
+                 $orderList[$k]['adv_task'] = 2;
              }
          }
          $this->assign('orderList',$orderList);
