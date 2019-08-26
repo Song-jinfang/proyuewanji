@@ -50,7 +50,7 @@ class Ad extends MobileBase
                     'msg'   =>  '余额不足',
                     'data'  =>  [],
                 ]);
-            }/////
+            }
             Db::startTrans();
             try{
                 $response['type'] = $type;
