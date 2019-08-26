@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no">
+		<link rel="stylesheet" href="__CSS__/swiper.min.css" />
+		<link rel="stylesheet" href="__CSS__/mine.css" />
+		<title></title>
+	</head>	
+<body>
+	<div class="header">
+	   <img src="__IMG__/back.png" class="back">交易明细
+	</div>
+   <div class="userInfor">
+   	  <div class="userImg"></div>
+   	  <p class="nickname">{$user_info.nickname}</p>
+   	  <p class="userId"><font>ID：{$user_info.user_id}</font><span class="copyBtn">复制</span></p>
+   	  <p style="width: 100%;display: flex;"><span class="residue">剩余：{$user_info.happy_beans}豆</span></p>
+   	  <img src="__IMG__/code.png" class="codeBtn">
+   </div>
+   <div class="tab">
+	   	<a href="mine.html">我的订单</a>
+	   	<a href="mine1.html" class="currents">我的转让</a>
+   </div>
+   <div class="tableDiv">
+	   	<div class="table">
+	   	 	<table border="0" cellspacing="0" cellpadding="0" >
+				<tr>
+					<th>日期</th>
+					<th>ID</th>
+					<th>电话</th>
+					<th>转让个数</th>
+				</tr>
+				<volist name="data" id="vo">
+					<tr>
+						<td>{$vo.add_time|date="y/m/d",###}</td>
+						<td>{$vo.pay_id}</td>
+						<td>{$vo.mobile}</td>
+						<td>{$vo.number}</td>
+					</tr>
+				</volist>
+	   	 	</table>
+	   	</div>
+   </div>
+   
+   
+  
+</body>
+<script type="text/javascript" src="__JS__/jquery-3.2.1.min.js" ></script>
+<script type="text/javascript" src="__IMG__/swiper.min.js" ></script>
+<script>
+
+</script>
+</html>

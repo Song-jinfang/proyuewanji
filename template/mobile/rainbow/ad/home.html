@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no">
+		<link rel="stylesheet" href="__CSS__/swiper.min.css" />
+		<link rel="stylesheet" href="__CSS__/home.css" />
+		<link rel="stylesheet" href="__CSS__/public.css" />
+		<title></title>
+	</head>	
+<body>
+	<div class="header">
+		首页
+	</div>
+	<div style="width: 100%;height: 0.8rem;"></div>
+	<div class="bannerDiv">
+		<div class="swiper-container swiper-containerA">
+	        <div class="swiper-wrapper">
+	            <div class="swiper-slide">
+	            	<img src="__IMG__/homebanner.png">
+	            </div>
+	            <div class="swiper-slide">
+	            	<img src="__IMG__/homebanner.png">
+	            </div>
+	            <div class="swiper-slide">
+	            	<img src="__IMG__/homebanner.png">
+	            </div>
+	        </div>
+	        <!-- Add Pagination -->
+	        <div class="swiper-pagination"></div>
+	    </div>
+	</div>
+    <!--广播-->
+	<div class="broadcast">
+		  <img src="__IMG__/lb.png">
+		  <div class="swiper-container swiper-containerB">
+		    <div class="swiper-wrapper" class="dataBox">
+	             <div class="swiper-slide swiper-no-swiping">
+		      	  <p>交易时候看清楚交易内容</p>
+		        </div>                
+		    </div>
+		  </div>
+	</div>
+	<!--广播-->
+    
+    <ul class="nextList">
+    	<li>
+    		<a href="###">
+    			<img src="__IMG__/icon-1.png" class="iconName">
+    			<img src="__IMG__/next.png" class="next">
+    			<font>豆包</font>
+    			<span>我的钱包(账户余额及悦玩豆)</span>
+    		</a>   		
+    	</li>
+    	<li>
+    		<a  class="payPop">
+    			<img src="__IMG__/icon-2.png" class="iconName">
+    			<img src="__IMG__/next.png" class="next">
+    			<font>豆包</font>
+    			<span>我的钱包(账户余额及悦玩豆)</span>
+    		</a>   		
+    	</li>
+    	<li>
+    		<a href="###">
+    			<img src="__IMG__/icon-3.png" class="iconName">
+    			<img src="__IMG__/next.png" class="next">
+    			<font>豆包</font>
+    			<span>我的钱包(账户余额及悦玩豆)</span>
+    		</a>   		
+    	</li>
+    	<li>
+    		<a href="###">
+    			<img src="__IMG__/icon-4.png" class="iconName">
+    			<img src="__IMG__/next.png" class="next">
+    			<font>豆包</font>
+    			<span>我的钱包(账户余额及悦玩豆)</span>
+    		</a>   		
+    	</li>
+    </ul>
+
+
+
+    <div style="width: 100%;height: 1.8rem;"></div>
+    <div class="footer">
+    	<a href="###" class="currA">
+    		<img src="__IMG__/a1-c.png">
+    		<span>首页</span>
+    	</a>
+    	<a href="###">
+    		<img src="__IMG__/a2.png">
+    		<span>赚钱</span>
+    	</a>
+    	<a href="###">
+    		<img src="__IMG__/a3.png">
+    		<span>购物车</span>
+    	</a>
+    	<a href="###">
+    		<img src="__IMG__/a4.png">
+    		<span>我的</span>
+    	</a>
+    </div>
+    
+    
+    
+    
+    <div class="pop">
+    	<div class="hint">
+    		<div class="affirmBtn">确认订单</div>
+<!--		    <p class="p1">40</p>-->
+<!--		    <p class="p2">(个)</p>-->
+<!--		    <p class="p3">正在转让悦玩豆</p>-->
+		    <p class="p4">余额{$have_price}(个)</p>
+		    
+		    
+		    <p class="tips">提示：请认真核对转让数量</p>
+		    <ul class="formList">
+		    	<li>
+		    		<span>转给TA</span>
+		    		<div>
+		    			<input type="text" id="id" placeholder="请输入TA的手机号" />
+		    		</div>
+		    	</li>
+		    	<li>
+		    		<span>交易密码</span>
+		    		<div>
+		    			<input type="password"  id="pwd" placeholder="请输入交易密码" />
+		    		</div>
+		    	</li>
+		    	<li>
+		    		<span>转出数量</span>
+		    		<div>
+                        <input type="number" id="number" placeholder="只能输入整数" min="0" max="{$have_price}"/>(个)
+		    		</div>
+		    	</li>
+		    </ul>
+		    <div class="btnDiv">
+		    	<div class="btn btn1" id="submit">确认</div>
+		    	<div class="btn btn2">取消</div>
+		    </div>
+    	</div>
+    </div>    
+</body>
+<script type="text/javascript" src="__JS__/jquery-3.2.1.min.js" ></script>
+<script type="text/javascript" src="__IMG__/swiper.min.js" ></script>
+<script>
+    var swiper = new Swiper('.swiper-containerA', {
+        pagination: '.swiper-pagination',
+        paginationClickable: true
+    });
+    var swiper = new Swiper('.swiper-containerB', {
+	    direction: 'vertical',
+	    loop : true,
+	    autoplay:2000,
+	});
+	$(".payPop").click(function(){
+		$(".pop").fadeIn();
+	})
+	$(".btn").click(function(){
+   	    $(".pop").hide()
+   })
+
+    $('#submit').click(function(){
+        var id = $("#id").val();
+        var pwd = $("#pwd").val();
+        var number = $("#number").val();
+        // var formData = new FormData();
+        // formData.append('id',id);
+        // formData.append('pwd',pwd);
+        // formData.append('number',number);
+        // console.log(formData);
+        $.ajax({
+            url:'home',
+            type:'post',
+            data:{'id':id,'pwd':pwd,'number':number},
+            success:function(e){
+                if(e.code == 1){
+                    alert(e.msg);
+                    console.log(e);
+                }else{
+                    alert(e.msg);
+                    console.log(e);
+                }
+            },
+            error:function(){
+                console.log('请求出错，请重新再试');
+            }
+        });
+    });
+
+</script>
+</html>

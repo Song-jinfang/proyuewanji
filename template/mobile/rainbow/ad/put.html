@@ -18,14 +18,16 @@
 		<div class="portion1">
 			<p class="title1">选择类型</p>
 			<div class="select">
-				<div class="current">图片广告</div>
-				<div>视频广告</div>
+				<div class="current" id="pic">图片广告</div>
+				<input type="hidden" id="pic_price" value="{$pic_price}">
+				<div id="video">视频广告</div>
+				<input type="hidden" id="video_price" value="{$video_price}">
 			</div>
 			<p class="title2">购买数量</p>
 			<div class="addBox">
-				<div class="minus">-</div>
-				<div class="number"></div>
-				<div class="add">+</div>
+				<div class="minus" id="dec">-</div>
+				<div class="number" id="number"></div>
+				<div class="add" id="inc">+</div>
 			</div>
 		</div>
 		<p class="title3">编辑文案</p>
@@ -56,7 +58,7 @@
 			
 		
 		<div class="total">
-			<span>总计:¥130.8</span>
+			<span id="total">总计:¥0.0</span>
 			<div class="payBtn">去结算</div>
 		</div>
 		<div class="pop">
@@ -240,6 +242,56 @@
 					console.log('请重新上传');
 				}
 			});
+		});
+	$("#pic").click(function(){
+		var number = $("#number").html();
+		var pic_price = $("#pic_price").val();
+		var total = number * pic_price;
+		document.getElementById("total").innerHTML = "总计:￥" + total + ".0";
+	});
+	$("#video").click(function(){
+		var number = $("#number").html();
+		var video_price = $("#video_price").val();
+		var total = number * video_price;
+		document.getElementById("total").innerHTML = "总计:￥" + total + ".0";
+	});
+	$("#dec").click(function(){
+		var number = $("#number").html();
+		var pic_price = $("#pic_price").val();
+		var video_price = $("#video_price").val();
+		var type_value = $(".current").html();
+		var type;
+		if(type_value == '图片广告'){
+			type = 1;
+		}else{
+			type = 2;
+		}
+		var total;
+		if(type == 1){
+			total = number * pic_price;
+		}else{
+			total = number * video_price;
+		}
+		document.getElementById("total").innerHTML = "总计:￥" + total + ".0";
+	});
+		$("#inc").click(function(){
+			var number = $("#number").html();
+			var pic_price = $("#pic_price").val();
+			var video_price = $("#video_price").val();
+			var type_value = $(".current").html();
+			var type;
+			if(type_value == '图片广告'){
+				type = 1;
+			}else{
+				type = 2;
+			}
+			var total;
+			if(type == 1){
+				total = number * pic_price;
+			}else{
+				total = number * video_price;
+			}
+			document.getElementById("total").innerHTML = "总计:￥" + total + ".0";
 		});
 	</script>
 </html>
