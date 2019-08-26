@@ -42,6 +42,7 @@ class Ad extends MobileBase
             $session_user = session('user');
             $uid = $session_user['user_id'];
             $adv_price = M('config')->where(['name' => 'adv_price'])->value('value');
+            $beans_price = M('config')->where(['name' => 'beans_price'])->value('value');
             $total_price = $adv_price * $number;
             $have_price  = M('users')->where(['user_id' => $uid])->value('happy_beans');
             if($have_price < $total_price){
@@ -64,6 +65,20 @@ class Ad extends MobileBase
                 D('task')->add($response);
                 $price = $have_price - $total_price;
                 D('users')->where(['user_id' => $uid])->update(['happy_beans' => $price]);
+
+                $order['order_sn'] = date('YmdHis',time()) . rand(1000,9999);
+                $order['user_id']  = $uid;
+                $order['total_amount'] = $total_price * 1.1;
+                $order['add_time'] = time();
+                D('order')->add($order);
+
+                $log['user_id'] = $uid;
+                $log['user_money'] = $total_price;
+                $log['add_time'] = time();
+                $log['desc']    = "消耗悦玩豆";
+                $log['type']    = 1;
+                D('adv_log')->add($log);
+
                 Db::commit();
                 return json([
                     'code'  =>  1,
