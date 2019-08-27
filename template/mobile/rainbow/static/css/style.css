@@ -1401,10 +1401,10 @@ input:-ms-input-placeholder {
 	height:1.87733rem;
 	line-height:1.87733rem;
 	color:#fff;
-	background-color:#e12c20;
+	background-color:#080808;
 	border-radius:.938667rem;
-	-webkit-box-shadow:0 2px 30px rgba(225,44,32,1);
-	box-shadow:0 2px 30px rgba(225,44,32,1);
+	/* -webkit-box-shadow:0 2px 30px rgba(225,44,32,1);
+	box-shadow:0 2px 30px rgba(225,44,32,1); */
 }
 .signup-find .note {
 	line-height:1;

@@ -1,4 +1,0 @@
-<?php
-//000000000000
- exit();?>
-{"goods_id":219,"cat_id":402,"extend_cat_id":0,"goods_sn":"TP0000219","goods_name":"\u96f6\u98df\u5927\u793c\u5305","click_count":12,"brand_id":0,"store_count":567,"comment_count":5,"weight":0,"volume":0,"market_price":"199.00","shop_price":"89.00","cost_price":"0.00","price_ladder":"","keywords":"","goods_remark":"","goods_content":"&lt;p&gt;123123232323&lt;\/p&gt;","mobile_content":null,"original_img":"\/public\/upload\/goods\/2018\/04-19\/fced3012c5693d1a87380ec1ea6cd32c.png","is_virtual":0,"virtual_indate":-28800,"virtual_limit":0,"virtual_refund":1,"virtual_sales_sum":0,"virtual_collect_sum":0,"collect_sum":0,"is_on_sale":1,"is_free_shipping":1,"sort":50,"is_recommend":1,"is_new":1,"is_hot":1,"last_update":0,"goods_type":3,"give_integral":0,"exchange_integral":0,"suppliers_id":0,"sales_sum":15,"prom_type":6,"prom_id":0,"commission":"0.00","spu":"","sku":"","template_id":3,"video":""}

@@ -590,27 +590,53 @@ function accountLog($user_id, $user_money = 0,$pay_points = 0, $desc = '',$distr
     }
 }
 
-function adv_order($user_id, $order_adv_profit = 0, $desc = '',$distribut_money = 0,$order_id = 0 ,$order_sn = ''){
-    /* 插入帐户变动记录 */
-    $account_log = array(
-        'user_id'       => $user_id,
-        'order_adv_profit'    => $order_adv_profit,
-        'change_time'   => time(),
-        'desc'   => $desc,
-    );
-    /* 更新用户信息 */
-    $update_data = array(
-        'order_adv_profit'   => ['exp','order_adv_profit+'.$order_adv_profit],
-    );
- /*    if(($user_money+$pay_points+$distribut_money) == 0)return false; */
-    $update = Db::name('users')->where("user_id = $user_id")->save($update_data);
-    if($update){
-        M('account_log')->add($account_log);
-        return true;
-    }else{
-        return false;
+// function adv_order($user_id, $order_adv_profit = 0, $desc = '',$distribut_money = 0,$order_id = 0 ,$order_sn = ''){
+//     /* 插入帐户变动记录 */
+//     $account_log = array(
+//         'user_id'       => $user_id,
+//         'order_adv_profit'    => $order_adv_profit,
+//         'change_time'   => time(),
+//         'desc'   => $desc,
+//     );
+//     /* 更新用户信息 */
+//     $update_data = array(
+//         'order_adv_profit'   => ['exp','order_adv_profit+'.$order_adv_profit],
+//     );
+//  /*    if(($user_money+$pay_points+$distribut_money) == 0)return false; */
+//     $update = Db::name('users')->where("user_id = $user_id")->save($update_data);
+//     if($update){
+//         M('account_log')->add($account_log);
+//         return true;
+//     }else{
+//         return false;
+//     }
+// }
+
+    function adv_order($user_id, $order_adv_profit = 0, $desc = '',$order_id = 0 ,$type){
+        /* 插入帐户变动记录 */
+        $account_log = array(
+            'user_id'       => $user_id,
+            'user_money'    => $order_adv_profit,
+            'add_time'   => time(),
+            'desc'   => $desc,
+            'type'=>$type
+        );
+        /* 更新用户信息 */
+        $update_data = array(
+            'order_point'   => ['exp','order_point+'.$order_adv_profit],
+        );
+        $update = Db::name('order')->where("order_id = $order_id")->save($update_data);
+        if($update){
+            M('adv_log')->add($account_log);
+            return true;
+        }else{
+            return false;
+        }
     }
-}
+
+
+
+
 
 
 
