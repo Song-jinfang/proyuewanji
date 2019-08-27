@@ -87,20 +87,30 @@ class Payment extends MobileBase
         // 订单支付提交
         $config = parse_url_param($this->pay_code); // 类似于 pay_code=alipay&bank_code=CCB-DEBIT 参数
         $config['body'] = getPayBody($order_id);
-
+       
         if ($this->pay_code == 'weixin' && $_SESSION['openid'] && strstr($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger')) {
             //微信JS支付
             $code_str = $this->payment->getJSAPI($order);
             exit($code_str);
         } elseif ($this->pay_code == 'weixinH5') {
-            //微信H5支付
+          /*   //微信H5支付
             $return = $this->payment->get_code($order, $config);
             if ($return['status'] != 1) {
                 $this->error($return['msg']);
             }
             $this->assign('deeplink', $return['result']);
             if(!isset($deeplink_flag)) $deeplink_flag = 1;
-            $this->assign('deeplink_flag', $deeplink_flag);
+            $this->assign('deeplink_flag', $deeplink_flag); */
+            
+            //微信H5支付
+            $return = $this->payment->get_code($order, $config);
+            //dump($return);exit;
+            if ($return['status'] != 1) {
+                $this->error($return['msg']);
+            }
+            $this->assign('deeplink', $return['result']);
+            //https://wx.tenpay.com/cgi-bin/mmpayweb-bin/checkmweb?prepay_id=wx231551523869239b66421a311769120800&package=3289251609"
+            $this->redirect($return['result']);
         } else {
             //其他支付（支付宝、银联...）
             $code_str = $this->payment->get_code($order, $config);
