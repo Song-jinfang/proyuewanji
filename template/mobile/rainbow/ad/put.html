@@ -58,14 +58,15 @@
 			
 		
 		<div class="total">
+			<span id="ywd">消耗悦玩豆:0个</span>
 			<span id="total">总计:¥0.0</span>
 			<div class="payBtn">去结算</div>
 		</div>
-		<div class="pop">
+		<div class="pop" style="display: none">
 			<div class="footer">
 				<img src="__IMG__/del_img.png" class="close">
-				<p class="p1">你需要消费3个币</p>
-				<p class="p2">3币</p>
+				<p class="p1" id="num1">你需要消费3个币</p>
+				<p class="p2" id="num2">3币</p>
 				<p class="p3">(1元=1币)</p>
 				<div class="payBtn1">购买</div>
 				<div class="bottom">
@@ -233,7 +234,13 @@
 				processData:false,
 				success:function(res){
 					if(res.code == 1){
-						alert(res.msg);
+						// alert(res.msg);
+						// var num = $("#ywd").html();
+						// var number = parseInt(num.substring(1).substring(1).substring(1).substring(1).substring(1).substring(1));
+						// document.getElementById('num1').innerHTML = "你需要消耗" + number + "币";
+						// document.getElementById('num2').innerHTML = number + "币";
+						// $(".pop").show();
+						window.location.href = "/index.php?m=Mobile&c=Cart&a=cart4&order_id=" + res.data.order_id;
 					}else{
 						alert(res.msg);
 					}
@@ -243,6 +250,13 @@
 				}
 			});
 		});
+	$(function(){
+		$("#total").bind('DOMNodeInserted',function(){
+			var total = $("#total").html();
+			var num = Math.ceil(parseInt(total.substring(1).substring(1).substring(1).substring(1)) * 0.1);
+			document.getElementById("ywd").innerHTML = "消耗悦玩豆:" + num + "个";
+		});
+	});
 	$("#pic").click(function(){
 		var number = $("#number").html();
 		var pic_price = $("#pic_price").val();

@@ -66,13 +66,16 @@ class Ad extends MobileBase
                 $total_price = $adv_price1 * $number;
             }
             $have_price  = M('users')->where(['user_id' => $uid])->value('happy_beans');
-            if($have_price < $total_price){
-                return json([
-                    'code'  =>  -1,
-                    'msg'   =>  '余额不足',
-                    'data'  =>  [],
-                ]);
-            }
+            $ywd_num  = ceil($total_price * 0.1);
+            $total_price += $ywd_num;
+            $total_amount = $total_price;
+//            if($have_price < $total_price){
+//                return json([
+//                    'code'  =>  -1,
+//                    'msg'   =>  '余额不足',
+//                    'data'  =>  [],
+//                ]);
+//            }
             Db::startTrans();
             try{
                 $response['type'] = $type;
@@ -84,17 +87,26 @@ class Ad extends MobileBase
                 $response['uid'] = $uid;
                 $response['identity'] = 2;
                 D('task')->add($response);
-                $price = $have_price - $total_price;
+                if($have_price < $ywd_num){
+                    $ywd_number = $ywd_num - $have_price;
+                    $total_price = $total_price - $ywd_number;
+                    $price = 0;
+                }else{
+                    $ywd_number = $ywd_num;
+                    $total_price -= $ywd_num;
+                    $price = $have_price - $ywd_num;
+                }
                 D('users')->where(['user_id' => $uid])->update(['happy_beans' => $price]);
 
                 $order['order_sn'] = date('YmdHis',time()) . rand(1000,9999);
                 $order['user_id']  = $uid;
-                $order['total_amount'] = $total_price * 1.1;
+                $order['total_amount'] = $total_amount;
+                $order['ywd_price'] = $ywd_number;
+                $order['order_amount'] = $total_price;
                 $order['add_time'] = time();
-                D('order')->add($order);
-
+                $order_id = D('order')->add($order);
                 $log['user_id'] = $uid;
-                $log['user_money'] = $total_price;
+                $log['user_money'] = $ywd_number;
                 $log['add_time'] = time();
                 $log['desc']    = "消耗悦玩豆";
                 $log['type']    = 1;
@@ -104,12 +116,16 @@ class Ad extends MobileBase
                 return json([
                     'code'  =>  1,
                     'msg'   =>  '购买成功',
-                    'data'  =>  [],
+                    'data'  =>  [
+                        'order_id'  =>  $order_id,
+                        'http'      =>  $_SERVER['SERVER_NAME']
+                    ],
                 ]);
             }catch (Exception $exception){
                 Db::rollback();
                 return json([
                     'code'  =>  -1,
+//                    'msg'   =>  $exception->getMessage(),
                     'msg'   =>  '网络异常，请重新购买',
                     'data'  =>  [],
                 ]);
