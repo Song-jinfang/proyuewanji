@@ -122,7 +122,8 @@
     	font-size: 0.24rem;
     	line-height: 0.26rem;
     	color: #040404;
-    	margin-top: 0.05rem;
+    	margin-top: 0.12rem;
+    	letter-spacing:2px;
     }
     .iconName{
     	width: 0.8rem;
