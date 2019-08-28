@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no">
+		<title>广告列表页</title>
+		<link rel="stylesheet" href="__CSS__/banner.css" />
+	</head>
+	<body>
+		<div class="header">
+		<img src="__IMG__/back.png" class="back">广告列表
+		</div>
+		<ul class="lists">
+			<volist name="data" id="vo">
+				<li>
+					<div class="img"></div>
+					<p class="headline">{$vo.desc}</p>
+					<p class="score">总金额:{$vo.total_amount}</p>
+					<p class="total">总条数：{$vo.total_num}条</p>
+					<p class="surplus">剩余：<font>{$vo.total_num - $vo.num}条</font></p>
+					<p class="time">{$vo.add_time|date="Y-m-d H:i",###}</p>
+					<p class="surplus">状态：
+                        <switch name="vo.exam">
+                            <case value="0"><font>待审核</font></case>
+                            <case value="1"><font>审核通过</font></case>
+                            <default/><font>审核未通过</font>
+                        </switch>
+                    </p>
+					<a href="{:U('mobile/Ad/details',array('id'=>$vo['id']))}" class="link">
+                        <switch name="vo.exam">
+                            <case value="0"><font>编辑</font></case>
+                            <case value="1"><font>浏览</font></case>
+                            <default/><font>编辑</font>
+                        </switch>
+                    </a>
+				</li>
+            </volist>
+		</ul>
+	</body>
+</html>

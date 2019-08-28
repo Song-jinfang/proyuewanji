@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <title></title>
+    <link rel="stylesheet" href="__CSS__/put.css" />
+</head>
+<body>
+<div class="header">
+    <img src="__IMG__/back.png" class="back">广告详情页
+</div>
+<div class="main">
+    <div class="titleDiv">
+        <img src="__IMG__/logo-1.png">
+        注：时间段不同价位不同，图片与视频价位也不同有投资才有回报
+    </div>
+    <div class="portion1">
+        <p class="title1">选择类型</p>
+        <div class="select">
+            <if condition="$data.adv_type eq 1">
+                <div class="current" id="pic">图片广告</div>
+                <else/>
+                <div  class="current" id="video">视频广告</div>
+            </if>
+        </div>
+        <p class="title2">购买数量</p>
+        <div class="addBox">
+<!--            <div class="minus" id="dec">-</div>-->
+            <div id="number">&nbsp;&nbsp;&nbsp;&nbsp;{$data.total_num}</div>
+<!--            <div class="add" id="inc">+</div>-->
+        </div>
+    </div>
+    <p class="title3">编辑标题</p>
+    <textarea style="height: 1rem;" class="textarea"  id='desc' placeholder="输入标题...">{$data.desc}</textarea>
+    <p class="title3">编辑文案</p>
+    <textarea class="textarea" id='description' placeholder="输入文案...">{$data.description}</textarea>
+
+
+
+    <div class="uploading">
+        <div class="upload_img_wrap">
+            <div id="imgBox"></div>
+            <img class="upload_img" data-id="1" src="__IMG__/upload_img.png" />
+            <img style="display:none" class="upload_img" data-id="2" src="__IMG__/upload_img.png" />
+            <img style="display:none" class="upload_img" data-id="3" src="__IMG__/upload_img.png" />
+        </div>
+        <div style="display: none;width: 100%;height: 100%;position: relative;">
+            <form id="upBox" class="upload_form" action="" method="post" enctype="multipart/form-data">
+                <div style="display: none;" id="inputBox">
+                    <input type="file" name="image[]" data-id="1" title="请选择图片" id="file1" accept="image/png,image/jpg,image/gif,image/JPEG" />
+                    <input type="file" name="image[]" data-id="2" title="请选择图片" id="file2" accept="image/png,image/jpg,image/gif,image/JPEG" />
+                    <input type="file" name="image[]" data-id="3" title="请选择图片" id="file3" accept="image/png,image/jpg,image/gif,image/JPEG" /> 点击选择图片
+                </div>
+                <input style="display:none" type="submit" id="sub" />
+            </form>
+        </div>
+    </div>
+    <input type="hidden" id="id" name="id" value="{$data.id}">
+    <div class="uploading">
+
+
+        <div class="upload_img_wrap" style="margin-top:10px;">
+            <div id="imgBox1"></div>
+            <volist name="data.thumb_img" id="v" key="k">
+                <img width="120px;" data-id="{$k}" src="{$v}"/>
+            </volist>
+        </div>
+    </div>
+
+    <if condition="$data.exam neq 1">
+        <div class="total">
+            <div class="payBtn">确定</div>
+        </div>
+    </if>
+
+</div>
+</body>
+<script type="text/javascript" src="__JS__/jquery-3.2.1.min.js" ></script>
+<script>
+    var imgNum = 0;
+    $(".upload_img_wrap .upload_img").bind("click", function(ev) {
+        //console.log(ev.currentTarget.dataset.id)
+        var index = ev.currentTarget.dataset.id;
+        var that = this;
+        if(index == 1) {
+            $("#file1").click();
+            $("#file1").unbind().change(function(e) {
+                var index = e.currentTarget.dataset.id;
+                if($('#file').val() == '') {
+                    return false;
+                }
+                $(that).hide();
+                var filePath = $(this).val();
+                changeImg(e, filePath, index);
+
+                imgNum++;
+                if(imgNum<3){
+                    $(".upload_img").eq(1).show();
+                }
+                $(".upload_img_length").html(imgNum);
+            })
+        } else if(index == 2) {
+            $("#file2").click();
+            $("#file2").unbind().change(function(e) {
+                var index = e.currentTarget.dataset.id;
+                if($('#file').val() == '') {
+                    return false;
+                }
+                $(that).hide();
+                var filePath = $(this).val();
+                changeImg(e, filePath, index);
+
+                imgNum++;
+                if(imgNum<3){
+                    $(".upload_img").eq(2).show();
+                }
+                $(".upload_img_length").html(imgNum);
+            })
+        } else if(index == 3) {
+            $("#file3").click();
+            $("#file3").unbind().change(function(e) {
+                var index = e.currentTarget.dataset.id;
+                if($('#file').val() == '') {
+                    return false;
+                }
+                var filePath = $(this).val();
+                changeImg(e, filePath, index);
+                $(that).hide();
+                imgNum++;
+                $(".upload_img_length").html(imgNum);
+            })
+        }
+    })
+
+    function changeImg(e, filePath, index) {
+        fileFormat = filePath.substring(filePath.lastIndexOf(".")).toLowerCase();
+        //检查后缀名
+        if(!fileFormat.match(/.png|.jpg|.jpeg/)) {
+            showError('文件格式必须为：png/jpg/jpeg');
+            return;
+        }
+        //获取并记录图片的base64编码
+        var reader = new FileReader();
+        reader.readAsDataURL(e.target.files[0]);
+        reader.onloadend = function() {
+            // 图片的 base64 格式, 可以直接当成 img 的 src 属性值
+            var dataURL = reader.result;
+            // console.log(dataURL)
+            // 显示图片
+            $("#imgBox").html($("#imgBox").html() + '<div class="imgContainer" data-index=' + index + '><img   src=' + dataURL + ' onclick="imgDisplay(this)"><img onclick="removeImg(this,' + index + ')"  class="imgDelete" src="__IMG__/del_img.png" /></div>');
+        };
+
+    }
+
+    function removeImg(obj, index) {
+        for(var i = 0; i < $(".imgContainer").length; i++) {
+            if($(".imgContainer").eq(i).attr("data-index") == index) {
+                $(".imgContainer").eq(i).remove();
+            }
+        }
+        for(var i = 0; i < $(".upload_img").length; i++) {
+            $(".upload_img").eq(i).hide();
+            if($(".upload_img").eq(i).attr("data-id") == index) {
+                // console.log($(".upload_img").eq(i).attr("data-id"))
+                $(".upload_img").eq(i).show();
+            }
+        }
+        imgNum--;
+        $(".upload_img_length").html(imgNum);
+    }
+
+
+    function imgDisplay(obj) {
+        var src = $(obj).attr("src");
+        var imgHtml = '<div style="width: 100%;height: 100%;overflow: auto;background: rgba(0,0,0,0.5);text-align: center;position: fixed;top: 0;left: 0;z-index: 1000;display: flex;justify-content: center;    align-items: center;"><img src=' + src + ' style="margin-top: 100px;width: 96%;margin-bottom: 100px;"/><p style="font-size: 50px;position: fixed;top: 30px;right: 30px;color: white;cursor: pointer;" onclick="closePicture(this)">×</p></div>'
+        $('body').append(imgHtml);
+    }
+
+    function closePicture(obj) {
+        $(obj).parent("div").remove();
+    }
+
+
+    $(".select div").click(function(){
+    	$(".select div").removeClass("current");
+    	$(this).addClass("current");
+    })
+
+
+    // var numbers=0;
+    // $(".number").html(numbers);
+    $(".minus").click(function(){
+        if(numbers>0){
+            numbers--;
+        }
+        $(".number").html(numbers);
+    })
+    $(".add").click(function(){
+        numbers++;
+        $(".number").html(numbers);
+    })
+    $(".close").click(function(){
+        $(".pop").hide()
+    })
+    $(".payBtn").click(function(){
+        var description = $("#description").val();
+        var desc = $("#desc").val();
+        var id   = $("#id").val();
+        var images1 = document.getElementById("file1").files;
+        var images2 = document.getElementById("file2").files;
+        var images3 = document.getElementById("file3").files;
+        var formData = new FormData();
+        formData.append('description',description);
+        formData.append('desc',desc);
+        formData.append('id',id);
+        formData.append('images[]',images1[0]);
+        formData.append('images[]',images2[0]);
+        formData.append('images[]',images3[0]);
+        $.ajax({
+            url:"/mobile/Ad/update_adv",
+            type:"post",
+            data:formData,
+            contentType:false,
+            processData:false,
+            success:function(res){
+                if(res.code == 1){
+                    alert(res.msg);
+                    history.go(-1);
+                }else{
+                    alert(res.msg);
+                }
+            },
+            error:function(){
+                console.log('请重新上传');
+            }
+        });
+    });
+</script>
+</html>

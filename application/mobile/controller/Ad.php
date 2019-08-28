@@ -98,16 +98,17 @@ class Ad extends MobileBase
                 $order['add_time'] = time();
                 $order_id = D('order')->add($order);
 
-                $response['type'] = $type;
+                $response['type'] = 2;
                 $response['status'] = 0;
                 $response['add_time'] = time();
                 $response['description'] = $description;
                 $response['desc'] = $desc;
                 $response['thumb_img'] = $file_path;
-                $response['num'] = $number;
+                $response['total_num'] = $number;
                 $response['uid'] = $uid;
                 $response['order_id'] = $order_id;
                 $response['identity'] = 2;
+                $response['adv_type'] = $type;
                 D('task')->add($response);
 
                 $log['user_id'] = $uid;
@@ -223,6 +224,67 @@ class Ad extends MobileBase
             $this->assign('data',$data);
             $this->assign('user_info',$user_info);
             return $this->fetch();
+        }
+    }
+
+    //个人广告列表
+    public function ad_list()
+    {
+        $userInfo = session('user');
+        $uid = $userInfo['user_id'];
+        $data = D('task')->alias('a')
+                ->join('order b','a.order_id = b.order_id','left')
+                ->where(['a.uid' => $uid])
+                ->field('a.*,b.total_amount')
+                ->select();
+        foreach ($data as &$vo){
+            $vo['thumb_img'] = explode(',',$vo['thumb_img']);
+        }
+        $this->assign('data',$data);
+        return $this->fetch();
+    }
+
+    //广告详情页
+    public function details()
+    {
+        $id = request()->get('id');
+        $data = D('task')->where(['id' => $id])->find();
+        $data['thumb_img'] = explode(',',$data['thumb_img']);
+        $this->assign('data',$data);
+        return $this->fetch();
+    }
+
+    //更新广告
+    public function update_adv()
+    {
+        $data = request()->post();
+        $id = $data['id'];
+        unset($data['id']);
+        $files = request()->file('images') ?: [];
+        $res = [];
+        if($files){
+            foreach ($files as $file){
+                $info = $file->move(ROOT_PATH . 'public' . DS . 'ad');
+                $res[] = '/public/ad/' . $info->getSaveName();
+            }
+        }
+        if($res){
+            $file_path = implode(',',$res);
+            $data['thumb_img'] = $file_path;
+        }
+        $response = D('task')->where(['id' => $id])->update($data);
+        if($response === false){
+            return json([
+                'code'  =>  -1,
+                'msg'   =>  '更新失败',
+                'data'  =>  $data
+            ]);
+        }else{
+            return json([
+                'code'  =>  1,
+                'msg'   =>  '更新成功',
+                'data'  =>  $data
+            ]);
         }
     }
 }
