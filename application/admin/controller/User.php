@@ -134,47 +134,105 @@ class User extends Base
         $this->assign('tasklist',$tasklist);
         return $this->fetch();
     }
+
+    //广告列表
     public  function user_task(){
-        $param = I('get.');
-        $type = $param['type'];
-        $type = $type?$type:1;
-        $task = $param['task'];
-        $task =  $task?$task:'one';
-        $where = '1=1';
-        switch ($type){
-            case 1:$where .= " and a.status = 1";break;
-            case 2:$where .= " and a.status = 3";break;
-            case 3:$where .= " and a.status = 4";break;
-            case 4:$where .= " and a.status = 2";break;
-            
-            // default:$where .=" and a.status = 1";break;
-        }
-        switch ($task){
-            case 'one':$where .= " and a.task_id = 22";break;
-            case 'two':$where .= " and a.task_id = 27";break;
-            //default:$where .=" and a.task_id = 22";break;
-            
-        }
-        $taskList = M('user_task')->field('a.*,b.desc,c.mobile')
-        ->alias('a')->join('task b','a.task_id=b.id')->join('users c','a.user_id=c.user_id')
-        ->where($where)->order('id','desc')->select();
-        //dump($taskList);
-        $this->assign('taskList',$taskList);
-        if(!empty($taskList)){
-            foreach($taskList as $k=>$v){
-                if($v['file']){
-                    $filename = explode(',',$v['file']);
-                    $taskList[$k]['file'] = $filename[0];
-                }
+//        $param = I('get.');
+//        $type = $param['type'];
+//        $type = $type?$type:1;
+//        $task = $param['task'];
+//        $task =  $task?$task:'one';
+//        $where = '1=1';
+//        switch ($type){
+//            case 1:$where .= " and a.status = 1";break;
+//            case 2:$where .= " and a.status = 3";break;
+//            case 3:$where .= " and a.status = 4";break;
+//            case 4:$where .= " and a.status = 2";break;
+//
+//            // default:$where .=" and a.status = 1";break;
+//        }
+//        switch ($task){
+//            case 'one':$where .= " and a.task_id = 22";break;
+//            case 'two':$where .= " and a.task_id = 27";break;
+//            //default:$where .=" and a.task_id = 22";break;
+//
+//        }
+//        $taskList = M('user_task')->field('a.*,b.desc,c.mobile')
+//        ->alias('a')->join('task b','a.task_id=b.id')->join('users c','a.user_id=c.user_id')
+//        ->where($where)->order('id','desc')->select();
+//        //dump($taskList);
+//        $this->assign('taskList',$taskList);
+//        if(!empty($taskList)){
+//            foreach($taskList as $k=>$v){
+//                if($v['file']){
+//                    $filename = explode(',',$v['file']);
+//                    $taskList[$k]['file'] = $filename[0];
+//                }
+//            }
+//        }
+//        $this->assign('type',$type);
+//        $this->assign('task',$task);
+//        return $this->fetch();
+        $taskList = D('task')->alias('a')
+                    ->join('ywj_users b','a.uid = b.user_id')
+                    ->where(['a.identity' => 2,'a.type' => 2])
+                    ->field('a.*,b.mobile,b.nickname')
+                    ->order('a.id','desc')
+                    ->select();
+        foreach ($taskList as &$vo){
+            if($vo['thumb_img']){
+                $vo['thumb_img'] = explode(',',$vo['thumb_img']);
             }
         }
-        $this->assign('type',$type);
-        $this->assign('task',$task);
+        $this->assign('taskList',$taskList);
         return $this->fetch();
     }
-    
-    
-    
+
+    //广告审核
+    public function task_pass()
+    {
+        $type    = request()->post('type') ?: "";
+        $task_id = request()->post('task_id') ?: "";
+        if(!($type && $task_id)){
+            return json([
+                'code'  =>  -1,
+                'msg'   =>  '缺少必要参数',
+                'data'  =>  [],
+            ]);
+        }
+        if($type == 3){
+            $response = D('task')->where(['id' => $task_id])->update(['exam' => 1,'is_open' => 1]);
+        }else{
+            $response = D('task')->where(['id' => $task_id])->update(['exam' => 2]);
+        }
+        if($response === false){
+            return json([
+                'code'  =>  -1,
+                'msg'   =>  '操作失败，请重新再试',
+                'data'  =>  [],
+            ]);
+        }else{
+            return json([
+                'code'  =>  1,
+                'msg'   =>  '操作成功',
+                'data'  =>  [],
+            ]);
+        }
+    }
+
+    //广告详情
+    public function task_edit()
+    {
+        $id = request()->get('id');
+        $data = D('task')->alias('a')
+                ->join('order b','a.order_id = b.order_id','left')
+                ->where(['a.id' => $id])
+                ->field('a.*,b.ywd_price,b.order_amount')
+                ->find();
+        $data['thumb_img'] = explode(',',$data['thumb_img']);
+        $this->assign('data',$data);
+        return $this->fetch();
+    }
     
     /**
      * 会员详细信息查看

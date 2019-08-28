@@ -52,7 +52,7 @@
                 <div style="width: 24px;"><i class="ico-check"></i></div>
               </th>
                <th align="left" abbr="article_title" axis="col3" class="">
-                <div style="text-align: left; width: 40px;" class="">任务id</div>
+                <div style="text-align: left; width: 40px;" class="">广告id</div>
               </th>
                 <th align="left" abbr="article_title" axis="col3" class="">
                 <div style="text-align: left; width: 240px;" class="">联系人</div>
@@ -69,10 +69,10 @@
               </th>
               <th align="center" abbr="article_time" axis="col6" class="">
                 <div style="text-align: center; width: 160px;" class="">发布时间</div>
-              </th>
-                <th align="center" abbr="article_time" axis="col6" class="">
-                <div style="text-align: center; width: 160px;" class="">类型</div>
-              </th>
+<!--              </th>-->
+<!--                <th align="center" abbr="article_time" axis="col6" class="">-->
+<!--                <div style="text-align: center; width: 160px;" class="">类型</div>-->
+<!--              </th>-->
               
                <th align="center" abbr="article_time" axis="col6" class="">
                 <div style="text-align: center; width: 160px;" class="">任务附件</div>
@@ -90,41 +90,41 @@
       </div>
     </div>
     <div class="tDiv">
-      <div class="tDiv2">
-          <div class="fbutton"> 
-        		<a href="{:U('Admin/User/user_task',array('type'=>1,'task'=>'one'))}"><div class="add" <if condition="$type eq 1 && $task eq 'one'">style="background-color:#091215;"</if> title="新增任务"><span><i class="fa fa-plus"></i>待审核一</span></div></a> 
-          </div>
-           <div class="fbutton"> 
-        		<a href="{:U('Admin/User/user_task',array('type'=>1,'task'=>'two'))}"><div class="add"  <if condition="$type eq 1 && $task eq 'two'">style="background-color:#091215;"</if> title="新增任务"><span><i class="fa fa-plus"></i>待审核二</span></div></a> 
-          </div>
-           <div class="fbutton"> 
-        		<a href="{:U('Admin/User/user_task',array('type'=>2,'task'=>'one'))}"><div class="add" <if condition="$type eq 2 && $task eq 'one'">style="background-color:#091215;"</if> title="新增广告"><span><i class="fa fa-plus"></i>审核通过一</span></div></a> 
-          </div>
-           <div class="fbutton"> 
-        		<a href="{:U('Admin/User/user_task',array('type'=>2,'task'=>'two'))}"><div class="add" <if condition="$type eq 2 && $task eq 'two'">style="background-color:#091215;"</if> title="新增广告"><span><i class="fa fa-plus"></i>审核通过二</span></div></a> 
-          </div>
-          
-             <div class="fbutton"> 
-        		<a href="{:U('Admin/User/user_task',array('type'=>3,'task'=>'one'))}"><div <if condition="$type eq 3 && $task eq 'one'">style="background-color:#091215;"</if> class="add" title="任务审核"><span><i class="fa fa-plus"></i>审核失败一</span></div></a> 
-          </div>
-          
-          
-          <div class="fbutton"> 
-        		<a href="{:U('Admin/User/user_task',array('type'=>3,'task'=>'two'))}"><div <if condition="$type eq 3 && $task eq 'two'">style="background-color:#091215;"</if> class="add" title="任务审核"><span><i class="fa fa-plus"></i>审核失败二</span></div></a> 
-          </div>
-           <div class="fbutton"> 
-        		<a href="{:U('Admin/User/user_task',array('type'=>4))}"><div class="add" title="任务审核"><span><i class="fa fa-plus"></i>任务失效</span></div></a> 
-          </div>
-        <!--    <div class="fbutton"> 
-        		<a href="{:U('Admin/User/user_task',array('task'=>'one'))}"><div class="add" title="任务审核"><span><i class="fa fa-plus"></i>任务one</span></div></a> 
-          </div>
-           <div class="fbutton"> 
-        		<a href="{:U('Admin/User/user_task',array('task'=>''))}"><div class="add" title="任务审核"><span><i class="fa fa-plus"></i>任务two</span></div></a> 
-          </div> -->
-          
-          <!-- <div class="fbutton"><div class="del" title="将选定行数据批量删除"><span><i class="fa fa-trash"></i>批量删除</span></div></div>-->
-      </div>
-      <div style="clear:both"></div>
+<!--      <div class="tDiv2">-->
+<!--&lt;!&ndash;          <div class="fbutton"> &ndash;&gt;-->
+<!--&lt;!&ndash;        		<a href="{:U('Admin/User/user_task',array('type'=>1,'task'=>'one'))}"><div class="add" <if condition="$type eq 1 && $task eq 'one'">style="background-color:#091215;"</if> title="新增任务"><span><i class="fa fa-plus"></i>待审核一</span></div></a> &ndash;&gt;-->
+<!--&lt;!&ndash;          </div>&ndash;&gt;-->
+<!--&lt;!&ndash;           <div class="fbutton"> &ndash;&gt;-->
+<!--&lt;!&ndash;        		<a href="{:U('Admin/User/user_task',array('type'=>1,'task'=>'two'))}"><div class="add"  <if condition="$type eq 1 && $task eq 'two'">style="background-color:#091215;"</if> title="新增任务"><span><i class="fa fa-plus"></i>待审核二</span></div></a> &ndash;&gt;-->
+<!--&lt;!&ndash;          </div>&ndash;&gt;-->
+<!--&lt;!&ndash;           <div class="fbutton"> &ndash;&gt;-->
+<!--&lt;!&ndash;        		<a href="{:U('Admin/User/user_task',array('type'=>2,'task'=>'one'))}"><div class="add" <if condition="$type eq 2 && $task eq 'one'">style="background-color:#091215;"</if> title="新增广告"><span><i class="fa fa-plus"></i>审核通过一</span></div></a> &ndash;&gt;-->
+<!--&lt;!&ndash;          </div>&ndash;&gt;-->
+<!--&lt;!&ndash;           <div class="fbutton"> &ndash;&gt;-->
+<!--&lt;!&ndash;        		<a href="{:U('Admin/User/user_task',array('type'=>2,'task'=>'two'))}"><div class="add" <if condition="$type eq 2 && $task eq 'two'">style="background-color:#091215;"</if> title="新增广告"><span><i class="fa fa-plus"></i>审核通过二</span></div></a> &ndash;&gt;-->
+<!--&lt;!&ndash;          </div>&ndash;&gt;-->
+<!--&lt;!&ndash;          &ndash;&gt;-->
+<!--&lt;!&ndash;             <div class="fbutton"> &ndash;&gt;-->
+<!--&lt;!&ndash;        		<a href="{:U('Admin/User/user_task',array('type'=>3,'task'=>'one'))}"><div <if condition="$type eq 3 && $task eq 'one'">style="background-color:#091215;"</if> class="add" title="任务审核"><span><i class="fa fa-plus"></i>审核失败一</span></div></a> &ndash;&gt;-->
+<!--&lt;!&ndash;          </div>&ndash;&gt;-->
+<!--&lt;!&ndash;          &ndash;&gt;-->
+<!--&lt;!&ndash;          &ndash;&gt;-->
+<!--&lt;!&ndash;          <div class="fbutton"> &ndash;&gt;-->
+<!--&lt;!&ndash;        		<a href="{:U('Admin/User/user_task',array('type'=>3,'task'=>'two'))}"><div <if condition="$type eq 3 && $task eq 'two'">style="background-color:#091215;"</if> class="add" title="任务审核"><span><i class="fa fa-plus"></i>审核失败二</span></div></a> &ndash;&gt;-->
+<!--&lt;!&ndash;          </div>&ndash;&gt;-->
+<!--&lt;!&ndash;           <div class="fbutton"> &ndash;&gt;-->
+<!--&lt;!&ndash;        		<a href="{:U('Admin/User/user_task',array('type'=>4))}"><div class="add" title="任务审核"><span><i class="fa fa-plus"></i>任务失效</span></div></a> &ndash;&gt;-->
+<!--&lt;!&ndash;          </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;    <div class="fbutton"> -->
+<!--        		<a href="{:U('Admin/User/user_task',array('task'=>'one'))}"><div class="add" title="任务审核"><span><i class="fa fa-plus"></i>任务one</span></div></a> -->
+<!--          </div>-->
+<!--           <div class="fbutton"> -->
+<!--        		<a href="{:U('Admin/User/user_task',array('task'=>''))}"><div class="add" title="任务审核"><span><i class="fa fa-plus"></i>任务two</span></div></a> -->
+<!--          </div> &ndash;&gt;-->
+<!--          -->
+<!--          &lt;!&ndash; <div class="fbutton"><div class="del" title="将选定行数据批量删除"><span><i class="fa fa-trash"></i>批量删除</span></div></div>&ndash;&gt;-->
+<!--      </div>-->
+<!--      <div style="clear:both"></div>-->
     </div>
     <div class="bDiv" style="height: auto;">
       <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
@@ -159,19 +159,19 @@
                 <td align="center" class="">
                   <div style="text-align: center; width: 160px;">{:date('Y-m-d H:i:s',$vo.add_time)}</div>
                 </td>
-                 <td align="center" class="">
-                  <div style="text-align: center; width: 160px;"><if condition='$vo[type] eq 1'>任务<else/>广告</if></div>
-                </td>
+<!--                 <td align="center" class="">-->
+<!--                  <div style="text-align: center; width: 160px;"><if condition='$vo[type] eq 1'>任务<else/>广告</if></div>-->
+<!--                </td>-->
                 <td align="center" class="">
                   <div style="text-align: center; width: 160px;">
-             <!--      <volist name="$vo['file']" id="v">
-                  	<img src="{$v}"/>
-                  </volist> -->
-                  	<a href="{$vo.file}" target="_brack"><img width="160px;"  src="{$vo.file}"/></a>
+                  <volist name="$vo['thumb_img']" id="v">
+                  	<a href="{$v}" target="_brack"><img width="160px;"  src="{$v}"/></a>
+                  </volist>
+
                   </div>
                 </td>
                 <td align="center" class="handle">
-                  <div style="text-align: center; width: 170px; max-width:170px;"> <a class="btn blue" target="_blank" href="{:U('Home/Article/detail',array('article_id'=>$vo['article_id']))}"><i class="fa fa-search"></i>查看</a>
+                  <div style="text-align: center; width: 170px; max-width:170px;"> <a class="btn blue" target="_self" href="{:U('/Admin/User/task_edit',array('id'=>$vo[id]))}"><i class="fa fa-search"></i>查看</a>
                    <!--  <notin name="vo.article_id" value="$article_able_id"> <a class="btn red"  href="javascript:void(0)" data-url="{:U('Article/aticleHandle')}" data-id="{$vo.article_id}" onClick="delfun(this)"><i class="fa fa-trash-o"></i>删除</a> </notin> -->
                    <!--  <in name="vo.article_id" value="$article_able_id"> <a class="btn red"  href="javascript:;" onclick="layer.alert('系统文章不得删除!',{icon:2});"><i class="fa fa-trash-o"></i>删除</a> </in> -->
                     <a  onclick="pass('{$vo.id}',3)" class="btn blue"><i class="fa fa-pencil-square-o"></i>审核通过</a> 
@@ -231,7 +231,7 @@
     function pass(task_id,type){
     	$.post('/Admin/User/task_pass',{'task_id':task_id,'type':type},function(data){
     		layer.open({content: data.msg});
-    		setTimeout(function(){ window.location.href=data.url;}, 2000);	
+    		setTimeout(function(){history.go(0)}, 1000);
     	},'json');
     }
 </script>

@@ -30,8 +30,10 @@
 				<div class="add" id="inc">+</div>
 			</div>
 		</div>
+		<p class="title3">编辑标题</p>
+		<textarea class="textarea"  id='desc' placeholder="输入文案..."></textarea>
 		<p class="title3">编辑文案</p>
-		<textarea class="textarea" placeholder="输入文案..."></textarea>
+		<textarea class="textarea" id='description' placeholder="输入文案..."></textarea>
 		
 		
 		
@@ -215,7 +217,8 @@
 				type = 2;
 			}
 			var number = $(".number").html();
-			var description = $(".textarea").val();
+			var description = $("#description").val();
+			var desc = $("#desc").val();
 			var images1 = document.getElementById("file1").files;
 			var images2 = document.getElementById("file2").files;
 			var images3 = document.getElementById("file3").files;
@@ -223,6 +226,7 @@
 			formData.append('type',type);
 			formData.append('number',number);
 			formData.append('description',description);
+			formData.append('desc',desc);
 			formData.append('images[]',images1[0]);
 			formData.append('images[]',images2[0]);
 			formData.append('images[]',images3[0]);

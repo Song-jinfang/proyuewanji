@@ -1,0 +1,121 @@
+<include file="public/layout" />
+<body style="background-color: #FFF; overflow: auto;">
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title"><a class="back" href="javascript:history.back();" title="返回列表"><i class="fa fa-arrow-circle-o-left"></i></a>
+            <div class="subject">
+                <h3>品牌详情</h3>
+                <h5>品牌添加与管理</h5>
+            </div>
+        </div>
+    </div>
+    <!--表单数据-->
+    <form method="post" id="addEditBrandForm" >
+        <div class="ncap-form-default">
+            <dl class="row">
+                <dt class="tit">
+                    <label for="ac_name"><em>*</em>广告标题</label>
+                </dt>
+                <dd class="opt">
+                    <input type="text" placeholder="名称" class="input-txt" id="brand_name"  readOnly="true" name="name" value="{$data.desc}">
+                    <span class="err" id="err_name" style="color:#F00; display:none;"></span>
+                    <p class="notic"></p>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <label for="ac_name">订单总金额</label>
+                </dt>
+                <dd class="opt">
+                    <input type="text" class="input-txt" name="url"  readOnly="true" value="{$data.order_amount}">
+                    <span  class="err" id="err_url" style="color:#F00; display:none;"></span>
+                    <p class="notic"></p>
+                </dd>
+            </dl>
+
+            <dl class="row">
+                <dt class="tit">
+                    <label for="ac_sort">悦玩豆消耗数</label>
+                </dt>
+                <dd class="opt">
+                    <input type="text" name="sort"  readOnly="true" value="{$data.ywd_price}" maxlength="3" class="input-txt">
+                    <span class="err" id="err_sort" style="color:#F00; display:none;"></span>
+                    <p class="notic"></p>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <label for="ac_sort">广告描述</label>
+                </dt>
+                <dd class="opt">
+
+                    <textarea rows="4" cols="60" name="desc"  readOnly="true" class="input-txt">{$data.description}</textarea>
+                    <span class="err" id="err_desc" style="color:#F00; display:none;"></span>
+                    <p class="notic"></p>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <label for="ac_sort">附件</label>
+                </dt>
+                <dd class="opt">
+                    <volist name="data.thumb_img" id="v">
+                        <a href="{$v}" target="_brack">附件-点击查看</a>
+                    </volist>
+                </dd>
+            </dl>
+        </div>
+    </form>
+</div>
+<script>
+    function verifyForm(){
+        var name = $("#brand_name").val();
+        var cat_id = $("#parent_id_2").val();
+        $('#err_name').text('').hide();
+        if($.trim(name) == '') {
+            layer.msg('请输入名称！！', {icon: 2});return false;
+        }
+
+        if(cat_id == 0) {
+            layer.msg('所属分类必须选择第二级！！', {icon: 2});return false;
+        }
+        $('span.err').show();
+        $.ajax({
+            type: "POST",
+            url: "{:U('Admin/Goods/addEditBrand')}",
+            data: $('#addEditBrandForm').serialize(),
+            dataType: "json",
+            error: function () {
+                layer.alert("服务器繁忙, 请联系管理员!");
+            },
+            success: function (data) {
+                if (data.status == 1) {
+                    layer.msg(data.msg, {icon: 1},function () {
+                        location.href = "{:U('Admin/Goods/brandList')}";
+                    });
+                } else {
+                    layer.msg(data.msg, {icon: 2});
+                    $.each(data.result, function (index, item) {
+                        $('#err_' + index).text(item).show();
+                    });
+                }
+            }
+        });
+    }
+
+
+    window.onload = function(){
+        var brand_cat_id = parseInt('{$brand.cat_id}');
+        if(brand_cat_id > 0 ){
+            get_category($("#parent_id_1").val(),'parent_id_2',brand_cat_id);
+        }
+    }
+    function img_call_back(fileurl_tmp)
+    {
+        $("#logo").val(fileurl_tmp);
+        $("#img_a").attr('href', fileurl_tmp);
+        $("#img_i").attr('onmouseover', "layer.tips('<img src="+fileurl_tmp+">',this,{tips: [1, '#fff']});");
+    }
+</script>
+</body>
+</html>

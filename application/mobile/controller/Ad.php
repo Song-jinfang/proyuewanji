@@ -35,7 +35,8 @@ class Ad extends MobileBase
             $type = request()->post('type') ?: "";
             $number = request()->post('number') ?: "";
             $description = request()->post('description') ?: "";
-            if(!($type || $number || $description || $data)){
+            $desc = request()->post('desc') ?: "";
+            if(!($type || $number || $description || $data || $desc)){
                 return json([
                     'code'  =>  -1,
                     'msg'   =>  '缺少必要参数',
@@ -78,15 +79,6 @@ class Ad extends MobileBase
 //            }
             Db::startTrans();
             try{
-                $response['type'] = $type;
-                $response['status'] = 0;
-                $response['add_time'] = time();
-                $response['description'] = $description;
-                $response['thumb_img'] = $file_path;
-                $response['num'] = $number;
-                $response['uid'] = $uid;
-                $response['identity'] = 2;
-                D('task')->add($response);
                 if($have_price < $ywd_num){
                     $ywd_number = $ywd_num - $have_price;
                     $total_price = $total_price - $ywd_number;
@@ -105,6 +97,19 @@ class Ad extends MobileBase
                 $order['order_amount'] = $total_price;
                 $order['add_time'] = time();
                 $order_id = D('order')->add($order);
+
+                $response['type'] = $type;
+                $response['status'] = 0;
+                $response['add_time'] = time();
+                $response['description'] = $description;
+                $response['desc'] = $desc;
+                $response['thumb_img'] = $file_path;
+                $response['num'] = $number;
+                $response['uid'] = $uid;
+                $response['order_id'] = $order_id;
+                $response['identity'] = 2;
+                D('task')->add($response);
+
                 $log['user_id'] = $uid;
                 $log['user_money'] = $ywd_number;
                 $log['add_time'] = time();
