@@ -112,7 +112,7 @@ class Ad extends MobileBase
                 D('task')->add($response);
 
                 $log['user_id'] = $uid;
-                $log['user_money'] = $ywd_number;
+                $log['user_money'] = '-' . $ywd_number;
                 $log['add_time'] = time();
                 $log['desc']    = "消耗悦玩豆";
                 $log['type']    = 1;
