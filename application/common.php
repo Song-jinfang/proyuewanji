@@ -621,7 +621,7 @@ function accountLog($user_id, $user_money = 0,$pay_points = 0, $desc = '',$distr
             'desc'   => $desc,
             'type'=>$type
         );
-        /* 更新用户信息 */
+        /*更新每日订单任务信息 */
         $update_data = array(
             'order_point'   => ['exp','order_point+'.$order_adv_profit],
         );
@@ -633,8 +633,65 @@ function accountLog($user_id, $user_money = 0,$pay_points = 0, $desc = '',$distr
             return false;
         }
     }
-
-
+/*
+ * 收益提到余额记录，并且消耗悦玩豆
+ */
+    function withdrawal_balance_finance($user_id,$money,$desc = '',$order_id=0,$type=1){
+        $confBeans = M('config')->column('value','name');
+        $account_log = array(
+            'user_id'       => $user_id,
+            'money'    => $money,
+            'add_time'   => time(),
+            'order_id'=>$order_id,
+            'desc' =>$desc,
+            'type'=>$type
+        );
+        /** 消耗能量豆******/
+        $orderBeansProfit = ceil(($confBeans['profit_cons_beans']/100) * $money);
+        $update_data = array(
+            'happy_beans'   => ['exp','happy_beans-'.$orderBeansProfit],
+        );
+        $update = Db::name('users')->where("user_id = $user_id")->save($update_data);
+        $adv_log = array(
+            'user_id'       => $user_id,
+            'user_money'    => '-'.$orderBeansProfit,
+            'add_time'   => time(),
+            'order_id'=>$order_id,
+            'desc' =>'领取任务收益消耗能量豆',
+            'type'=>1
+        );
+        M('adv_log')->add($adv_log);
+        /** 消耗能量豆******/
+        if($update){
+            M('withdrawal_balance')->add($account_log);
+            return true;
+        }else{
+            return false;
+        }
+    }
+    //获取悦玩豆
+    function consumption_beans($user_id,$beans,$desc){
+        $account_log = array(
+            'user_id'       => $user_id,
+            'user_money'    => $beans,
+            'add_time'   => time(),
+            'desc' =>$desc,
+            'type'=>1
+        );
+        $update_data = array(
+            'happy_beans'   => ['exp','happy_beans+'.$beans]
+        );
+        $update = Db::name('users')->where("user_id = $user_id")->save($update_data);
+        if($update){
+            M('adv_log')->add($account_log);
+            return true;
+        }else{
+            return false;
+        }
+        
+    }
+    
+    
 
 
 
@@ -882,7 +939,7 @@ function update_pay_status($order_sn,$ext=array())
             $update = array('pay_status'=>1,'pay_time'=>$time);
             $update['seven_days'] = strtotime('+7 day');
             $update['fourteen_days'] = strtotime('+14 day');
-            $update['twenty_one_days'] = strtotime('+21 day');
+            $update['fifteen_days'] = strtotime('+15 day');
             $update['twenty_eight_days'] = strtotime('+28 day');
             if(isset($ext['transaction_id'])) $update['transaction_id'] = $ext['transaction_id'];
             M('order')->where("order_sn", $order_sn)->save($update);

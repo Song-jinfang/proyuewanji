@@ -81,25 +81,35 @@ class User extends MobileBase
      /*
      * 总收益
      */
-    public function earnings(){
+    public function earnings(){ 
         $param = I('get.');
         $p = $param['p']?$param['p']:'1';
-        $orderList = M('order')->field("order_id,order_point,order_sn,FROM_UNIXTIME(add_time,'%Y.%m.%d') add_time,seven_days,fourteen_days,twenty_one_days,twenty_eight_days")->where('user_id = '.$this->user_id .' and pay_status = 1')->order('order_id','desc')->select();
+        $orderList = M('order')->field("order_id,order_amount,order_point,order_sn,FROM_UNIXTIME(add_time,'%Y.%m.%d') add_time,seven_days,fourteen_days,fifteen_days,fifteen_status,twenty_eight_days,seven_status,fourteen_status")->where('user_id = '.$this->user_id .' and pay_status = 1')->order('order_id','desc')->select();
          $time = time();
+         $confBeans = M('config')->column('value','name');
          foreach($orderList as $k=>$v){
              if($v['seven_days']){
-                 $orderList[$k]['seven_status'] = 1;//默认可以领取
+                 $orderList[$k]['status_7'] = 1;//默认可以领取
+                 $orderList[$k]['money_7'] = ($confBeans['seven_profit']/100) * $v['order_amount'];
                  if($v['seven_days'] > $time){
                      //没有到领取时间
-                     $orderList[$k]['seven_status'] = 2;
+                     $orderList[$k]['status_7'] = 2;
                      $orderList[$k]['seven_days'] = date('Y.m.d',$v['seven_days']);
                  }
+                 if($v['seven_status'] == 1){
+                     $orderList[$k]['status_7'] = 3;
+                 }
+                 
              }
              if($v['fourteen_days']){
-                 $orderList[$k]['fourteen_status'] = 1;//默认可以领取
+                 $orderList[$k]['status_14'] = 1;//默认可以领取
+                 $orderList[$k]['money_14'] = ($confBeans['fourteen_profit']/100) * $v['order_amount'];
                  if($v['fourteen_days'] > $time){
-                     $orderList[$k]['fourteen_status'] = 2; //没有到领取时间
+                     $orderList[$k]['status_14'] = 2; //没有到领取时间
                      $orderList[$k]['fourteen_days'] = date('Y.m.d',$v['fourteen_days']);
+                 }
+                 if($v['fourteen_status'] == 1){
+                     $orderList[$k]['status_14'] = 3;
                  }
              }
              if($v['twenty_one_days']){
@@ -124,6 +134,151 @@ class User extends MobileBase
          $this->assign('orderList',$orderList);
          return $this->fetch();
     }
+    //获取第15天以后可以提现的订单
+    function is_withdraw(){
+        //获取昨日的订单总额乘50%再乘70%
+        $time = time();
+        $start_time = strtotime(date("Y-m-d",strtotime("-1 day")));
+        $end_time = strtotime(date("Y-m-d"));
+        $sumOrderamount = M('order')->where('add_time >'.$start_time.' and add_time <'.$end_time.' and pay_status = 1')
+                        ->sum('order_amount');
+        $orderMoney = $sumOrderamount * 0.5*0.7;
+        //查询过了15天的订单
+        $orderlist = M('order')->field('order_amount,order_id,order_point')
+                    ->where('fifteen_days < '.$time.' and twenty_eight_days > '.$time.' and fifteen_status = 0 and pay_status=1')
+                    ->order('pay_time','ASC')->select();
+        $s = 0;
+        $order_ids = '';
+        //在范围内的订单吧状态改成2，可以领取收益。
+        if(!empty($orderlist)){
+            foreach ($orderlist as $k=>$v){
+                $s += ($v['order_amount']+$v['order_point']);
+                if($orderMoney > $s){
+                    $order_ids .= $order_ids == ''?$v['order_id']:','.$v['order_id'];
+                }
+            }
+        }
+        if($order_ids){
+            M('order')->where('order_id','in',$order_ids)->update(['fifteen_status'=>2]);
+        }
+        //过了28天还不符合条件的改为3,表示收益过期，赋等额的悦玩豆；
+        $s = 0;
+        $order_ids = '';
+        $orderOverdue = M('order')->field('order_amount,order_id')
+        ->where('twenty_eight_days < '.$time.' and fifteen_status = 0 and pay_status=1')
+        ->select();
+        if(!empty($orderOverdue)){
+            foreach($orderOverdue as $k=>$v){
+               /*  $s += $v['order_amount'];
+                if($orderMoney > $s){ */
+                    $order_ids .= $order_ids == ''?$v['order_id']:','.$v['order_id'];
+               /*  } */
+            }
+        }
+        if($order_ids){
+            M('order')->where('order_id','in',$order_ids)->update(['fifteen_status'=>3]);
+        }
+        
+    }
+    
+    
+    
+/*     function test(){
+         Db::startTrans();
+         try{
+              $rs1 =  M('adv_log')->where('id=1')->update(['desc'=>'22222']);
+              $rs2 = M('withdrawal_balance')->where('id=1')->update(['desc1'=>'111888']);
+              Db::commit();
+         }catch (Exception $exception){
+             Db::rollback();
+         }
+    } */
+    
+    //领取7 14 15-28天订单收益    同一笔订单，广告收益和订单定期收益只能领取一次
+    function get_money(){
+        $confBeans = M('config')->column('value','name');
+        $order_id = I('post.order_id');
+        $day_mark = I('post.day');
+        $start_time = strtotime(date('Y-m-d'));
+        $count =  M('withdrawal_balance')->where('order_id='.$order_id.' and add_time >'.$start_time)->count();
+        if($count){
+            $this->ajaxReturn(
+                array(
+                    'status'=>1,
+                    'msg'=>'今天的领取次数已达上限',
+                    'url'=>'/Mobile/User/earnings'
+                    
+                ));
+        }
+        $orderInfo = M('order')->where('order_id='.$order_id)
+                    ->value('order_amount');
+        $profit_status = $day_mark.'_status';
+        $day_mark = $day_mark.'_profit';
+        $orderProfit = $orderInfo * ($confBeans[$day_mark]/100);
+        $orderBeansProfit = ($confBeans['profit_cons_beans']/100) * $orderProfit;
+        //领取订单收益消费悦豌豆百分比
+        $orderBeansProfit = ceil($orderBeansProfit);
+        $happy_beans = M('users')->where('user_id='.$this->user_id)->value('happy_beans');
+        if($happy_beans < $orderBeansProfit){
+            $this->ajaxReturn(array('status'=>-1,'msg'=>'悦玩豆余额不足'));
+        }
+        withdrawal_balance_finance($this->user_id,$orderProfit,'领取订单收益',$order_id);
+        accountLog($this->user_id,$orderProfit,0,'领取订单收益',$order_id);//加余额
+        $data[$profit_status] = 1;
+        M('order')->where('order_id = '.$order_id)->update($data);
+        $this->ajaxReturn(
+            array(
+                'status'=>1,
+                'msg'=>'已领取'.$orderProfit.'元',
+                'url'=>'/Mobile/User/earnings'
+            )
+        );
+    }
+    
+    //订单过期领取悦玩豆
+    function get_beans(){
+        $confFifteen_profit = M('config')->where("name='fifteen_profit'")->value('value');
+        $order_id = I('post.order_id');
+        $orderInfo = M('order')->where('order_id='.$order_id)
+        ->value('order_amount');
+        $beans = intval(($confFifteen_profit/100)*$orderInfo);
+        consumption_beans($this->user_id,$beans,'订单收益折换等价悦玩豆');
+        M('order')->where('order_id = '.$order_id)->update(['fifteen_status'=>1]);
+        $this->ajaxReturn(
+            array(
+                'status'=>1,
+                'msg'=>'领取成功'.$beans.'个悦玩豆',
+                'url'=>'/Mobile/User/earnings')
+            );
+    }
+    //领取订单广告收益， 同一笔订单，广告收益和订单定期收益只能领取一次
+    function get_advEarnings_to_balance(){
+        $order_id = I('post.order_id');
+        $start_time = strtotime(date('Y-m-d'));
+        $count =  M('withdrawal_balance')->where('order_id='.$order_id.' and add_time >'.$start_time)->count();
+        if($count){
+            $this->ajaxReturn(
+                array(
+                    'status'=>1,
+                    'msg'=>'今天的领取次数已达上限',
+                    'url'=>'/Mobile/User/earnings'
+                   
+                ));
+        }
+        $order_point = M('order')->where('order_id='.$order_id)
+        ->value('order_point');
+        if($order_point){
+            accountLog($this->user_id,$order_point,0,'领取订单广告收益',$order_id);
+            withdrawal_balance_finance($this->user_id,$order_point,'领取订单广告收益',$order_id,2);
+        }
+        $this->ajaxReturn(
+            array(
+                'status'=>1,
+                'msg'=>'领取成功'.$order_point.'元',
+                'url'=>'/Mobile/User/earnings')
+            );
+    }
+    
     
     
     function time_days($end_time){

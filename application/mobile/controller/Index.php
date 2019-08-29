@@ -55,16 +55,16 @@ class Index extends MobileBase {
             print_r($signPackage);
         */
         /*热门商品*/
-        $hot_goods = M('goods')->field('goods_id,shop_price,goods_name,original_img')->where("is_hot=1 and is_on_sale=1")->order('goods_id DESC')->limit(8)->cache(true,TPSHOP_CACHE_TIME)->select();//首页热卖商品
+        $hot_goods = M('goods')->field('goods_id,shop_price,goods_name,original_img')->where("is_hot=1 and is_on_sale=1")->order('goods_id DESC')->limit(8)->select();//首页热卖商品
         $thems = M('goods_category')->where('level=1')->order('sort_order')->limit(9)->cache(true,TPSHOP_CACHE_TIME)->select();
         $this->assign('thems',$thems);
         $this->assign('hot_goods',$hot_goods);
         /**商品精选**/
-        $new_goods = M('goods')->field('goods_id,original_img,shop_price,market_price,goods_name,sales_sum')->where("is_new=1 and is_on_sale=1")->order('sort DESC')->limit(4)->cache(true,TPSHOP_CACHE_TIME)->select();//
+        $new_goods = M('goods')->field('goods_id,original_img,shop_price,market_price,goods_name,sales_sum')->where("is_new=1 and is_on_sale=1")->order('sort DESC')->limit(4)->select();//
         $this->assign('new_goods',$new_goods);
         //dump($new_goods);
         /**推荐商品**/
-        $favourite_goods = M('goods')->field('goods_id,original_img')->where("is_recommend=1 and is_on_sale=1")->order('sort DESC')->limit(4)->cache(true,TPSHOP_CACHE_TIME)->select();//首页推荐商品
+        $favourite_goods = M('goods')->field('goods_id,original_img')->where("is_recommend=1 and is_on_sale=1")->order('sort DESC')->limit(4)->select();//首页推荐商品
      /*    $is_recommend = M('goods')->where('') */
         //秒杀商品
         $now_time = time();  //当前时间
@@ -95,7 +95,7 @@ class Index extends MobileBase {
     
     public function test_order(){
         
-        update_pay_status('201908210909111752');
+        update_pay_status('201908281649067192');
     }
     
     public function test(){
@@ -109,8 +109,11 @@ class Index extends MobileBase {
      * 
      */
     public function adv_list(){
+        $order_id = !empty(I('get.order_id'))?I('get.order_id'):'';
+        if($order_id){
+            $this->assign('order_id',$order_id);
+        }
         $task_list = M('task')->field("id,desc,price,FROM_UNIXTIME(add_time,'%Y-%m-%d') add_time,total_num,num")->select();
-        dump($task_list);
         if(!empty($task_list)){
             foreach($task_list as $k=>$v){
                 $task_list[$k]['num'] = $v['total_num'] - $v['num'];
@@ -123,11 +126,14 @@ class Index extends MobileBase {
      * 广告详情页面
      */
     public function adv_details(){
-        $id = I('get.id');
+        $param = I('get.');
+        $id = $param['id'];
+        $order_id = $param['order_id'];
         if($id){
             $taskInfo = M('task')->field("id,desc,content,thumb_img,price,time_len")->where('id='.$id)->find();
             $this->assign('task_info',$taskInfo);
         }
+        $this->assign('order_id',$order_id);
         return $this->fetch();
     }
     /*
@@ -159,27 +165,30 @@ class Index extends MobileBase {
               $orderInfo = M('order')->field('order_amount,order_id')->where('order_id='.$order_id)->find();
              //订单广告收益
               $orderAdvProfit = $orderInfo['order_amount'] * ($orderConf/100);
-              adv_order($this->user['user_id'],$orderAdvProfit,'完成浏览广告获得经验值');
-              $this->ajaxReturn(['status'=>0,'msg'=>'获得'.$orderAdvProfit.'个值']);
+              adv_order($this->user['user_id'],$orderAdvProfit,'完成浏览广告获得经验值',$order_id,$type=1);
+              //$this->ajaxReturn(['status'=>0,'msg'=>'获得'.$orderAdvProfit.'个值']);
+              $price = $orderAdvProfit;
+              $desc = '完成浏览广告获得经验值';
           }else{
               $time = strtotime(date('Y-m-d'));
               $task_count = M('user_task')->where('add_time > '.$time.' and user_id='.$this->user['user_id'])->count();
-                  $taskinfo = M('task')->where('id='.$task_id)->find();
-                  //0撸和或者会员浏览广告
-                  $orderCount = M('order')->where('user_id='.$this->user['user_id'].' and pay_status = 1')->count();
-                  accountLog($this->user['user_id'],0,$taskinfo['price'],'浏览广告获得积分');
-                  $data['user_id'] = $this->user['user_id'];
-                  $data['task_id'] = $task_id;
-                  $data['status'] = 1;
-                  $data['add_time'] = time();
-                  $data['task_money'] = $taskinfo['price'];
-                  M('user_task') ->add($data);
-                  $this->ajaxReturn(['status'=>0,'msg'=>'获得'.$taskinfo['price'].'个积分']);
+              $taskinfo = M('task')->where('id='.$task_id)->find();
+              //0撸和或者会员浏览广告
+              $orderCount = M('order')->where('user_id='.$this->user['user_id'].' and pay_status = 1')->count();
+              accountLog($this->user['user_id'],0,$taskinfo['price'],'浏览广告获得积分');
+              //$this->ajaxReturn(['status'=>0,'msg'=>'获得'.$taskinfo['price'].'个积分']);
+              $desc = '获得'.$taskinfo['price'].'个积分';
+              $price = $taskinfo['price'];
           }
+          $data['user_id'] = $this->user['user_id'];
+          $data['task_id'] = $task_id;
+          $data['status'] = 1;
+          $data['add_time'] = time();
+          $data['task_money'] = $price;
+          $data['order_id'] = $order_id;
+          M('user_task') ->add($data);
+          $this->ajaxReturn(['status'=>0,'msg'=>'获得'.$price.'个积分']);
     }
-    
-    
-    
     /*
      * 分享
      */

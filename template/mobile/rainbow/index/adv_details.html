@@ -15,8 +15,8 @@
 	</div>
 	<p class="pageTitle">{$task_info.desc}</p>
 	<input type="hidden" id="task_id" name="task_id" value="{$task_info.id}"/>
-	<input type="hidden" id="order_id" name="order_id" value="<php>echo $_GET['id']</php>"/>
 	<input type="hidden" id="time_len" name="time_len" value="{$task_info.time_len}"/>
+	<input type="hidden" id="order_id" name="order_id" value="{$order_id}"/>
 	<div class="detailsList">
 		<div class="list">
 			<p class="title">广告详情</p>
@@ -35,7 +35,8 @@
 	<script>
 	var s=0;
 	var task_id = $("#task_id").val();
-		$.post('is_show',{'task_id':task_id},function(data){
+	var order_id = $("#order_id").val();
+		$.post('/mobile/index/is_show',{'task_id':task_id},function(data){
 			if(data.status == 1){
 				s = 1;//给全局变量赋值
 				var speed_time = $("#time_len").val() * 1000;
@@ -45,7 +46,6 @@
 				      lineColor:"#fbab16",
 				      speed:speed_time
 				    },callback);
-				
 			}else{
 				s = 2;//给全局变量赋值
 				var speed_time = 100;
@@ -61,8 +61,9 @@
 	
 	
 	    function callback(){
+	    	alert(order_id);
 	    	if(s == 1){
-	    		$.post('get_integral',{'task_id':task_id},function(data){
+	    		$.post('/mobile/index/get_integral',{'task_id':task_id,'order_id':order_id},function(data){
 					layer.open({'content':data.msg});
 				},'json');
 	    	}
