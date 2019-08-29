@@ -955,6 +955,19 @@ function update_pay_status($order_sn,$ext=array())
                 minus_stock($order);
             }
         }
+        /* 根据不同的type分别处理订单 */
+/*         if($order['type'] == 1){//商品下单
+            
+            
+        }else */
+        if($order['type'] == 2){//购买悦玩豆
+            consumption_beans($user_id,$order['ywd_price'],'在线购买悦玩豆');
+        }else{//支付投放广告
+            
+            
+        }
+        
+        
         // 给他升级, 根据order表查看消费记录 给他会员等级升级 修改他的折扣 和 总金额
         $User =new \app\common\logic\User();
         $User->setUserById($order['user_id']);
