@@ -12,10 +12,10 @@
 	   <img src="__IMG__/back.png" class="back">交易明细
 	</div>
    <div class="userInfor">
-   	  <div class="userImg"></div>
-   	  <p class="nickname">朵朵呀！</p>
-   	  <p class="userId"><font>ID：12345677</font><span class="copyBtn">复制</span></p>
-   	  <p style="width: 100%;display: flex;"><span class="residue">剩余：108豆</span></p>
+   	  <div class="userImg"><img src="{$user_info.head_pic}" alt=""></div>
+   	  <p class="nickname">{$user_info.nickname}</p>
+   	  <p class="userId"><font>ID：{$user_info.user_id}</font></p>
+   	  <p style="width: 100%;display: flex;"><span class="residue">剩余：{$user_info.happy_beans}豆</span></p>
    	  <img src="__IMG__/code.png" class="codeBtn">
    </div>
    <div class="tab">
@@ -29,26 +29,12 @@
 	   	 			<th>下单时间</th>
 	   	 			<th>购买个数</th>
 	   	 		</tr>
+				<volist name="data" id="vo">
 	   	 		<tr>
-	   	 			<td>2019/8/3</td>
-	   	 			<td>152</td>
+	   	 			<td>{$vo.add_time|date="y/m/d h:i",###}</td>
+	   	 			<td>{$vo.ywd_price}</td>
 	   	 		</tr>
-	   	 		<tr>
-	   	 			<td>2019/8/3</td>
-	   	 			<td>152</td>
-	   	 		</tr>
-	   	 		<tr>
-	   	 			<td>2019/8/3</td>
-	   	 			<td>152</td>
-	   	 		</tr>
-	   	 		<tr>
-	   	 			<td>2019/8/3</td>
-	   	 			<td>152</td>
-	   	 		</tr>
-	   	 		<tr>
-	   	 			<td>2019/8/3</td>
-	   	 			<td>152</td>
-	   	 		</tr>
+				</volist>
 	   	 	</table>
 	   	</div>
    </div>   

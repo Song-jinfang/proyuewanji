@@ -210,6 +210,12 @@ class Ad extends MobileBase
     public function mine()
     {
         if(request()->isGet()){
+            $session_user = session('user');
+            $uid = $session_user['user_id'];
+            $user_info = D('users')->where(['user_id' => $uid])->field('nickname,happy_beans,user_id,head_pic')->find();
+            $data = D('order')->where(['user_id' => $uid,'pay_status' => 1,'type' => 2])->field('add_time,ywd_price')->select();
+            $this->assign('user_info',$user_info);
+            $this->assign('data',$data);
             return $this->fetch();
         }
     }
@@ -220,7 +226,7 @@ class Ad extends MobileBase
         if(request()->isGet()){
             $session_user = session('user');
             $uid = $session_user['user_id'];
-            $user_info = D('users')->where(['user_id' => $uid])->field('nickname,happy_beans,user_id')->find();
+            $user_info = D('users')->where(['user_id' => $uid])->field('nickname,happy_beans,user_id,head_pic')->find();
             $data = D('turn_out')->where(['uid' => $uid])->select();
             $this->assign('data',$data);
             $this->assign('user_info',$user_info);
