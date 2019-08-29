@@ -96,6 +96,7 @@ class Ad extends MobileBase
                 $order['ywd_price'] = $ywd_number;
                 $order['order_amount'] = $total_price;
                 $order['add_time'] = time();
+                $order['type'] = 3;
                 $order_id = D('order')->add($order);
 
                 $response['type'] = 2;
@@ -284,6 +285,57 @@ class Ad extends MobileBase
                 'code'  =>  1,
                 'msg'   =>  '更新成功',
                 'data'  =>  $data
+            ]);
+        }
+    }
+
+    //购买悦玩豆
+    public function buy_ywd()
+    {
+        $number = request()->post('number');
+        if(!$number){
+            return json([
+                'code'  =>  -1,
+                'msg'   =>  '缺少必要参数',
+                'data'  =>  [],
+            ]);
+        }
+        Db::startTrans();
+        try{
+            $beans_price = M('config')->where(['name' => 'beans_price'])->value('value');
+            $userInfo = session('user');
+            $user_id = $userInfo['user_id'];
+            $order['order_sn'] = date('YmdHis',time()) . rand(1000,9999);
+            $order['user_id']  = $user_id;
+            $order['total_amount'] = $number * $beans_price;
+            $order['order_amount'] = $number * $beans_price;
+            $order['ywd_price'] = $number;
+            $order['type'] = 2;
+            $order['add_time'] = time();
+            $order_id = D('order')->add($order);
+
+            $log['user_id'] = $userInfo['user_id'];
+            $log['user_money'] = $number;
+            $log['add_time'] = time();
+            $log['desc']    = "购买悦玩豆";
+            $log['type']    = 1;
+            D('adv_log')->add($log);
+            Db::commit();
+            return json([
+                'code'  =>  1,
+                'msg'   =>  '购买成功',
+                'data'  =>  [
+                    'order_id'  =>  $order_id,
+                    'http'      =>  $_SERVER['SERVER_NAME']
+                ],
+            ]);
+        }catch (Exception $exception){
+            Db::rollback();
+            return json([
+                'code'  =>  -1,
+//                    'msg'   =>  $exception->getMessage(),
+                'msg'   =>  '网络异常，请重新购买',
+                'data'  =>  [],
             ]);
         }
     }
