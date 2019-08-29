@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width, user-scalable=no">
 		<title></title>
 		<link rel="stylesheet" href="__CSS__/earnings.css" />
+		<script type="text/javascript" src="__JS__/jquery-3.2.1.min.js" ></script>
 	</head>
 	<body>
 	<div class="header">
@@ -29,56 +30,129 @@
 		<div class="list">
 		<volist name="orderList" id="v">
 			<div class="orderLists">
-				<p class="orderTitle">①订单号：{$v.order_sn} <font>订单日期{$v.add_time}</font></p>
+				<p class="orderTitle" style="color:#e2e0e0">①订单号：{$v.order_sn}&nbsp&nbsp&nbsp<font>日期：{$v.add_time}</font></p>
 				<div class="form">
 					<div class="dayBox">
 						<div class="div">
-							<font>第1天</font>
-							<span class="btn btnGreen">{$v.add_time}</span>
-						</div>
-						<div class="div">
-							<font>第7天</font>
-							<if condition="$v.seven_status eq 1">
-								<span class="btn btnBlack">领取</span>
+							<font>7天</font>
+							<if condition="$v.status_7 eq 1">
+								<span class="btn btnBlack" onclick="get_money_to_balance('{$v.order_id}','seven')">领取{$v.money_7}元</span>
+							<elseif  condition="$v.status_7 eq 3"/>
+									<span class="btn btnGray" >已领取</span>
 							<else/>
 								<span class="btn btnGray">{$v.seven_days}</span>
 							</if>
 						</div>
+						
 						<div class="div">
-							<font>第14天</font>
-							<if condition="$v.fourteen_days eq 1">
-								<span class="btn btnBlack">领取</span>
+							<font>14天</font>
+							<if condition="$v.status_14 eq 1">
+								<span class="btn btnBlack" onclick="get_money_to_balance('{$v.order_id}','fourteen')">领取{$v.money_14}元</span>
+							<elseif  condition="$v.status_14 eq 3"/>
+								<span class="btn btnGray" >已领取</span>
 							<else/>
 								<span class="btn btnGray">{$v.fourteen_days}</span>
 							</if>
 						</div>
-						<div class="div">
-							<font>第21天</font>
-							<if condition="$v.twenty_one_days eq 1">
-								<span class="btn btnBlack">领取</span>
+					</div>
+					
+					<div class="scoreDiv" style="border-bottom:1px dashed #cdcfcd">
+						<p class="scoreTitle">领取收益</p>
+						<div class="dayBox1">
+							<div class="div1" style="width:65%;">
+								<font>订单金额50%</font>
+							</div>
+							<div class="div1" style="width:35%;">
+							<if condition="$v.fifteen_status eq 2"><!--在15-28天内可以领取-->
+								<a  style="text-decoration:none"><span class="btn btnGreen" onclick="get_money_to_balance('{$v.order_id}','fifteen')">领取</span></a>
+							<elseif condition="$v.fifteen_status eq 3"><!--过了28天，领取失效 -->
+								<a  style="text-decoration:none"><span class="btn btnGreen" onclick="get_money_to_beans('{$v.order_id}')">领取悦玩豆</span></a>
+							<elseif condition="$v.fifteen_status eq 1"><!--已经领取到余额/悦玩豆-->
+								<a style="text-decoration:none"><span class="btn btnGray">已领取</span></a>
 							<else/>
-								<span class="btn btnGray">{$v.twenty_one_days}</span>
+								<a style="text-decoration:none"><span class="btn btnGray">暂时不能领取</span></a>
 							</if>
+							</div>
 						</div>
 					</div>
 					<div class="scoreDiv">
-						<p class="scoreTitle">做任务送积分</p>
+						<p class="scoreTitle">做任务送现金 <b style="color:#1e8706">（已赚{$v.order_point}元）</b></p>
 						<div class="dayBox1">
-							<div class="div1">
-								<font>第14天</font>
-								<span class="btn1">已赚13个积分</span>
-							</div>
-							<div class="div1">
+							<div class="div1" style="width:50%;">
 								<font></font>
-							    <span class="btn btnGreen">去做任务</span>
+								<if condition="$v.adv_task eq 1">
+									<a href="/mobile/index/adv_list/order_id/{$v.order_id}" style="text-decoration:none"><span class="btn btnGreen">去做任务</span></a>
+								<else/>
+									<a style="text-decoration:none"><span class="btn btnGray">去做任务</span></a>
+								</if>
+							</div>
+							<div class="div1" style="width:50%;">
+								<if condition="$v.fifteen_status eq 1 || $v.fifteen_status eq 2">
+									<span class="btn btnGreen" onclick="get_advEarnings_to_balance('{$v.order_id}')">领取收益</span>
+								<elseif condition="$v.fifteen_status eq 3">
+									<span class="btn btnGray">已失效</span>
+								<else/>
+									<span class="btn btnGray">暂时不能领取</span>
+								</if>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</volist>
-
-			
+			<script src="__JS__/layer.js"  type="text/javascript" ></script>
+			<script>
+				function get_money_to_balance(order_id,day){
+					layer.msg('领取收益需消耗1%的积分', {
+						  time: 0 //不自动关闭
+						  ,btn: ['确定', '取消']
+						  ,yes: function(index){
+						    layer.close(index);
+							$.post('get_money',{'order_id':order_id,'day':day},function(data){
+								if(data.status == 1){
+									layer.msg(data.msg);							
+									setTimeout(function(){
+										window.location.href = data.url;								
+									}, 2000);
+								}
+							},'json');
+						  }
+					});
+				}
+				/**订单过期，领取等值的悦玩豆**/
+				function get_money_to_beans(order_id){
+					$.post('get_beans',{'order_id':order_id,'type':type},function(data){
+						if(data.status == 1){
+							layer.open({'content':data.msg});							
+							setTimeout(function(){
+								window.location.href = data.url;								
+							}, 3000);
+						}
+					},'json');
+					
+				}
+				/***领取订单**/
+				function get_advEarnings_to_balance(order_id){
+					layer.msg('领取收益需消耗1%的悦玩豆', {
+						  time: 0 //不自动关闭
+						  ,btn: ['确定', '取消']
+						  ,yes: function(index){
+						    layer.close(index);
+							$.post('get_advEarnings_to_balance',{'order_id':order_id},function(data){
+								if(data.status == 1){
+									layer.msg(data.msg);							
+										setTimeout(function(){
+										window.location.href = data.url;								
+										}, 2000);							
+								}
+							},'json');
+						  }
+					});
+				}
+				
+				
+				
+			</script>
 		</div>
 		<div class="text">
 			<p>释:商品返现规则：从下单日期开始，第七天可返商品消费价格的50% 第14天可返20%第21天可通过任务返余下的20%</p>

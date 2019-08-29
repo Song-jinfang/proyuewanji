@@ -1,27 +1,27 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no">
-		<title>浏览广告页</title>
-		<link rel="stylesheet" href="__CSS__/banner.css" />
-	</head>
-	<body>
-		<div class="header">
-		<img src="images/back.png" class="back">浏览广告
-		</div>
-		<ul class="lists">
-			<volist name="task_list" id="v">
-				<li>
-					<div class="img"></div>
-					<p class="headline">{$v.desc}</p>
-					<p class="score">完成任务获得积分:{$v.price}个</p>
-					<p class="total">总条数：{$v.total_num}条</p>
-					<p class="surplus">剩余：<font>{$v.num}条</font></p>
-					<p class="time">发布时间:{$v.add_time}</p>
-					<a href="/Mobile/index/adv_details?id={$v.id}" class="link">浏览</a>
-				</li>
-			</volist>
-		</ul>
-	</body>
-</html>
+	<html>
+		<head>
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, user-scalable=no">
+			<title>浏览广告页</title>
+			<link rel="stylesheet" href="__CSS__/banner.css" />
+		</head>
+		<body>
+			<div class="header">
+			<img src="__IMG__/back.png" class="back">浏览广告
+			</div>
+			<ul class="lists">
+				<volist name="task_list" id="v">
+						<li>
+							<div class="img"></div>
+							<p class="headline">{$v.desc}</p>
+							<p class="score">完成任务获得积分:{$v.price}个</p>
+							<p class="total">总条数：{$v.total_num}条</p>
+							<p class="surplus">剩余：<font>{$v.num}条</font></p>
+							<p class="time">发布时间:{$v.add_time}</p>
+							<a href="/Mobile/index/adv_details/id/{$v.id}/order_id/{$order_id}" class="link">浏览</a>
+						</li>
+				</volist>
+			</ul>
+		</body>
+	</html>
