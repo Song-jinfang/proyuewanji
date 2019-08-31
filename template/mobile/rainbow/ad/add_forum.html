@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no">
+		<title></title>
+		<link rel="stylesheet" href="__CSS__/put.css" />
+	</head>
+	<body>
+	<div class="header">
+	   <img src="__IMG__/back.png" class="back">发布话题
+	</div>
+	<div class="main">
+		<textarea class="textarea"  id='title' placeholder="说点什么...."></textarea>
+	    <div class="uploading">
+	    	<div class="upload_img_wrap">
+				<div id="imgBox"></div>
+				<img class="upload_img" data-id="1" src="__IMG__/upload_img.png" />
+				<img style="display:none" class="upload_img" data-id="2" src="__IMG__/upload_img.png" />
+				<img style="display:none" class="upload_img" data-id="3" src="__IMG__/upload_img.png" />
+			</div>
+	        <div style="display: none;width: 100%;height: 100%;position: relative;">
+				<form id="upBox" class="upload_form" action="" method="post" enctype="multipart/form-data">
+					<div style="display: none;" id="inputBox">
+						<input type="file" name="image[]" data-id="1" title="请选择图片" id="file1" accept="image/png,image/jpg,image/gif,image/JPEG" />
+						<input type="file" name="image[]" data-id="2" title="请选择图片" id="file2" accept="image/png,image/jpg,image/gif,image/JPEG" />
+						<input type="file" name="image[]" data-id="3" title="请选择图片" id="file3" accept="image/png,image/jpg,image/gif,image/JPEG" /> 点击选择图片
+					</div>
+					<input style="display:none" type="submit" id="sub" />
+				</form>
+			</div>
+	    </div>
+	    <style>
+	    	.pub{
+				width:100%;height:0.8rem;border:1px solid;background-color:#000;
+				color:#fff;font-size:14px;padding-right:45%;border-radius:10px
+	    	}
+	    </style>
+        <input <eq name="user_id" value="1" >type="number"</eq> <neq name="user_id" value="1" >type="hidden"</neq> css="pub_input" name="goods_id" placeholder="#商品ID#"  id="goods_id" style="border:1px solid #e6e6e6 ; width:2.5rem; height: 0.7rem;"/>
+		<div class="total pub" id="payBtn">
+				发布
+		</div>
+	</div>
+	</body>
+	<script type="text/javascript" src="__JS__/jquery-3.2.1.min.js" ></script>
+	<script>
+		var imgNum = 0;
+		$(".upload_img_wrap .upload_img").bind("click", function(ev) {
+			//console.log(ev.currentTarget.dataset.id)
+			var index = ev.currentTarget.dataset.id;
+			var that = this;
+			if(index == 1) {
+				$("#file1").click();
+				$("#file1").unbind().change(function(e) {
+					var index = e.currentTarget.dataset.id;
+					if($('#file').val() == '') {
+						return false;
+					}
+					$(that).hide();
+					var filePath = $(this).val();
+					changeImg(e, filePath, index);
+
+					imgNum++;
+					if(imgNum<3){
+						$(".upload_img").eq(1).show();
+					}
+					$(".upload_img_length").html(imgNum);
+				})
+			} else if(index == 2) {
+				$("#file2").click();
+				$("#file2").unbind().change(function(e) {
+					var index = e.currentTarget.dataset.id;
+					if($('#file').val() == '') {
+						return false;
+					}
+					$(that).hide();
+					var filePath = $(this).val();
+					changeImg(e, filePath, index);
+
+					imgNum++;
+					if(imgNum<3){
+						$(".upload_img").eq(2).show();
+					}
+					$(".upload_img_length").html(imgNum);
+				})
+			} else if(index == 3) {
+				$("#file3").click();
+				$("#file3").unbind().change(function(e) {
+					var index = e.currentTarget.dataset.id;
+					if($('#file').val() == '') {
+						return false;
+					}
+					var filePath = $(this).val();
+					changeImg(e, filePath, index);
+					$(that).hide();
+					imgNum++;
+					$(".upload_img_length").html(imgNum);
+				})
+			}
+		})
+
+		function changeImg(e, filePath, index) {
+			fileFormat = filePath.substring(filePath.lastIndexOf(".")).toLowerCase();
+			//检查后缀名
+			if(!fileFormat.match(/.png|.jpg|.jpeg/)) {
+				showError('文件格式必须为：png/jpg/jpeg');
+				return;
+			}
+			//获取并记录图片的base64编码
+			var reader = new FileReader();
+			reader.readAsDataURL(e.target.files[0]);
+			reader.onloadend = function() {
+				// 图片的 base64 格式, 可以直接当成 img 的 src 属性值
+				var dataURL = reader.result;
+				// console.log(dataURL)
+				// 显示图片
+				$("#imgBox").html($("#imgBox").html() + '<div class="imgContainer" data-index=' + index + '><img   src=' + dataURL + ' onclick="imgDisplay(this)"><img onclick="removeImg(this,' + index + ')"  class="imgDelete" src="__IMG__/del_img.png" /></div>');
+			};
+
+		}
+
+		function removeImg(obj, index) {
+			for(var i = 0; i < $(".imgContainer").length; i++) {
+				if($(".imgContainer").eq(i).attr("data-index") == index) {
+					$(".imgContainer").eq(i).remove();
+				}
+			}
+			for(var i = 0; i < $(".upload_img").length; i++) {
+				$(".upload_img").eq(i).hide();
+				if($(".upload_img").eq(i).attr("data-id") == index) {
+					console.log($(".upload_img").eq(i).attr("data-id"))
+					$(".upload_img").eq(i).show();
+				}
+			}
+			imgNum--;
+			$(".upload_img_length").html(imgNum);
+		}
+
+
+		function imgDisplay(obj) {
+			var src = $(obj).attr("src");
+			var imgHtml = '<div style="width: 100%;height: 100%;overflow: auto;background: rgba(0,0,0,0.5);text-align: center;position: fixed;top: 0;left: 0;z-index: 1000;display: flex;justify-content: center;    align-items: center;"><img src=' + src + ' style="margin-top: 100px;width: 96%;margin-bottom: 100px;"/><p style="font-size: 50px;position: fixed;top: 30px;right: 30px;color: white;cursor: pointer;" onclick="closePicture(this)">×</p></div>'
+			$('body').append(imgHtml);
+		}
+
+		function closePicture(obj) {
+			$(obj).parent("div").remove();
+		}
+
+
+		$(".select div").click(function(){
+			$(".select div").removeClass("current");
+			$(this).addClass("current");
+		})
+
+
+		var numbers=0;
+		$(".number").html(numbers);
+		$(".minus").click(function(){
+			if(numbers>0){
+				numbers--;
+			}
+			$(".number").html(numbers);
+		})
+		$(".add").click(function(){
+			numbers++;
+			$(".number").html(numbers);
+		})
+		$(".close").click(function(){
+			$(".pop").hide()
+		})
+
+		$("#payBtn").click(function(){
+			var title = $("#title").val();
+            var goods_id = $("#goods_id").val();
+			var images1 = document.getElementById("file1").files;
+			var images2 = document.getElementById("file2").files;
+			var images3 = document.getElementById("file3").files;
+			var formData = new FormData();
+			formData.append('title',title);
+			formData.append('goods_id',goods_id);
+			formData.append('images[]',images1[0]);
+			formData.append('images[]',images2[0]);
+			formData.append('images[]',images3[0]);
+			$.ajax({
+				url:"add_forum",
+				type:"post",
+				data:formData,
+				contentType:false,
+				processData:false,
+				success:function(res){
+					// console.log(res);
+					if(res.code == 1){
+						alert(res.msg);
+						// var num = $("#ywd").html();
+						// var number = parseInt(num.substring(1).substring(1).substring(1).substring(1).substring(1).substring(1));
+						// document.getElementById('num1').innerHTML = "你需要消耗" + number + "币";
+						// document.getElementById('num2').innerHTML = number + "币";
+						// $(".pop").show();
+					}else{
+						alert(res.msg);
+					}
+				},
+				error:function(){
+					console.log('请重新上传');
+				}
+			});
+		});
+	</script>
+</html>

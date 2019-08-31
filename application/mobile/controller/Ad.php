@@ -345,4 +345,231 @@ class Ad extends MobileBase
             ]);
         }
     }
+
+    //添加话题
+    public function add_forum()
+    {
+        if(request()->isGet()){
+            $userInfo = session('user');
+            $user_id = $userInfo['user_id'];
+            $this->assign('user_id',$user_id);
+            return $this->fetch();
+        }else{
+            $data = request()->file('images') ?: [];
+            $post_data = request()->post();
+            $res = [];
+            foreach ($data as $file){
+                $info = $file->move(ROOT_PATH . 'public' . DS . 'ad');
+                $res[] = '/public/ad/' . $info->getSaveName();
+            }
+            $userInfo = session('user');
+            $user_id = $userInfo['user_id'];
+            if($user_id != 1){
+                $type = 2;
+            }else{
+                $type = 1;
+            }
+            Db::startTrans();
+            try{
+                $forum_id = D('forum')->add([
+                                'title'    =>  $post_data['title'],
+                                'add_time' =>  time(),
+                                'user_id'  =>  $user_id,
+                                'type'     =>  $type,
+                                'goods_id' =>   $data['goods_id']
+                            ]);
+                $photo_data = [];
+                $num = 0;
+                foreach ($res as $vo){
+                    $photo_data[$num]['forum_id'] = $forum_id;
+                    $photo_data[$num]['photo_address'] = $vo;
+                    $num++;
+                }
+                Db::name('forum_photo')->insertAll($photo_data);
+                Db::commit();
+                return json([
+                    'code'  =>  1,
+                    'msg'   =>  '发布成功',
+                    'data'  =>  [],
+                ]);
+            }catch (Exception $exception){
+                Db::rollback();
+                return json([
+                    'code'  =>  -1,
+//                    'msg'   =>  $exception->getMessage(),
+                    'msg'   =>  '发布失败',
+                    'data'  =>  []
+                ]);
+            }
+        }
+    }
+
+    //话题列表
+    public function forum_list()
+    {
+        $data = Db::name('forum')->alias('a')
+                ->join('ywj_users b','a.user_id = b.user_id')
+                ->join('ywj_goods c','a.goods_id = c.goods_id','left')
+                ->field('a.*,b.nickname,b.head_pic,c.goods_name,c.original_img')
+                ->order('a.add_time','desc')
+                ->select();
+        foreach ($data as &$vo){
+            $vo['photo_list'] = Db::name('forum_photo')->where(['forum_id' => $vo['forum_id']])->column('photo_address');
+            $vo['comment_list'] = Db::name('forum_comment')->alias('a')
+                                    ->join('ywj_users b','a.user_id = b.user_id')
+                                    ->where(['a.forum_id' => $vo['forum_id']])
+                                    ->field('a.*,b.nickname')
+                                    ->order('a.add_time','desc')
+                                    ->limit(3)
+                                    ->select();
+            $vo['comment_count'] = Db::name('forum_comment')->where(['forum_id' => $vo['forum_id']])->count();
+            $vo['like_count']    = Db::name('forum_like')->where(['forum_id' => $vo['forum_id']])->count();
+        }
+//        dump($data);die;
+        $this->assign('data',$data);
+        return $this->fetch();
+    }
+
+    //全部评论
+    public function all_comment()
+    {
+        $forum_id = request()->post('forum_id');
+        $data = Db::name('forum_comment')->alias('a')
+                ->join('ywj_users b','a.user_id = b.user_id')
+                ->where(['a.forum_id' => $forum_id])
+                ->field('a.*,b.nickname')
+                ->order('a.add_time','desc')
+                ->select();
+        $html = "";
+        foreach ($data as $vo){
+            $html .= "<li>";
+            $html .= "<span>";
+            $html .= $vo['nickname'];
+            $html .= "：</span>";
+            $html .= "<font>";
+            $html .= $vo['content'];
+            $html .= "</font>";
+            $html .= "</li>";
+        }
+        return json([
+            'code'  =>  1,
+            'msg'   =>  '操作成功',
+            'data'  =>  $html,
+        ]);
+    }
+
+    public function all_comment_limit()
+    {
+        $forum_id = request()->post('forum_id');
+        $data = Db::name('forum_comment')->alias('a')
+            ->join('ywj_users b','a.user_id = b.user_id')
+            ->where(['a.forum_id' => $forum_id])
+            ->field('a.*,b.nickname')
+            ->order('a.add_time','desc')
+            ->limit(3)
+            ->select();
+        $html = "";
+        foreach ($data as $vo){
+            $html .= "<li>";
+            $html .= "<span>";
+            $html .= $vo['nickname'];
+            $html .= "：</span>";
+            $html .= "<font>";
+            $html .= $vo['content'];
+            $html .= "</font>";
+            $html .= "</li>";
+        }
+        return json([
+            'code'  =>  1,
+            'msg'   =>  '操作成功',
+            'data'  =>  $html,
+        ]);
+    }
+
+    //添加评论
+    public function add_comment()
+    {
+//        $data = request()->post();
+//        return json($data);
+        $forum = request()->post('forum_id');
+        $content  = request()->post('content');
+        $forum = explode('-',$forum);
+        $forum_id = $forum[1];
+        if(!($forum_id || $forum_id)){
+            return json([
+                'code'  =>  1,
+                'msg'   =>  '评论失败，请重新再试',
+                'data'  =>  [],
+            ]);
+        }
+        $userInfo = session('user');
+        $user_id = $userInfo['user_id'];
+        Db::name('forum_comment')->insert([
+            'forum_id' => $forum_id,
+            'user_id'  => $user_id,
+            'content'  => $content,
+            'add_time' => time(),
+        ]);
+        $data = Db::name('forum_comment')->alias('a')
+            ->join('ywj_users b','a.user_id = b.user_id')
+            ->where(['a.forum_id' => $forum_id])
+            ->field('a.*,b.nickname')
+            ->order('a.add_time','desc')
+            ->limit(3)
+            ->select();
+        $count = Db::name('forum_comment')->where(['forum_id' => $forum_id])->count();
+        $html = "";
+        foreach ($data as $vo){
+            $html .= "<li>";
+            $html .= "<span>";
+            $html .= $vo['nickname'];
+            $html .= "：</span>";
+            $html .= "<font>";
+            $html .= $vo['content'];
+            $html .= "</font>";
+            $html .= "</li>";
+        }
+        return json([
+            'code'  =>  1,
+            'msg'   =>  '操作成功',
+            'data'  =>  ['html_str' => $html,'forum_id' => $forum_id,'count' => $count],
+        ]);
+    }
+
+    //点赞
+    public function add_like()
+    {
+        $forum_id = request()->post('forum_id');
+        $userInfo = session('user');
+        $user_id = $userInfo['user_id'];
+        if(!($forum_id || $user_id)){
+            return json([
+                'code'  =>  -1,
+                'msg'   =>  '取消成功',
+                'data'  =>  [],
+            ]);
+        }
+        $like_id = Db::name('forum_like')->where(['forum_id' => $forum_id,'user_id' => $user_id])->value('like_id');
+        if($like_id){
+            Db::name('forum_like')->where(['like_id' => $like_id])->delete();
+            $count = Db::name('forum_like')->where(['forum_id' => $forum_id])->count();
+            return json([
+                'code'  =>  1,
+                'msg'   =>  '取消成功',
+                'data'  =>  ['count' => $count,'forum_id' => $forum_id],
+            ]);
+        }else{
+            Db::name('forum_like')->insert([
+                'forum_id'  => $forum_id,
+                'user_id'   => $user_id,
+                'add_time'  => time(),
+            ]);
+            $count = Db::name('forum_like')->where(['forum_id' => $forum_id])->count();
+            return json([
+                'code'  =>  1,
+                'msg'   =>  '点赞成功',
+                'data'  =>  ['count' => $count,'forum_id' => $forum_id],
+            ]);
+        }
+    }
 }

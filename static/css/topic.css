@@ -1,0 +1,269 @@
+	html {
+		width: 100%;
+		font-size: calc(100vw/7.5);
+		font-size: -webkit-calc(100vw/7.5);
+		-webkit-text-size-adjust: 100%;
+	}
+	body{
+		width:100%;
+		background: #fff;
+		padding-bottom: 0.5rem;
+	}
+	ul,li{
+		list-style: none;
+	}
+	*{
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+		-webkit-tap-highlight-color: transparent;
+	}
+	img{
+		display: block;
+	}
+    .header{
+		width: 100%;
+		height: 0.95rem;
+		line-height: 0.95rem;
+		text-align: center;
+		font-size: 0.3rem;
+		position: relative;
+		background: #000;
+		color: #fff;
+	}
+	.back{
+		width: 0.2rem;
+		height: 0.32rem;
+		position: absolute;
+		left: 0.2rem;
+		top: 50%;
+		margin-top: -0.16rem;
+	}
+	.lists{
+		width: 100%;
+		padding: 0 0.25rem;
+	}
+	section{
+		border-bottom: 1px solid #f0f0f0;	
+		padding-bottom: 0.3rem;
+		margin-bottom: 0.3rem;
+	}
+	.user{
+		width: 100%;
+		height: 1.4rem;
+		display: flex;
+		display: -webkit-flex;
+		position: relative;
+		align-content: center;
+		padding-left: 1.1rem;
+		flex-wrap: wrap;
+	}
+	.userImg{
+		width: 0.8rem;
+		height: 0.8rem;
+		border-radius: 50%;
+		position: absolute;
+		left: 0;
+		top: 50%;
+		margin-top: -0.4rem;
+		overflow: hidden;
+		background: #2B89E8;
+	}
+	.userImg img{
+		width: 100%;
+		height: 100%;
+	}
+	.userName{
+		width: 100%;
+		font-size: 0.3rem;
+		line-height: 0.3rem;
+	}
+	.timer{
+		width: 100%;
+		font-size: 0.26rem;
+		line-height: 0.26rem;
+		margin-top: 0.1rem;
+	}
+	.commentText{
+		width: 100%;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp:2;
+		overflow: hidden;
+		font-size: 0.32rem;
+		line-height: 0.4rem;
+	}
+	.imgBox{
+		width: 100%;
+		height: auto;
+		display: flex;
+		display: -webkit-flex;
+		flex-wrap: wrap;
+	}
+	.imgBox img{
+		width: 2.1rem;
+		height: 2.1rem;
+		margin-left: 0.35rem;
+		margin-top: 0.35rem;
+	}
+	.imgBox img:nth-child(1){
+		margin-left: 0;
+	}
+	.imgBox img:nth-child(4){
+		margin-left: 0;
+	}
+	.banner{
+		width: 100%;
+		height: 1rem;
+		background: #eeeeee;
+		position: relative;
+		display: flex;
+		display: -webkit-flex;
+		position: relative;
+		align-items: center;
+		padding:0  0.2rem 0 1.16rem;
+		margin-top: 0.2rem;
+	}
+	.bannerImg{
+		width: 0.8rem;
+		height: 0.8rem;
+		position: absolute;
+		left: 0.2rem;
+		top: 50%;
+		margin-top: -0.4rem;
+		overflow: hidden;
+		background: #2B89E8;
+	}
+	.bannerImg img{
+		width: 100%;
+		height: 100%;
+	}
+	.bannerText{
+		width: 100%;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp:2;
+		overflow: hidden;
+		font-size: 0.26rem;
+		line-height: 0.32rem;
+	}
+	.commentBox{
+		width: 100%;
+		display: flex;
+		display: -webkit-flex;
+		align-items: center;
+		margin-top: 0.3rem;
+		margin-bottom: 0.4rem;
+	}
+	.commentBox span{
+		width: 50%;
+		display: flex;
+		display: -webkit-flex;
+		align-items: center;
+	}
+	.commentNum{
+		font-size: 0.3rem;
+		line-height: 0.3rem;
+	}
+	.commentNum font{
+		font-size: 0.26rem;
+		line-height: 0.26;
+		color: #999;
+		margin-left: 0.1rem;
+	}
+	.z img{
+		width: 0.36rem;
+		height: 0.36rem;
+	}
+	.z font{
+		font-size: 0.26rem;
+		color: #999;
+		margin-left: 0.1rem;
+	}
+	.commentList{
+		width: 100%;
+		height: auto;
+	}
+	.commentList li{
+		width: 100%;
+		height: auto;
+		font-size: 0.28rem;
+		line-height: 0.36rem;
+		margin-top: 0.15rem;
+	}
+	.commentList li span{
+		color: #4f94e2;
+	}
+	.commentList li span font{
+		margin-left: 0.1rem;
+	}
+	.more{
+		font-size: 0.28rem;
+		text-decoration: none;
+		color: #4f94e2;
+		display: block;
+		width: 2rem;
+		margin-top: 0.2rem;
+	}
+	.bind{
+		display: block;
+		width: 1.9rem;
+		position: fixed;
+		bottom: 2rem;
+		right: 0.6rem;
+		z-index: 999;
+	}
+	.bind img{
+		width: 100%;
+	}
+	.pop{
+		width: 100%;
+		height: 100%;
+		position: fixed;
+		left: 0;
+		bottom: 0;
+		z-index: 9999;
+		background: rgba(0,0,0,0.6);
+		display: none;
+	}
+	.inputDiv{
+		width: 100%;
+		height: 0.8rem;
+		background: #ebeaea;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		padding: 0 1.5rem 0 1rem;
+	}
+	.inputDiv img{
+		width: 0.67rem;
+		height: 0.56rem;
+		position: absolute;
+		left: 0.2rem;
+		top: 50%;
+		margin-top: -0.28rem;
+	}
+	.inputDiv input{
+		width: 100%;
+		height: 100%;
+		display: block;
+		border: none;
+		background: none;
+		font-size: 0.28rem;
+	}
+	.bindBtn{
+		width: 1.15rem;
+		height: 0.6rem;
+		background: #fff;
+/*		border-radius: 500px;*/
+		display: flex;
+		display: -webkit-flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 0.26rem;
+		position: absolute;
+		right: 0.1rem;
+		top: 50%;
+		margin-top: -0.3rem;
+		color: #999;
+	}

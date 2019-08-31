@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no">
+		<title></title>
+		<link rel="stylesheet" href="__CSS__/topic.css" />
+	</head>
+<body>
+	<div class="header">
+	   <img src="__IMG__/back.png" class="back">话题吧
+	</div>
+	<style>
+		.lists{letter-spacing:0.05rem;}
+	</style>
+	<div class="lists">
+		<volist name="data" id="vo" key="k">
+			<section>
+				<div class="user">
+					<div class="userImg">
+						<img src="{$vo.head_pic}" alt="">
+					</div>
+					<p class="userName"><b>{$vo.nickname}</b></p>
+					<p class="timer">{$vo.add_time|date="y-m-d H:i",###}</p>
+				</div>
+				<p class="commentText"><b>{$vo.title}</b></p>
+				<div class="imgBox">
+					<volist name="vo.photo_list" id="v">
+						<img src="{$v}">
+					</volist>
+				</div>
+				<eq name="vo.user_id" value="1">
+					<div class="banner">
+						<div class="bannerImg">
+							<img src="{$vo.original_img}">
+						</div>
+						<p class="bannerText"> {$vo.goods_name}</p>
+					</div>
+				</eq>
+				<div class="commentBox">
+					<span class="commentNum" id="forum_id-{$vo.forum_id}">评论<font>({$vo.comment_count}条)</font></span>
+					<span class="z" id="like_id-{$vo.forum_id}" onclick="add_like(this,'{$vo.forum_id}')"><img src="__IMG__/z.png"><font>{$vo.like_count}</font></span>
+				</div>
+				<ul class="commentList" id="key-{$vo.forum_id}">
+					<volist name="vo.comment_list" id="val">
+						<li>
+							<span>{$val.nickname}：</span>
+							<font>{$val.content}</font>
+						</li>
+					</volist>
+				</ul>
+				<p class="more" onclick="alla(this,'{$vo.forum_id}','{$vo.forum_id}')">全部评论》</p>
+			</section>
+		</volist>
+		
+	</div>
+	
+	<a href="add_forum.html" class="bind"><img src="__IMG__/bind_03.png"></a>
+	<div class="pop">
+		<div class="inputDiv">
+			<img src="__IMG__/pen_03.png">
+			<input type="text" class="commentInput" id="content" placeholder="写评论..." />
+			<span class="bindBtn">
+				提交
+			</span>
+	    </div>
+	</div>
+	
+</body>
+<script type="text/javascript" src="__JS__/jquery-3.2.1.min.js" ></script>
+<script>
+	var clickElement=null;
+	var forum_id = 0;
+	$(".commentNum").click(function(e){
+		$(".pop").fadeIn();
+		$(".commentInput").focus();
+		clickElement=$(this).parent().parent();
+		forum_id = e.target.id;
+	})	
+	$(".bindBtn").click(function(){
+		var content = $("#content").val();
+		$.ajax({
+			url:'add_comment',
+			type:'post',
+			data:{'forum_id':forum_id,'content':content},
+			success:function(e){
+				if(e.code == 1){
+					$("#key-" + e.data.forum_id).find('li').remove();
+					$("#key-" + e.data.forum_id).append(e.data.html_str);
+					var val = '评论<font>(' + e.data.count + '条)</font>' ;
+					$("#forum_id-" + e.data.forum_id).html(val);
+				}else{
+					alert(e.msg);
+				}
+			},
+			error:function(e){
+				console.log(e);
+			},
+		});
+		var value=$(".commentInput").val();
+		$(".pop").fadeOut();
+		// var li="<li><span>大将军~:</span><font>"+ value +"</font></li>"
+		// clickElement.find("ul").append(li)
+		$(".commentInput").val("")
+	})
+	$('.pop').on("touchstart",function(event){
+	  if(event.target==this){
+	    $(this).fadeOut()
+	  }
+	})
+	function alla(e,key,forum_id)
+	{
+		$.ajax({
+		url:'all_comment',
+		type:'post',
+		data:{'forum_id':forum_id},
+		success:function(res){
+			if(res.code == 1){
+				$("#key-" + key).find('li').remove();
+				$("#key-" + key).append(res.data);
+				$(e).html("收起》");
+				$(e).attr("onclick",null).unbind("click");
+				$(e).on('click',function(){
+					retract(e,key,forum_id);
+				});
+			}
+		},
+		error:function(res){
+			console.log(res);
+		}
+	});
+	}
+	function retract(e,key,forum_id)
+	{
+		$.ajax({
+			url:'all_comment_limit',
+			type:'post',
+			data:{'forum_id':forum_id},
+			success:function(res){
+				if(res.code == 1){
+					$("#key-" + key).find('li').remove();
+					$("#key-" + key).append(res.data);
+					$(e).html("全部评论》");
+					$(e).attr("onclick",null).unbind("click");
+					$(e).on('click',function(){
+						alla(e,key,forum_id);
+					});
+				}
+			},
+			error:function(res){
+				console.log(res);
+			}
+		})
+	}
+	function add_like(e,forum_id)
+	{
+		console.log(forum_id);
+		$.ajax({
+			url:'add_like',
+			type:'post',
+			data:{'forum_id':forum_id},
+			success:function(e){
+				if(e.code == 1){
+					var val = '<img src="__IMG__/z.png"><font>' + e.data.count + '</font>' ;
+					$("#like_id-" + e.data.forum_id).html(val);
+				}
+			},
+			error:function(e){
+				console.log(e);
+			}
+		})
+	}
+</script>
+</html>
