@@ -202,6 +202,7 @@ class Cart extends MobileBase {
             $error = $cart_validate->getError();
             $this->ajaxReturn(['status' => 0, 'msg' => $error, 'result' => '']);
         }
+        $goodInfo = M('goods')->field('join_t')->where('goods_id = '.$goods_id)->find();
         $address = Db::name('user_address')->where("address_id", $address_id)->find();
         $cartLogic = new CartLogic();
         $pay = new Pay();
@@ -224,6 +225,9 @@ class Cart extends MobileBase {
             // 提交订单
             if ($_REQUEST['act'] == 'submit_order') {
                 $placeOrder = new PlaceOrder($pay);
+                if($goodInfo['join_t']){
+                    $placeOrder->setJoin_t($goodInfo['join_t']);
+                }
                 $placeOrder->setMobile($mobile)->setUserAddress($address)->setConsignee($consignee)->setInvoiceTitle($invoice_title)
                     ->setUserNote($user_note)->setTaxpayer($taxpayer)->setInvoiceDesc($invoice_desc)->setPayPsw($pay_pwd)->setTakeTime($take_time)->setType(1)->addNormalOrder();
                 $cartLogic->clear();
@@ -318,7 +322,6 @@ class Cart extends MobileBase {
                 unset($paymentList[$key]);
             }
         }
-
         $bank_img = include APP_PATH.'home/bank.php'; // 银行对应图片
         $this->assign('paymentList',$paymentList);
         $this->assign('bank_img',$bank_img);

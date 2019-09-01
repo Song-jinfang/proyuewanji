@@ -60,6 +60,7 @@
     <div class="paiton">
         <div class="maleri30">
             <input type="hidden" name="order_id" value="{$order['order_id']}" id="order_id"/>
+             <input type="hidden" name="order_type" value="{$order['type']}" id="order_type"/>
             <a class="soon" href="javascript:void(0);" onClick="pay()"><span>立即支付</span></a>
             <!--<p class="fr"><a href="javascript:void(0);" class="lossbq">支付失败？</a></p>-->
         </div>
@@ -135,7 +136,7 @@
     $(function(){
         //默认选中第一个
         $('.pay-list-4 div ul li:first').find('.che').addClass('check_t').end().find(':radio').prop('checked',true);
-    })
+    });
     //切换支付方式
     function changepay(obj){
         $(obj).find('.che').addClass('check_t').parents('li').siblings('li').find('.che').removeClass('check_t');

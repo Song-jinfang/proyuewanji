@@ -70,6 +70,9 @@ class Payment extends MobileBase
 
         // 修改订单的支付方式 苹果支付完成，再次打开本地址，不会带上order_id
         $order_id = I('order_id/d'); // 订单id
+        $order_type = I('order_type/d');
+       // dump($order_type);exit;
+        
         if(is_ios()  && empty($order_id)){
             $order_id = session('pay_order_id');
             $deeplink_flag = 0;
@@ -87,7 +90,14 @@ class Payment extends MobileBase
         // 订单支付提交
         $config = parse_url_param($this->pay_code); // 类似于 pay_code=alipay&bank_code=CCB-DEBIT 参数
         $config['body'] = getPayBody($order_id);
-       
+        if($order_type == 2){//购买悦玩豆
+            $config['body'] = '购买悦玩豆';
+        }else if($order_type == 3){//购买
+            $config['body'] = '购买悦玩集广告';
+        }else{
+            $config['body'] = getPayBody($order_id);
+        }
+        
         if ($this->pay_code == 'weixin' && $_SESSION['openid'] && strstr($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger')) {
             //微信JS支付
             $code_str = $this->payment->getJSAPI($order);

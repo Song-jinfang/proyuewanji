@@ -152,6 +152,13 @@ class User
         $update['total_amount'] = $total_amount;//更新累计修复额度
         Db::name('users')->where("user_id", $this->user['user_id'])->save($update);
     }
+    /*
+     * 购买T+7后设置用户为有效用户
+     */
+    function updateUserEffective(){
+        Db::name('users')->where("user_id", $this->user['user_id'])->save(['is_effective'=>1]);
+    }
+    
 
     public function getUser()
     {

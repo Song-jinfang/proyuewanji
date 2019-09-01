@@ -688,11 +688,31 @@ function accountLog($user_id, $user_money = 0,$pay_points = 0, $desc = '',$distr
         }else{
             return false;
         }
-        
     }
     
     
 
+    //消耗悦玩豆
+    function lose_beans($user_id,$beans,$desc){
+        $account_log = array(
+            'user_id'       => $user_id,
+            'user_money'    => '-'.$beans,
+            'add_time'   => time(),
+            'desc' =>$desc,
+            'type'=>1
+        );
+        $update_data = array(
+            'happy_beans'   => ['exp','happy_beans-'.$beans]
+        );
+        $update = Db::name('users')->where("user_id = $user_id")->save($update_data);
+        if($update){
+            M('adv_log')->add($account_log);
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
 
 
 
@@ -937,10 +957,12 @@ function update_pay_status($order_sn,$ext=array())
         } else {
             // 修改支付状态  已支付
             $update = array('pay_status'=>1,'pay_time'=>$time);
-            $update['seven_days'] = strtotime('+7 day');
-            $update['fourteen_days'] = strtotime('+14 day');
-            $update['fifteen_days'] = strtotime('+15 day');
-            $update['twenty_eight_days'] = strtotime('+28 day');
+            if($order['type'] == 1 && $order['join_t'] == 1){
+                $update['seven_days'] = strtotime('+7 day');
+                $update['fourteen_days'] = strtotime('+14 day');
+                $update['fifteen_days'] = strtotime('+15 day');
+                $update['twenty_eight_days'] = strtotime('+28 day');
+            }
             if(isset($ext['transaction_id'])) $update['transaction_id'] = $ext['transaction_id'];
             M('order')->where("order_sn", $order_sn)->save($update);
         }
@@ -955,22 +977,59 @@ function update_pay_status($order_sn,$ext=array())
                 minus_stock($order);
             }
         }
-        /* 根据不同的type分别处理订单 */
-/*         if($order['type'] == 1){//商品下单
-            
-            
-        }else */
-        if($order['type'] == 2){//购买悦玩豆
-            consumption_beans($user_id,$order['ywd_price'],'在线购买悦玩豆');
-        }else{//支付投放广告
-            
-            
-        }
-        
         
         // 给他升级, 根据order表查看消费记录 给他会员等级升级 修改他的折扣 和 总金额
         $User =new \app\common\logic\User();
         $User->setUserById($order['user_id']);
+        /* 根据不同的type分别处理订单 */
+         if($order['type'] == 1){//商品下单
+            if($order['join_t'] == 1){//参与t+7和动态收益
+                $User->updateUserEffective();//给t+7的标志；
+                $user = $parent = M('users')->field('pid_list')->where('user_id='.$order['user_id'])->find();
+               // dump($order['user_id']);
+                if($user['pid_list']){
+                    $pidArr = array_reverse(explode(',',$user['pid_list']));
+                    unset($pidArr[0]);
+                    $conf = M('config')->where('id >=172 and id <=177')->column('value','name');
+                  
+                    foreach($pidArr as $k=>$v){
+                        if($v){
+                            $pidCount = M('users')->where("first_leader ='$v' and is_effective=1")->count();
+                           
+                            if($pidCount){
+                               // $pidUser =  M('users')->field('user_id')->where("first_leader ='$v' and is_effective=1")->find();
+                                if($k == 1 || $k == 2){
+                                    if($pidCount > 1 && $pidCount <5){
+                                        $rela = ($conf['level_'.$k]/100) * $order['order_amount'];
+                                    }
+                                }
+                                if($k == 3 || $k == 4){
+                                    if($pidCount > 6 && $pidCount < 19){
+                                        if($pidCount){
+                                            $rela = ($conf['level_'.$k]/100) * $order['order_amount'];
+                                        }
+                                    }
+                                }
+                                if($k == 5 || $k == 6){
+                                    if($pidCount > 20){
+                                        if($pidCount){
+                                            $rela = ($conf['level_'.$k]/100) * $order['order_amount'];
+                                        }
+                                    }
+                                }
+                                dynamic_profit($v,$rela,'团队用户购买商品获得收益',$order['order_id'],3);
+                            }
+                        }
+                    }
+                }
+            }
+        }elseif($order['type'] == 2){//购买悦玩豆
+            consumption_beans($order['user_id'],$order['ywd_price'],'在线购买悦玩豆');
+        }
+       /*  else{//支付投放广告
+            lose_beans($order['user_id'],$order['ywd_price'],'购买广告消耗悦玩豆');//修改悦豌豆余额，
+        } */
+
         $User->updateUserLevel();
         // 记录订单操作日志
         $commonOrder = new \app\common\logic\Order();
@@ -1008,6 +1067,33 @@ function update_pay_status($order_sn,$ext=array())
         $wechat->sendTemplateMsgOnPaySuccess($order);
     }
 }
+
+/*
+ * 购买订单给上级添加动态收益
+ */
+function dynamic_profit($user_id,$money,$desc,$order_id = 0,$type){
+    /* 插入帐户变动记录 */
+    $account_log = array(
+        'user_id'       => $user_id,
+        'user_money'    => $money,
+        'add_time'   => time(),
+        'desc'   => $desc,
+        'type'=>$type
+    );
+    /*更新每日订单任务信息 */
+     $update_data = array(
+         'dynamic_profit'        => ['exp','dynamic_profit+'.$money],
+    ); 
+     $update = Db::name('users')->where("user_id = $user_id")->save($update_data);
+    if($update){
+        M('adv_log')->add($account_log);
+        return true;
+    }else{
+        return false;
+    }
+    
+}
+
 
 /**
  * 订单确认收货

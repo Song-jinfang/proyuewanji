@@ -4081,8 +4081,8 @@ input:-ms-input-placeholder {
 }
 .shop-top-under .shulges .choic-sel .red {
 	color:white;
-	background:#f23030;
-	border-color:#f23030
+	background:#000000;
+	border-color:#000000
 }
 .plusshopcar-buy {
 	background-color:#f8f8f8;
@@ -4104,7 +4104,7 @@ input:-ms-input-placeholder {
 	float:left
 }
 .plusshopcar-buy .pb_buy {
-	background-color:#f23030;
+	background-color:#000000;
 	float:right
 }
 .action-detail .detailban {
@@ -4786,7 +4786,7 @@ input:-ms-input-placeholder {
 	text-align:center;
 	height:2.13333rem;
 	line-height:2.13333rem;
-	background-color:#f23030;
+	background-color:#000000;
 	display:block
 }
 .payit .fr a.disable {
@@ -5397,7 +5397,7 @@ span.mp_mp {
 	line-height:2.048rem
 }
 .ddmoney .fr {
-	color:#f23030
+	color:#000000
 }
 .quickpayment {
 	height:2.56rem;
@@ -5457,7 +5457,7 @@ span.mp_mp {
 	display:block;
 	text-align:center;
 	line-height:1.87733rem;
-	background-color:#f23030;
+	background-color:#000000;
 	font-size:.68267rem;
 	color:white;
 	border-radius:.21333rem
@@ -6934,7 +6934,7 @@ p.nike-price .throughli {
 	margin-top:0
 }
 .invoice .myorder .order .fl span.couponssl {
-	background:#da1d1d;
+	background:#000000;
 	font-size:.512rem;
 	color:white;
 	padding:.08533rem .21333rem;
@@ -10974,9 +10974,9 @@ body .gearDate {
 	height:0.896rem;
 }
 .z-dispatching .fr .dispatching-checkbox .z-dispatching-cheng {
-	background:#FF403C url(../images/z-chengs.png) no-repeat 0.128rem 0.1706rem;
+	background:#000000 url(../images/z-chengs.png) no-repeat 0.128rem 0.1706rem;
 	background-size:70% 60%;
-	border:solid 2px #FF403C;
+	border:solid 2px #000000;
 }
 .z-dispatching-one {
 	display:none;

@@ -95,7 +95,7 @@ class Index extends MobileBase {
     
     public function test_order(){
         
-        update_pay_status('201908281649067192');
+        update_pay_status('201908301113061487');
     }
     
     public function test(){

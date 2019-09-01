@@ -47,7 +47,8 @@ class PlaceOrder
     private $shop;
     private $take_time;
     private $preSell;
-
+    private $type;
+    private $join_t;
     /**
      * PlaceOrder constructor.
      * @param Pay $pay
@@ -248,6 +249,8 @@ class PlaceOrder
             'total_amount' => $this->pay->getTotalAmount(),// 订单总额
             'order_amount' => $this->pay->getOrderAmount(),//'应付款金额',
             'add_time' => time(), // 下单时间
+            'type'=>$this->type,
+            'join_t'=>$this->join_t,//是否参与t+7
         ];
         if($orderData["order_amount"] < 0){
             throw new TpshopException("订单入库", 0, ['status' => -8, 'msg' => '订单金额不能小于0', 'result' => '']);
@@ -482,6 +485,21 @@ class PlaceOrder
         $this->take_time = $take_time;
         return $this;
     }
+    /*新添加type方法*/
+    public function setType($type)
+    {
+        $this->type = $type;
+        return $this;
+    }
+    
+    /*新添加join_t方法*/
+    public function setJoin_t($join_t)
+    {
+        $this->join_t = $join_t;
+        return $this;
+    }
+    
+    
     public function setConsignee($consignee)
     {
         $this->consignee = $consignee;

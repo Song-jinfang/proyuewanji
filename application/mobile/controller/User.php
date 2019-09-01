@@ -535,7 +535,7 @@ class User extends MobileBase
     
     //测试生成二维码
     public function t(){
-       $this->getWchatQrcode('14');
+       $this->getWchatQrcode('141');
        // $this->createQrcode('http://yuewanji.hlz4319.com/mobile/User/reg','code','http://yuewanji.hlz4319.com/public/static/yuwanji/img/head_pic.jpg');
     }     
     public function wx_pic(){
@@ -549,7 +549,7 @@ class User extends MobileBase
         //  带LOGO
         $url = 'http://yuewanji.hlz4319.com/Mobile/User/reg?pid='.$users_id; //二维码内容
         $errorCorrectionLevel = 'L';//容错级别
-        $matrixPointSize = 9;//生成图片大小
+        $matrixPointSize = 12;//生成图片大小
         //生成二维码图片
         Vendor('phpqrcode.phpqrcode');
         $object = new \QRcode();
@@ -584,7 +584,7 @@ class User extends MobileBase
     }
     //合成图片
     function share_img($users_id){
-        $dst_path ='public/static/yuwanji/img/share_1.png';
+        $dst_path ='static/img/src/share_1.png';
         
         $src_path = 'code/code_jpg/'.$users_id.'.jpg';
         
@@ -602,7 +602,7 @@ class User extends MobileBase
         
         //如果水印图片本身带透明色，则使用imagecopy方法
         //imagecopy($dst, $src, 225.5,772, 0, 0, $src_w, $src_h);
-        $rs = imagecopymerge($dst, $src, 221.5, 752, 0, 0, $src_w, $src_h, 100);
+        $rs = imagecopymerge($dst, $src, 176, 720, 0, 0, $src_w, $src_h, 100);
         //输出图片
         list($src_w, $src_h, $dst_type) = getimagesize($dst_path);
         
