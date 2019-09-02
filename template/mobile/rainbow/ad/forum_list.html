@@ -161,6 +161,9 @@
 			data:{'forum_id':forum_id},
 			success:function(e){
 				if(e.code == 1){
+					var val = '<img src="__IMG__/20190902100850.png"><font>' + e.data.count + '</font>' ;
+					$("#like_id-" + e.data.forum_id).html(val);
+				}else if(e.code == 2){
 					var val = '<img src="__IMG__/z.png"><font>' + e.data.count + '</font>' ;
 					$("#like_id-" + e.data.forum_id).html(val);
 				}

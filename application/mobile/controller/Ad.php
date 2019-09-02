@@ -554,7 +554,7 @@ class Ad extends MobileBase
             Db::name('forum_like')->where(['like_id' => $like_id])->delete();
             $count = Db::name('forum_like')->where(['forum_id' => $forum_id])->count();
             return json([
-                'code'  =>  1,
+                'code'  =>  2,
                 'msg'   =>  '取消成功',
                 'data'  =>  ['count' => $count,'forum_id' => $forum_id],
             ]);
