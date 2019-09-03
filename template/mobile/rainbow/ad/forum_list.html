@@ -39,7 +39,12 @@
 				</eq>
 				<div class="commentBox">
 					<span class="commentNum" id="forum_id-{$vo.forum_id}">评论<font>({$vo.comment_count}条)</font></span>
-					<span class="z" id="like_id-{$vo.forum_id}" onclick="add_like(this,'{$vo.forum_id}')"><img src="__IMG__/z.png"><font>{$vo.like_count}</font></span>
+					<span class="z" id="like_id-{$vo.forum_id}" onclick="add_like(this,'{$vo.forum_id}')">
+						<if condition="$vo.is_like eq 1">
+							<img src="__IMG__/20190902100850.png">
+							<else /><img src="__IMG__/z.png">
+						</if>
+						<font>{$vo.like_count}</font></span>
 				</div>
 				<ul class="commentList" id="key-{$vo.forum_id}">
 					<volist name="vo.comment_list" id="val">

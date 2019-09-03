@@ -413,6 +413,8 @@ class Ad extends MobileBase
                 ->field('a.*,b.nickname,b.head_pic,c.goods_name,c.original_img')
                 ->order('a.add_time','desc')
                 ->select();
+        $userInfo = session('user');
+        $user_id = $userInfo['user_id'];
         foreach ($data as &$vo){
             $vo['photo_list'] = Db::name('forum_photo')->where(['forum_id' => $vo['forum_id']])->column('photo_address');
             $vo['comment_list'] = Db::name('forum_comment')->alias('a')
@@ -424,6 +426,12 @@ class Ad extends MobileBase
                                     ->select();
             $vo['comment_count'] = Db::name('forum_comment')->where(['forum_id' => $vo['forum_id']])->count();
             $vo['like_count']    = Db::name('forum_like')->where(['forum_id' => $vo['forum_id']])->count();
+            $like_id = Db::name('forum_like')->where(['user_id' => $user_id,'forum_id' => $vo['forum_id']])->value('like_id');
+            if($like_id){
+                $vo['is_like'] = 1;
+            }else{
+                $vo['is_like'] = 2;
+            }
         }
 //        dump($data);die;
         $this->assign('data',$data);
