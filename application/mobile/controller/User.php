@@ -1474,6 +1474,11 @@ class User extends MobileBase
      */
     public function withdrawals()
     {
+        $week_arr =  [1,2,3,4,5];
+        $new_week = date('w',time());
+        if(!in_array($new_week,$week_arr)){
+            $this->error('周六周日不能提现');
+        }
         C('TOKEN_ON', true);
         $cash_open=tpCache('cash.cash_open');
         if($cash_open!=1){
