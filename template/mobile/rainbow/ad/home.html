@@ -12,15 +12,13 @@
 	<div class="bannerDiv">
 		<div class="swiper-container swiper-containerA">
 	        <div class="swiper-wrapper">
-	            <div class="swiper-slide">
-	            	<img src="__IMG__/homebanner.png">
-	            </div>
-	            <div class="swiper-slide">
-	            	<img src="__IMG__/homebanner.png">
-	            </div>
-	            <div class="swiper-slide">
-	            	<img src="__IMG__/homebanner.png">
-	            </div>
+	             <adv pid ="543" limit="3" item="v">
+		            <a href="{$v.ad_link}">
+			            <div class="swiper-slide">
+			            	<img src="{$v[ad_code]}">
+			            </div>
+		            </a>
+	         	</adv>
 	        </div>
 	        <!-- Add Pagination -->
 	        <div class="swiper-pagination"></div>
