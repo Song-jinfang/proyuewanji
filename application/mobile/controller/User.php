@@ -131,9 +131,41 @@ class User extends MobileBase
                  $orderList[$k]['adv_task'] = 2;
              }
          }
+         $profitArr['adv_profit'] = M('adv_log')->where('type=2')->sum('user_money');
+         $profitArr['share_profit'] = M('adv_log')->where('type=3')->sum('user_money');
+         $profitArr['order_profit'] = M('withdrawal_balance')->where('user_id='.$this->user_id)->sum('money');
+         $this->assign('profitArr',$profitArr);
          $this->assign('orderList',$orderList);
          return $this->fetch();
     }
+    /*
+     * 广告收益
+     */
+    function adv_profit(){
+        $data = M('adv_log')->field("from_unixtime(add_time,'%m-%d %H:%i') as add_time,desc,user_money")->where('type=2')->select();
+        $profitArr['adv_profit'] = M('adv_log')->where('type=2')->sum('user_money');
+        $profitArr['share_profit'] = M('adv_log')->where('type=3')->sum('user_money');
+        $profitArr['order_profit'] = M('withdrawal_balance')->where('user_id='.$this->user_id)->sum('money');
+        $this->assign('data',$data);
+        $this->assign('profitArr',$profitArr);
+        return $this->fetch();
+    }
+    
+    /*
+     * 广告收益
+     */
+    function share_profit(){
+        $data = M('adv_log')->field("from_unixtime(add_time,'%m-%d %H:%i') as add_time,desc,user_money")->where('type=3')->select();
+        $profitArr['adv_profit'] = M('adv_log')->where('type=2')->sum('user_money');
+        $profitArr['share_profit'] = M('adv_log')->where('type=3')->sum('user_money');
+        $profitArr['order_profit'] = M('withdrawal_balance')->where('user_id='.$this->user_id)->sum('money');
+        $profitArr['dynamic_profit'] = M('users')->where('user_id='.$this->user_id)->value('dynamic_profit');
+        $this->assign('profitArr',$profitArr);
+        $this->assign('data',$data);
+        return $this->fetch();
+    }
+    
+    
     //获取第15天以后可以提现的订单
     function is_withdraw(){
         //获取昨日的订单总额乘50%再乘70%
@@ -277,6 +309,24 @@ class User extends MobileBase
                 'msg'=>'领取成功'.$order_point.'元',
                 'url'=>'/Mobile/User/earnings')
             );
+    }
+    /*
+     * 获取分享总收益到余额
+     */
+    function getShrePointToMoney(){
+        $dynamic_profit = M('users')->field('dynamic_profit,happy_beans')->where('user_id='.$this->user_id)->find();
+        $confBeans = M('config')->where("name='profit_cons_beans'")->value('value');
+        $beans = intval(($confBeans/100)*$dynamic_profit['dynamic_profit']);//应付悦玩豆
+        if($dynamic_profit['happy_beans'] < $beans){
+            $this->ajaxReturn(['status'=>-1,'msg'=>'悦玩豆不足']);
+        }
+        if($dynamic_profit['dynamic_profit']){
+            withdrawal_balance_finance($this->user_id,$dynamic_profit['dynamic_profit'],'领取分享收益',0,2);
+           $update =  M('users')->where('user_id='.$this->user_id)->update(['dynamic_profit'=>0]);
+           if($update){
+               $this->ajaxReturn(['status'=>'1','msg'=>'领取成功']);
+           }
+        }
     }
     
     
@@ -1474,6 +1524,11 @@ class User extends MobileBase
      */
     public function withdrawals()
     {
+        $week_arr =  [1,2,3,4,5];
+        $new_week = date('w',time());
+        if(!in_array($new_week,$week_arr)){
+            $this->error('周六周日不能提现');
+        }
         C('TOKEN_ON', true);
         $cash_open=tpCache('cash.cash_open');
         if($cash_open!=1){

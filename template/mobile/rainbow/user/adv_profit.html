@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no">
+		<title></title>
+		<link rel="stylesheet" href="__CSS__/earnings.css" />
+		<script type="text/javascript" src="__JS__/jquery-3.2.1.min.js" ></script>
+	</head>
+	<style>
+		.tableDiv{
+		width: 6.8rem;
+		height: auto;
+		margin: auto;
+		margin-top: 0.4rem;
+	}
+	.table{
+		padding: 0 0.4rem 0.9rem 0.4rem;
+		background: #fff;
+	}
+	table{
+		width: 100%;
+		font-size: 0.26rem;
+	}
+	th{
+		border-bottom: 1px solid #8c8a8a;
+		padding: 0.2rem 0;
+		text-align: left;
+	}
+	td{
+		color: #8c8a8a;
+		border-bottom: 1px solid #8c8a8a;
+		padding: 0.2rem 0;
+	}
+	
+	</style>
+	<body>
+	<div class="header">
+	    <a id="[back]" <php> if(request()->action() == 'earnings'){ </php>  href="{:U('User/index')}" <php> }else{ </php> href="[href]" <php> } </php> ><img src="__IMG__/back.png" class="back" ></a>广告收益
+	</div>
+		<div class="tab">
+			<a href="/Mobile/user/earnings" <php> if(request()->action() == 'earnings'){</php>class="curr" <php>}</php>   >
+				<p>{$profitArr['adv_profit']}<font>(元)</font></p>
+			    <p>单单返</p>
+			</a>
+			<span></span>
+			<a href="/Mobile/user/adv_profit" <php> if(request()->action() == 'adv_profit'){</php>class="curr" <php>}</php> >
+				<p>{$profitArr['share_profit']}<font>(元)</font></p>
+			    <p>广告收益</p>
+			</a>
+			<span></span>
+			<a href="/Mobile/user/share_profit" <php> if(request()->action() == 'share_profit'){</php>class="curr" <php>}</php> >
+				<p>{$profitArr['order_profit']}<font>(元)</font></p>
+			    <p>分享收益</p>
+			</a>
+		</div>
+		  <div class="tableDiv">
+			   	<div class="table">
+			   	 	<table border="0" cellspacing="0" cellpadding="0" >
+			   	 		<tr>
+			   	 			<th style="width:20%">金额</th>
+			   	 			<th style="width:30%">收益时间</th>
+			   	 			<th>收益描述</th>
+			   	 		</tr>
+						<volist name="data" id="vo">
+				   	 		<tr>
+				   	 			<td>{$vo.user_money}</td>
+				   	 			<td>{$vo.add_time}</td>
+				   	 			
+				   	 			<td>{$vo.desc}</td>
+				   	 		</tr>
+						</volist>
+			   	 	</table>
+			   	</div>
+		   </div>   
+	</body>
+</html>

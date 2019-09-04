@@ -1154,14 +1154,14 @@ footer .flool3 p {
 }
 .classlist .fr .branchList .tp-class-list ul li {
 	float:left;
-	width:50%;
+	width:33.3%;
 	text-align:center
 }
 .classlist .fr .branchList .tp-class-list ul li a {
 	display:block
 }
 .classlist .fr .branchList .tp-class-list ul li a img {
-	width:3.93333rem;
+	width:3.03333rem;
 	height:3.23333rem
 }
 .classlist .fr .branchList .tp-class-list ul li a p {

@@ -9,24 +9,24 @@
 	</head>
 	<body>
 	<div class="header">
-	    <a id="[back]" <php> if(request()->action() == 'earnings'){ </php>  href="{:U('User/index')}" <php> }else{ </php> href="[href]" <php> } </php> ><img src="__IMG__/back.png" class="back" ></a>详情
+	    <a id="[back]" <php> if(request()->action() == 'earnings'){ </php>  href="{:U('User/index')}" <php> }else{ </php> href="[href]" <php> } </php> ><img src="__IMG__/back.png" class="back" ></a>单单返
 	</div>
 		<div class="tab">
 			<a href="###" class="curr">
-				<p>267<font>(元)</font></p>
-			    <p>商品返现</p>
+				<p>{$profitArr['adv_profit']}<font>(元)</font></p>
+			    <p>单单返</p>
+			</a>
+			<span></span>
+			<a href="/Mobile/user/adv_profit">
+				<p>{$profitArr['share_profit']}<font>(元)</font></p>
+			    <p>广告收益</p>
 			</a>
 			<span></span>
 			<a href="###">
-				<p>267<font>(元)</font></p>
-			    <p>任务收益</p>
+				<p>{$profitArr['order_profit']}<font>(元)</font></p>
+			    <p>分享收益</p>
 			</a>
-			<span></span>
-			<a href="###">
-				<p>267<font>(元)</font></p>
-			    <p>豆豆交易收益</p>
-			</a>
-		</div>
+			</div>
 		<div class="list">
 		<volist name="orderList" id="v">
 			<div class="orderLists">

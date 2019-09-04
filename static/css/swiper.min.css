@@ -104,7 +104,7 @@ html {
     	opacity: 1;
     }
     .bannerDiv .swiper-pagination-bullet-active{
-    	background: dodgerblue;
+    	background: #000000;
     	opacity: 1;
     }
     .iconBox{
