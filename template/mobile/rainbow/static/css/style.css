@@ -455,7 +455,7 @@ header .sea-box input {
 	height:2.34667rem
 }
 }.footer {
-	height:2.13333rem;
+	height:2.323333rem;
 	background:#fff;
 	position:fixed;
 	z-index:999;
@@ -497,7 +497,7 @@ header .sea-box input {
 	font-size:.59733rem
 }
 }.footer ul li a .icon p {
-	font-size:.55467rem;
+	font-size:.49867rem;
 	margin-top:.21333rem
 }
 @media screen and (min-width:1300px) {
@@ -11840,8 +11840,8 @@ pre {
 .icon_tps {
 	display:block;
 	margin:0 auto;
-	width:1.0666rem;
-	height:1.0666rem;
+	width:1.4666rem;
+	height:1.166rem;
 }
 .icon_tp2 {
 	display:none;

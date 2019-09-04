@@ -84,7 +84,8 @@ class User extends MobileBase
     public function earnings(){ 
         $param = I('get.');
         $p = $param['p']?$param['p']:'1';
-        $orderList = M('order')->field("order_id,order_amount,order_point,order_sn,FROM_UNIXTIME(add_time,'%Y.%m.%d') add_time,seven_days,fourteen_days,fifteen_days,fifteen_status,twenty_eight_days,seven_status,fourteen_status")->where('user_id = '.$this->user_id .' and pay_status = 1')->order('order_id','desc')->select();
+        $orderList = M('order')->field("order_id,order_amount,order_point,order_sn,FROM_UNIXTIME(add_time,'%Y.%m.%d') add_time,seven_days,fourteen_days,fifteen_days,fifteen_status,twenty_eight_days,seven_status,fourteen_status")
+                    ->where('user_id = '.$this->user_id .' and pay_status = 1 and type = 1 and join_t = 1')->order('order_id','desc')->select();
          $time = time();
          $confBeans = M('config')->column('value','name');
          foreach($orderList as $k=>$v){
@@ -155,11 +156,12 @@ class User extends MobileBase
      * 广告收益
      */
     function share_profit(){
-        $data = M('adv_log')->field("from_unixtime(add_time,'%m-%d %H:%i') as add_time,desc,user_money")->where('type=3')->select();
-        $profitArr['adv_profit'] = M('adv_log')->where('type=2')->sum('user_money');
-        $profitArr['share_profit'] = M('adv_log')->where('type=3')->sum('user_money');
-        $profitArr['order_profit'] = M('withdrawal_balance')->where('user_id='.$this->user_id)->sum('money');
+        $data = M('adv_log')->field("from_unixtime(add_time,'%m-%d %H:%i') as add_time,desc,user_money")->where('type=3')->select();//
+        $profitArr['adv_profit'] = M('adv_log')->where('type=2')->sum('user_money');//广告收益
+        $profitArr['share_profit'] = M('adv_log')->where('type=3')->sum('user_money');//分享总收益
+        $profitArr['order_profit'] = M('withdrawal_balance')->where('user_id='.$this->user_id)->sum('money');//分享总提取到余额的额度
         $profitArr['dynamic_profit'] = M('users')->where('user_id='.$this->user_id)->value('dynamic_profit');
+        $profitArr['profit_already'] = M('withdrawal_balance')->where('user_id='.$this->user_id.' and type=2')->sum('money');
         $this->assign('profitArr',$profitArr);
         $this->assign('data',$data);
         return $this->fetch();

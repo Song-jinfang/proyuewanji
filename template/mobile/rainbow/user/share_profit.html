@@ -64,14 +64,21 @@
 		 		</div>
 		 </div> -->
 		 <style>
-				.get_profit{line-height:0.6rem;display:block;width:3.5rem;text-align:center;background-color:#c29700;border-radius:5px;color:#fff;}
-				.tableDiv span{float:left;}
+				/* .get_profit{line-height:0.6rem;display:block;width:3.5rem;text-align:center;background-color:#c29700;border-radius:5px;color:#fff;}
+				.tableDiv span{float:left;} */
+    				.get_profit{background: #fff;width: 6.8rem;margin: auto;overflow:hidden;margin-top:0.2rem;font-size:15px;padding:5px;}
+					.get_profit span{display:block;float:left;line-height:0.7rem;margin-left:0.2rem}
+				
 		 </style>
-		  <if condition="$profitArr['dynamic_profit'] gt 0">
-				  <div class="tableDiv" style="padding: 0 0.4rem 0.9rem 0.4rem;background: #fff;">
-					   <p style="font-size:13px;float:right;margin-top:0.15rem" onclick="getMoneyToBeans()"><span class="get_profit"><b>{$profitArr['dynamic_profit']}</b>(元)领取</span></p>
-				   </div>   
-		   </if>
+			  	<div class="get_profit">
+			  		<span>已领取:</span><span style="font-size:18px;color:#459018">{$profitArr['profit_already']}</span>
+			  		<span>待领取:</span><span style="font-size:18px;color:#459018">{$profitArr['dynamic_profit']}</span>
+			  		<if condition="$profitArr['dynamic_profit'] gt 0">
+			  			<span onclick="getMoneyToBeans()"  style="margin-left:0.3rem;line-height:0.7rem;background:#459018;width:1.2rem;text-align:center;border-radius:8px;color:#fff">领取</span>
+			  		<else>
+			  			<span style="margin-left:0.3rem;line-height:0.7rem;background:#bbbbbb;width:1.2rem;text-align:center;border-radius:8px;color:#fff">领取</span>
+			  		</if>
+			   </div>   
 		    <div class="tableDiv">
 			   	<div class="table">
 			   	 	<table border="0" cellspacing="0" cellpadding="0" >
