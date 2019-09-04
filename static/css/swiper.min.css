@@ -202,6 +202,8 @@ html {
     	height: 6.95rem;
     	margin: auto;
     	background: #240dd3;
+    	background:url(/static/img/div_back.png) no-repeat;
+    	background-size:100% 100%;  
     	position: relative;
     }
     
