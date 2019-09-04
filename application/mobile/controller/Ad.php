@@ -146,6 +146,8 @@ class Ad extends MobileBase
             $session_user = session('user');
             $uid = $session_user['user_id'];
             $have_price  = M('users')->where(['user_id' => $uid])->value('happy_beans');
+            $data = Db::name('notify')->where(['type' => 1,'status' => 1])->select();
+            $this->assign('data',$data);
             $this->assign('have_price',$have_price);
             return $this->fetch();
         }else{

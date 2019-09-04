@@ -28,11 +28,13 @@
 	<div class="broadcast">
 		  <img src="__IMG__/lb.png">
 		  <div class="swiper-container swiper-containerB">
-		    <div class="swiper-wrapper" class="dataBox">
-	             <div class="swiper-slide swiper-no-swiping">
-		      	  <p>交易时候看清楚交易内容</p>
-		        </div>                
-		    </div>
+			 <volist name="data" id="vo">
+				<div class="swiper-wrapper" class="dataBox">
+					 <div class="swiper-slide swiper-no-swiping">
+					  <p>{$vo.title}</p>
+					</div>
+				</div>
+			 </volist>
 		  </div>
 	</div>
 	<!--广播-->
@@ -42,7 +44,7 @@
     			<img src="__IMG__/icon-1.png" class="iconName">
     			<img src="__IMG__/next.png" class="next">
     			<font>豆包</font>
-    			<span>我的钱包(账户余额及悦玩豆)</span>
+    			<span>我的悦玩豆({$have_price}个)</span>
     		</a>   		
     	</li>
     	<li>
