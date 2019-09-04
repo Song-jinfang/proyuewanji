@@ -1,0 +1,351 @@
+	html {
+		width: 100%;
+		font-size: calc(100vw/7.5);
+		font-size: -webkit-calc(100vw/7.5);
+		-webkit-text-size-adjust: 100%;
+	}
+	body{
+		width:100%;
+		background: #fff;
+	}
+	*{
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+		-webkit-tap-highlight-color: transparent;
+	}
+	ul,li{
+		list-style: none;
+	}
+	img{
+		display: block;
+	}
+	.header{
+		width: 100%;
+		height: 0.88rem;
+		line-height: 0.88rem;
+		font-size: 0.32rem;
+		position: relative;
+		background: #fff;
+		color: #020101;
+		padding-left: 0.6rem;
+	}
+	.back{
+		width: 0.2rem;
+		height: 0.32rem;
+		position: absolute;
+		left: 0.2rem;
+		top: 50%;
+		margin-top: -0.16rem;
+	}
+	.line{
+		width: 100%;
+		height: 0.12rem;
+		background: #eceaea;
+	}
+	section{
+		padding: 0.2rem 0.2rem 0.4rem 0.2rem;
+	}
+	.t1{
+		width: 100%;
+		display: flex;
+		display: -webkit-flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.t1 span:nth-child(1){
+		font-size: 0.32rem;
+	}
+	.t1 span:nth-child(2){
+		font-size: 0.22rem;
+	}
+	.inputDiv{
+		width: 100%;
+		display: flex;
+		display: -webkit-flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-top: 0.2rem;
+	}
+	.num{
+		width: 2.22rem;
+		height: 0.8rem;
+		display: flex;
+		display: -webkit-flex;
+		align-items: center;
+		justify-content: space-between;
+		border: 1px solid #bebebe;
+		padding: 0 0.1rem;
+	}
+	.num input{
+		display: block;
+		width: 1.6rem;
+		font-size: 0.28rem;
+		background: none;
+		border: none;
+	}
+	.num font{
+		font-size: 0.28rem;
+	}
+	.money{
+		width: 3.6rem;
+		height: 0.8rem;
+		display: flex;
+		display: -webkit-flex;
+		align-items: center;
+		justify-content: space-between;
+		border: 1px solid #bebebe;
+		padding: 0 0.1rem;
+	}
+	.money input{
+		display: block;
+		width:2.6rem;
+		font-size: 0.28rem;
+	    background: none;
+		border: none;	
+	}
+	.money font{
+		font-size: 0.28rem;
+	}
+	.inputDiv img{
+		width: 0.46rem;
+		height: 0.27rem
+	}
+	.focus{
+		border: 1px solid #05a2c4 ;
+	}
+	.price{
+		width: 100%;
+		display: flex;
+		display: -webkit-flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-top: 0.2rem;
+	}
+	.tag{
+		font-size: 0.24rem;
+		color: #000;
+		padding: 2px 5px;
+		border: 1px solid #05a2c4;
+	}
+	.price p{
+		font-size: 0.24rem;
+		line-height: 0.3rem;
+	}
+	.confirmBtn{
+		width: 100%;
+		height: 0.66rem;
+		display: flex;
+		display: -webkit-flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 0.32rem;
+		color: #fff;
+		background: #05a2c4;
+		margin-top: 0.2rem;
+	}
+	.t2{
+		width: 100%;
+		font-size: 0.32rem;
+	}
+	.lists{
+		width: 100%;
+		height: auto;
+	}
+	.lists a{
+		width: 100%;
+		height: auto;
+		position: relative;
+		display: block;
+		text-decoration: none;
+		color:#000;
+		padding-left: 1.3rem;
+		margin-top: 0.6rem;
+	}
+	.proImg{
+		width: 1rem;
+		height: 1rem;
+		position: absolute;
+		left: 0;
+		top: 50%;
+		margin-top: -0.5rem;
+	}
+	.img{
+		width: 100%;
+		height: 100%;
+		border-radius: 50%;
+		position: absolute;
+		left: 0;
+		top: 0;
+	}
+	.wxIcon{
+		width: 0.35rem;
+		height: 0.33rem;
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		z-index: 1;
+	}
+	.name{
+		font-size: 0.32rem;
+		line-height: 0.32rem;
+	}
+	.totalNum{
+		font-size: 0.26rem;
+		line-height: 0.26rem;
+		margin-top: 0.15rem;
+	}
+	.nums{
+		font-size: 0.26rem;
+		line-height: 0.26rem;
+		margin-top: 0.15rem;
+	}
+	.prices{
+		font-size: 0.26rem;
+		line-height: 0.26rem;
+		right: 0;
+		bottom: 0.85rem;
+		position: absolute;
+	}
+	.buyBtn{
+		width: 1.4rem;
+		height: 0.6rem;
+		display: flex;
+		display: -webkit-flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 0.3rem;
+		color: #fff;
+		background: #05a2c4;
+		position: absolute;
+		right: 0;
+		bottom: 0.1rem;
+	}
+	
+	    .pop{
+    	width: 100%;
+    	height: 100%;
+    	position: fixed;
+    	left: 0;
+    	top: 0;
+    	background: rgba(255,255,255,0.6);
+    	z-index: 999;
+    	display: none;
+    }
+    .hint{
+    	width: 100%;
+    	position: absolute;
+    	bottom: 0;
+    	left: 0;
+    	background: #fff;
+    }
+    .affirmBtn{
+    	width: 100%;
+    	height: 0.5rem;
+    	line-height: 0.5rem;
+    	text-align: center;
+    	line-height: 0.5rem;
+    	color: #fff;
+    	font-size: 0.3rem;
+    	background: #010101;
+    	border-top: 1px solid #c29700;
+    }
+    .p1{
+    	width: 100%;
+    	text-align: center;
+    	font-size: 0.4rem;
+    	color: #010101;
+    	line-height: 0.42rem;
+    	margin-top: 0.3rem;
+    }
+    .p2{
+    	width: 100%;
+    	text-align: center;
+    	font-size: 0.26rem;
+    	color: #010101;
+    	line-height: 0.28rem;
+    	margin-top: 0.1rem;
+    }
+    .p3{
+    	width: 100%;
+    	text-align: center;
+    	font-size: 0.26rem;
+    	color: #010101;
+    	line-height: 0.28rem;
+    	margin-top: 0.2rem;
+    }
+    .p4{
+    	width: 100%;
+    	text-align: center;
+    	font-size: 0.24rem;
+    	color: #8e8e8f;
+    	line-height: 0.26rem;
+    	margin-top: 0.1rem;
+    }
+    .tips{
+    	width: 100%;
+    	padding: 0 0.5rem;
+    	font-size: 0.24rem;
+    	color: #8E8E8F;
+    	margin-top: 0.5rem;
+    }
+    .formList{
+    	width: 100%;
+    	height: auto;
+    	padding: 0 0.5rem;
+    	margin-top: 0.5rem;
+    }
+    .formList li{
+    	width: 100%;
+    	display: flex;
+    	display: -webkit-flex;
+    	justify-content: space-between;
+    	align-items: center;
+    	height: 0.84rem;
+    	font-size: 0.3rem;
+    	color: #010101;
+    	border-bottom: 1px solid #c7c7c7;
+    }
+    .formList li span{
+    	width: 30%;
+    }
+    .formList li div{
+    	width: 60%;
+    	height: 100%;
+    	display: flex;
+    	display: -webkit-flex;
+    	align-items: center;
+    }
+    .formList input{
+    	display: block;
+    	width: 100%;
+    	font-size: 0.3rem;
+    	background: none;
+    	border: none;
+    }
+    .btnDiv{
+    	width: 100%;
+    	padding: 0 0.5rem;
+    	display: flex;
+    	display: -webkit-flex;
+    	justify-content: space-between;
+    	margin-top: 0.54rem;
+    	margin-bottom: 0.5rem;
+    }
+    .btn{
+    	width: 3.04rem;
+    	height: 0.9rem;
+    	display: flex;
+    	display: -webkit-flex;
+    	justify-content: center;
+    	align-items: center;
+    	font-size: 0.32rem;
+    	color: #fff;
+    	border-radius: 8px;
+    }
+    .btn1{
+    	background: #020101;
+    }
+    .btn2{
+    	background: #b8b2b2;
+    }

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no">
+		<title></title>
+		<link rel="stylesheet" href="__CSS__/buy.css" />
+	</head>
+	<body>
+	<div class="header">
+		<a href="javascript:history.go(-1);"><img src="__IMG__/back1.png" class="back"></a>我要买
+	</div>
+	<div class="line"></div>
+	<section>
+		<div class="t1">
+			<span>挂卖</span>
+			<span>参考价：{$beans_price}RMB</span>
+		</div>
+		<div class="inputDiv">
+			<div class="num">
+				<input class="inputs" id="numbers" type="text" placeholder="请输入个数"/>
+				<font>个</font>
+			</div>
+			<img src="__IMG__/line.png">
+			<div class="money">
+				<input class="inputs" type="text" id="unit_price"  placeholder="请输入单价" onchange="unit_price()" />
+				<font>RMB</font>
+			</div>
+		</div>
+		<div class="price">
+			<div class="tag">微信</div>
+			<div>
+				<p>成交单价</p>
+				<p id="deal_price">0RMB</p>
+			</div>
+		</div>
+		<div class="confirmBtn" onclick="release()">确定</div>
+	</section>
+	
+	<div class="line"></div>
+	<section>
+		<p class="t2">自选交易</p>
+		<div class="lists">
+			<volist name="data" id="vo">
+				<a href="###">
+					<div class="proImg">
+						<img src="{$vo.head_pic}" class="img">
+						<img src="__IMG__/wx.png" class="wxIcon">
+					</div>
+					<p class="name">{$vo.nickname}</p>
+					<p class="totalNum">总成交数量：{$vo.count}个 </p>
+					<p class="nums">数量：{$vo.surplus_num}个</p>
+					<span class="prices">单价：{$vo.unit_price}RMB</span>
+					<div class="buyBtn" id="id-{$vo.sell_id}">购买</div>
+				</a>
+			</volist>
+		</div>
+	</section>
+	
+	<div class="pop">
+    	<div class="hint">
+    		<div class="affirmBtn">确认订单</div>
+		    
+		    
+		    <p class="tips"></p>
+		    <ul class="formList">
+		    	<li>
+		    		<span>购买数量</span>
+		    		<div>
+		    			<input type="number" id="heans_numbers" placeholder="只能输入整数" />
+						<input type="hidden" id="sell_id" name="sell_id" value="">
+		    			<font>(个)</font>
+		    		</div>
+		    	</li>
+		    	
+		    	
+		    </ul>
+		    <div class="btnDiv">
+		    	<div class="btn btn1" onclick="submit_order()">确认</div>
+		    	<div class="btn btn2">取消</div>
+		    </div>
+    	</div>
+    </div> 
+	</body>
+	<script type="text/javascript" src="__JS__/jquery-3.2.1.min.js" ></script>
+	<script>
+		$(".buyBtn").click(function(e){
+			var v_id = e.target.id;
+			var arr = v_id.split("-");
+			var sell_id = arr[1];
+			$.ajax({
+				url:'sell_info',
+				type:'post',
+				data:{'sell_id':sell_id},
+				success:function(e){
+					if(e.code == 1){
+						$(".tips").html("提示：一个悦玩豆=" + e.data.unit_price + "元");
+						$("#sell_id").val(e.data.sell_id);
+					}
+				},
+				error:function(){
+					alert('网络异常');
+				}
+			});
+			$(".pop").fadeIn();
+		})
+		$(".btn").click(function(){
+	   	    $(".pop").hide()
+	   })
+		$(".inputs").focus(function(){
+			$(this).parent().addClass("focus")
+		})
+		$(".inputs").blur(function(){
+			$(this).parent().removeClass("focus")
+		})
+		function unit_price()
+		{
+			var unit_price = $("#unit_price").val();
+			unit_price = unit_price ? unit_price : 0;
+			$("#deal_price").html(unit_price + 'RMB');
+		}
+		function release()
+		{
+			var numbers = $("#numbers").val();
+			var unit_price = $("#unit_price").val();
+			$.ajax({
+				url:'sell',
+				type:'post',
+				data:{'numbers':numbers,'unit_price':unit_price},
+				success:function(e){
+					history.go(0);
+				},
+				error:function(e){
+					alert('操作失败，请重新再试');
+				}
+			});
+		}
+		function submit_order()
+		{
+			var sell_id = $("#sell_id").val();
+			var num = $("#heans_numbers").val();
+			$.ajax({
+				url:'buy_beans',
+				type:'post',
+				data:{'sell_id':sell_id,'number':num},
+				success:function(e){
+					if(e.code == 1){
+						window.location.href = "/index.php?m=Mobile&c=Cart&a=cart4&order_id=" + e.data.order_id;
+					}else{
+						alert(e.msg);
+					}
+				},
+				error:function(){
+					alert('操作失败，请重新再试');
+				}
+			});
+		}
+	</script>
+</html>

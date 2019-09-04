@@ -580,4 +580,156 @@ class Ad extends MobileBase
             ]);
         }
     }
+
+    //交易大厅
+    public function buy()
+    {
+        $data = Db::name('sell')->alias('a')
+                ->join('users b','a.user_id = b.user_id')
+                ->order('a.add_time','desc')
+                ->field('a.*,b.nickname,b.head_pic')
+                ->select();
+        foreach ($data as &$vo){
+            $vo['count'] = Db::name('buy')->alias('a')
+                            ->join('sell b','a.sell_id = b.sell_id')
+                            ->join('order c','a.order_id = c.order_id')
+                            ->where(['b.user_id' => $vo['user_id'],'c.pay_status' => 1])
+                            ->sum('a.number');
+        }
+        $beans_price = Db::name('config')->where(['name' => 'beans_price'])->value('value');
+        $this->assign('beans_price',$beans_price);
+        $this->assign('data',$data);
+        return $this->fetch();
+    }
+
+    //卖豆
+    public function sell()
+    {
+        $numbers = request()->post('numbers');
+        $unit_price = request()->post('unit_price');
+        if(!($numbers || $unit_price)){
+            return json([
+                'code'  =>  -1,
+                'msg'   =>  '发布失败，请重新再试',
+                'data'  =>  [],
+            ]);
+        }
+        $userInfo = session('user');
+        $user_id = $userInfo['user_id'];
+        $have_numbers = Db::name('users')->where(['user_id' => $user_id])->value('happy_beans');
+        if($numbers > $have_numbers){
+            return json([
+                'code'  =>  -1,
+                'msg'   =>  '发布失败，余额不足',
+                'data'  =>  [],
+            ]);
+        }
+        Db::startTrans();
+        try{
+            Db::name('sell')->insert([
+                'user_id' => $user_id,
+                'total_num' => $numbers,
+                'unit_price' => $unit_price,
+                'surplus_num' => $numbers,
+                'add_time'  => time(),
+            ]);
+            Db::name('users')->where(['user_id' => $user_id])->setInc('frozen_beans',$numbers);
+            Db::name('users')->where(['user_id' => $user_id])->setDec('happy_beans',$numbers);
+            Db::commit();
+            return json([
+                'code'  =>  1,
+                'msg'   =>  '发布成功',
+                'data'  =>  [],
+            ]);
+        }catch (Exception $e){
+            Db::rollback();
+            return json([
+                'code'  =>  -1,
+//                'msg'   =>  '网络异常，请重新再试',
+                'msg'   =>  $e->getMessage(),
+                'data'  =>  [],
+            ]);
+        }
+    }
+
+    //卖豆详情
+    public function sell_info()
+    {
+        $sell_id = request()->post('sell_id');
+        $data = Db::name('sell')->where(['sell_id' => $sell_id])->find();
+        return json([
+            'code'  =>  1,
+            'msg'   =>  '操作成功',
+            'data'  =>  $data,
+        ]);
+    }
+
+    //买豆
+    public function buy_beans()
+    {
+        $sell_id = request()->post('sell_id');
+        $number = request()->post('number');
+        if(!($sell_id || $number)){
+            return json([
+                'code'  =>  -1,
+                'msg'   =>  '操作失败，请重新再试',
+                'data'  =>  [],
+            ]);
+        }
+        $have = Db::name('sell')->where(['sell_id' => $sell_id])->value('surplus_num');
+        if($number > $have){
+            return json([
+                'code'  =>  -1,
+                'msg'   =>  '超出剩余悦玩豆个数',
+                'data'  =>  [],
+            ]);
+        }
+        Db::startTrans();
+        try{
+            $price = Db::name('sell')->where(['sell_id' => $sell_id])->value('unit_price');
+            $userInfo = session('user');
+            $user_id = $userInfo['user_id'];
+            $order['order_sn'] = date('YmdHis',time()) . rand(1000,9999);
+            $order['user_id'] = $user_id;
+            $order['total_amount'] = $number * $price;
+            $order['order_amount'] = $number * $price;
+            $order['type'] = 4;
+            $order['add_time'] = time();
+            $order_id = D('order')->add($order);
+
+            $log['user_id'] = $userInfo['user_id'];
+            $log['user_money'] = $number;
+            $log['add_time'] = time();
+            $log['desc']    = "购买悦玩豆";
+            $log['type']    = 1;
+            D('adv_log')->add($log);
+
+            $buy['sell_id'] = $sell_id;
+            $buy['number'] = $number;
+            $buy['unit_price'] = $price;
+            $buy['order_id'] = $order_id;
+            $buy['purchaser'] = $user_id;
+            $buy['add_time'] = time();
+            D('buy')->add($buy);
+
+            Db::name('sell')->where(['sell_id' => $sell_id])->setDec('surplus_num',$number);
+            Db::commit();
+            return json([
+                'code'  =>  1,
+                'msg'   =>  '购买成功',
+                'data'  =>  [
+                    'order_id'  =>  $order_id,
+                    'http'      =>  $_SERVER['SERVER_NAME']
+                ],
+            ]);
+        }catch (Exception $exception){
+            Db::rollback();
+            return json([
+                'code'  => -1,
+                'msg'   => '网络异常，请稍后再试',
+//                'msg'   => $exception->getMessage(),
+                'data'  => [],
+            ]);
+        }
+    }
 }
