@@ -147,6 +147,7 @@
 </body>
 <script type="text/javascript" src="__JS__/jquery-3.2.1.min.js" ></script>
 <script type="text/javascript" src="__IMG__/swiper.min.js" ></script>
+	<script src="__JS__/layer.js"  type="text/javascript" ></script>
 <script>
     var swiper = new Swiper('.swiper-containerA', {
         pagination: '.swiper-pagination',
@@ -163,7 +164,7 @@
 	$(".payPop1").click(function(){
 		$(".pop1").fadeIn();
 	})
-	$(".btn").click(function(){
+	$(".btn2").click(function(){
    	    $(".pop").hide()
    	    $(".pop1").hide()
    })
@@ -183,13 +184,13 @@
             data:{'id':id,'pwd':pwd,'number':number},
             success:function(e){
                 if(e.code == 1){
-                    alert(e.msg);
+					layer.msg(e.msg);
                 }else{
-                    alert(e.msg);
+					layer.msg(e.msg);
                 }
             },
             error:function(){
-                console.log('请求出错，请重新再试');
+				layer.msg('请求出错，请重新再试');
             }
         });
     });
@@ -208,11 +209,11 @@
 				if(e.code == 1){
 					window.location.href = "/index.php?m=Mobile&c=Cart&a=cart4&order_id=" + e.data.order_id;
 				}else{
-					alert(e.msg);
+					layer.msg(e.msg);
 				}
 			},
 			error:function(){
-				console.log('请求出错，请重新再试');
+				layer.msg('请求出错，请重新再试');
 			}
 		});
 	});

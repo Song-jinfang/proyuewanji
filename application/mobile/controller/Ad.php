@@ -156,7 +156,7 @@ class Ad extends MobileBase
             if(!($data['id'] || $data['pwd'] || $data['number'])){
                 return json([
                     'code'  =>  -1,
-                    'msg'   =>  '缺少必要参数',
+                    'msg'   =>  '请填写完整信息',
                     'data'  =>  []
                 ]);
             }
@@ -304,7 +304,7 @@ class Ad extends MobileBase
         if(!$number){
             return json([
                 'code'  =>  -1,
-                'msg'   =>  '缺少必要参数',
+                'msg'   =>  '请填写完整信息',
                 'data'  =>  [],
             ]);
         }
