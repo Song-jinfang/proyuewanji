@@ -354,6 +354,10 @@ class User extends MobileBase
         } */
         $MenuCfg = new MenuCfg();
         $menu_list = $MenuCfg->where('is_show', 1)->order('menu_id asc')->select();
+        $action = request()->action();
+        $controller = request()->controller();
+        $this->assign('action',$action);
+        $this->assign('controller',$controller);
         $this->assign('menu_list', $menu_list);
         return $this->fetch();
     }

@@ -80,6 +80,10 @@ class Index extends MobileBase {
             ->join('__SPEC_GOODS_PRICE__ s','s.prom_id = f.id AND g.goods_id = s.goods_id','LEFT')
             ->where("start_time >= $start_time and end_time <= $end_time and f.is_end=0")
             ->limit(3)->select();
+        $action = request()->action();
+        $controller = request()->controller();
+        $this->assign('action',$action);
+        $this->assign('controller',$controller);
         $this->assign('flash_sale_list',$flash_sale_list);
         $this->assign('start_time',$start_time);
         $this->assign('end_time',$end_time);
