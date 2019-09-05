@@ -127,7 +127,7 @@
 			if(!(unit_price || numbers)){
                 layer.msg('请填写数量和单价');
                 setTimeout(function(){
-                    history.go(0);
+
                 }, 1000);
                 return;
             }
@@ -136,10 +136,17 @@
 				type:'post',
 				data:{'numbers':numbers,'unit_price':unit_price},
 				success:function(e){
-                    layer.msg(e.msg);
-                    setTimeout(function(){
-                        history.go(0);
-                    }, 2000);
+                    if(e.code == 1){
+						layer.msg(e.msg);
+						setTimeout(function(){
+							history.go(0);
+						}, 2000);
+					}else{
+						layer.msg(e.msg);
+						setTimeout(function(){
+
+						}, 2000);
+					}
 				},
 				error:function(e){
 					alert('操作失败，请重新再试');
@@ -150,6 +157,9 @@
 		{
 			var sell_id = $("#sell_id").val();
 			var num = $("#heans_numbers").val();
+			if(!num) {
+				return;
+			}
 			$.ajax({
 				url:'buy_beans',
 				type:'post',
