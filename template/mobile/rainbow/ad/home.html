@@ -178,6 +178,10 @@
         // formData.append('pwd',pwd);
         // formData.append('number',number);
         // console.log(formData);
+		if(!(pwd || number)){
+			layer.msg('请将信息填写完整');
+			return;
+		}
         $.ajax({
             url:'home',
             type:'post',
