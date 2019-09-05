@@ -161,7 +161,7 @@
         <!--支持配送,发票信息-s-->
         <div class="information_dr">
             <div class="maleri30">
-                <div class="invoice list7">
+             <!--    <div class="invoice list7">
                     <div class="myorder p">
                         <div class="content30">
                                 <div class="order" id="invoiceDefault">
@@ -175,7 +175,7 @@
                                 </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <!--使用余额-s-->
                 <div class="invoice list7">
                     <div class="myorder p">
@@ -229,7 +229,7 @@
                     </div>
                 </div>
 
-                <!--使用余额、积分-s-->
+             <!--   
                 <div id="balance-li" class="invoice list7">
 
                     <div class="myorder myorder-2 p" id="paypwd_view" style="display: none">
@@ -245,13 +245,13 @@
                             </label>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <!--使用余额、积分-e-->
             </div>
         </div>
         <!--支持配送,发票信息-s-->
         <!--优惠券-s-->
-        <div class="information_dr ma-to-20" id="coupon_div">
+        <!-- <div class="information_dr ma-to-20" id="coupon_div">
             <div class="maleri30">
                 <div class="invoice list7">
                     <div class="myorder p">
@@ -270,7 +270,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <!--优惠券-e-->
         <!--卖家留言-s-->
         <div class="customer-messa">
@@ -337,6 +337,14 @@
                         </div>
                         <div class="fr">
                             <a> ￥<span id="balance">0</span>元</a>
+                        </div>
+                    </div>
+                      <div class="p z-monry-cont">
+                        <div class="fl">
+                         购买此订单需消耗悦玩豆：
+                        </div>
+                        <div class="fr">
+                            <a><span id="happy_beans">20</span>个</a>
                         </div>
                     </div>
                 </div>
@@ -1055,11 +1063,11 @@
             pay_pwd_view();
             ajax_order_price();
         });
-        //支付密码点击事件
+        /* //支付密码点击事件
         $(document).on('blur', '#pay_pwd', function () {
             var pay_pwd = md5($("input[name='auth_code']").val() + $.trim($('#pay_pwd').val()));
             $('input[name="pay_pwd"]').val(pay_pwd);
-        })
+        }) */
     })
     //备注
     $(function () {
@@ -1155,7 +1163,8 @@
                     }});
                     return false;
                 }else{
-                    $('.submit_price a').removeClass("disable");
+					$("#happy_beans").html(data.result.happy_beans);
+                	$('.submit_price a').removeClass("disable");
                     refresh_price(data);
                 }
             }
@@ -1232,6 +1241,7 @@
                 $("#balance").text(data.result.user_money);// 余额
                 $("#pointsFee").text(data.result.integral_money);// 积分支付
                 $("#payables").text(data.result.order_amount);// 应付
+              
                 $("#order_prom_amount").text(data.result.order_prom_amount);// 订单 优惠活动
                 showErrorMsg('订单提交成功，跳转支付页面!');
                 location.href = "/index.php?m=Mobile&c=Cart&a=cart4&order_sn=" + data.result;
