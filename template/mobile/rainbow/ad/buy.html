@@ -105,7 +105,7 @@
 			});
 			$(".pop").fadeIn();
 		})
-		$(".btn").click(function(){
+		$(".btn2").click(function(){
 	   	    $(".pop").hide()
 	   })
 		$(".inputs").focus(function(){
@@ -158,6 +158,7 @@
 			var sell_id = $("#sell_id").val();
 			var num = $("#heans_numbers").val();
 			if(!num) {
+				layer.msg('请输入购买数量');
 				return;
 			}
 			$.ajax({
@@ -168,7 +169,7 @@
 					if(e.code == 1){
 						window.location.href = "/index.php?m=Mobile&c=Cart&a=cart4&order_id=" + e.data.order_id;
 					}else{
-						alert(e.msg);
+						layer.msg(e.msg);
 					}
 				},
 				error:function(){
