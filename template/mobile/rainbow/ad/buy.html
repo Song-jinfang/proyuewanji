@@ -83,6 +83,7 @@
     </div> 
 	</body>
 	<script type="text/javascript" src="__JS__/jquery-3.2.1.min.js" ></script>
+    <script src="__JS__/layer.js"  type="text/javascript" ></script>
 	<script>
 		$(".buyBtn").click(function(e){
 			var v_id = e.target.id;
@@ -123,12 +124,22 @@
 		{
 			var numbers = $("#numbers").val();
 			var unit_price = $("#unit_price").val();
+			if(!(unit_price || numbers)){
+                layer.msg('请填写数量和单价');
+                setTimeout(function(){
+                    history.go(0);
+                }, 1000);
+                return;
+            }
 			$.ajax({
 				url:'sell',
 				type:'post',
 				data:{'numbers':numbers,'unit_price':unit_price},
 				success:function(e){
-					history.go(0);
+                    layer.msg(e.msg);
+                    setTimeout(function(){
+                        history.go(0);
+                    }, 2000);
 				},
 				error:function(e){
 					alert('操作失败，请重新再试');
