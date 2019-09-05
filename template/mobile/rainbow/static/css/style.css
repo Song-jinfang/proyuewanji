@@ -464,7 +464,8 @@ header .sea-box input {
 	width:100%;
 	-moz-box-shadow:0 0 10px 0 rgba(155,143,143,0.6);
 	-webkit-box-shadow:0 0 10px 0 rgba(155,143,143,0.6);
-	box-shadow:0 0 10px 0 rgba(155,143,143,0.6)
+	box-shadow:0 0 10px 0 rgba(155,143,143,0.6);
+	padding-top:0.25rem
 }
 @media screen and (min-width:1300px) {
 	.footer {
@@ -11840,8 +11841,8 @@ pre {
 .icon_tps {
 	display:block;
 	margin:0 auto;
-	width:1.4666rem;
-	height:1.166rem;
+	width:1.2666rem;
+	height:1.026rem;
 }
 .icon_tp2 {
 	display:none;

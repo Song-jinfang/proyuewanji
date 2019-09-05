@@ -1094,7 +1094,6 @@ function dynamic_profit($user_id,$money,$desc,$order_id = 0,$type){
     
 }
 
-
 /**
  * 订单确认收货
  * @param $id 订单id

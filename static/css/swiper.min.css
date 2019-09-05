@@ -38,7 +38,7 @@ html {
 	.header{
 		width: 100%;
 		height: 1rem;
-		background: #141414;
+		/* background: #141414; */
 		position: fixed;
 		left: 0;
 		top: 0;
@@ -46,9 +46,9 @@ html {
 		z-index: 9;
 	}
 	.searchDiv{
-		width: 4.9rem;
+		width: 6.8rem;
 		height: 0.54rem;
-		background: #616161;
+		background: #ffffff;
 		position: absolute;
 		left: 0;
 		right: 0;
@@ -79,7 +79,7 @@ html {
 		width: 100%;
 		height: 2.55rem;
 		position: relative;
-		background: #201f1e;
+		/* background: #201f1e; */
 	}
 	.bannerbox{
 		width: 6.96rem;
@@ -104,7 +104,7 @@ html {
     	opacity: 1;
     }
     .bannerDiv .swiper-pagination-bullet-active{
-    	background: #000000;
+    	background: #f96c56;
     	opacity: 1;
     }
     .iconBox{
@@ -201,8 +201,8 @@ html {
     	width: 6.96rem;
     	height: 6.95rem;
     	margin: auto;
-    	background: #240dd3;
-    	background:url(/static/img/div_back.png) no-repeat;
+    	background: #ececeb;
+    	/* background:url(/static/img/div_back.png) no-repeat; */
     	background-size:100% 100%;  
     	position: relative;
     }
@@ -474,7 +474,7 @@ html {
     	color: #000;
     }
     .footer img{
-    	width: 0.68rem;
+    	width: 0.63rem;
     	height: 0.52rem;
     	margin: auto;
     }

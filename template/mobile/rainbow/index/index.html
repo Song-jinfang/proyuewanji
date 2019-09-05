@@ -7,31 +7,32 @@
 		<title></title>
 	</head>
 <body>
-	<div class="header">
-		<div class="searchDiv">
-			<img src="__IMG__/search.png" class="searchIcon">
-			<input type="text"  class="searchInput"/>
-		</div>
+	<div style="background: url(/static/img/top_back.png) no-repeat;">
+			<div class="header">
+				<div class="searchDiv">
+					<img src="__IMG__/search.png" class="searchIcon">
+					<input type="text"  class="searchInput"/>
+				</div>
+			</div>
+			<div style="width: 100%;height: 1rem;"></div>
+			<div class="bannerDiv">
+				<div class="bannerbox">
+					<div class="swiper-container swiper-containerA">
+				        <div class="swiper-wrapper">
+				             <adv pid ="9" limit="5" item="v">
+					            <div class="swiper-slide">
+					             	<a href="{$v.ad_link}">
+					            		<img src="{$v[ad_code]}" title="{$v[title]}" style="{$v[style]}" >
+					            	 </a>
+					            </div>
+				             </adv>
+				        </div>
+				        <!-- Add Pagination -->
+				        <div class="swiper-pagination swiper-paginationA"></div>
+				    </div>
+				</div>
+			</div>
 	</div>
-	<div style="width: 100%;height: 1rem;"></div>
-	<div class="bannerDiv">
-		<div class="bannerbox">
-			<div class="swiper-container swiper-containerA">
-		        <div class="swiper-wrapper">
-		             <adv pid ="9" limit="5" item="v">
-			            <div class="swiper-slide">
-			             	<a href="{$v.ad_link}">
-			            		<img src="{$v[ad_code]}" title="{$v[title]}" style="{$v[style]}" >
-			            	 </a>
-			            </div>
-		             </adv>
-		        </div>
-		        <!-- Add Pagination -->
-		        <div class="swiper-pagination swiper-paginationA"></div>
-		    </div>
-		</div>
-	</div>
-	
 	<div class="iconBox">
 		<div class="swiper-container swiper-containerB">
 	        <div class="swiper-wrapper">
@@ -118,10 +119,11 @@
 	       <!--  <div class="swiper-pagination swiper-paginationB"></div> -->
 		</div>		
 	</div>
-	
-	<div class="link1">
-		<a href="###">立即抢购   》</a>
-	</div>
+	<div style="clear:both"></div>
+	<a href="" >
+		<div class="link1">
+		</div>
+	</a>
 	<div class="linkBox">
 		
 		
