@@ -192,15 +192,15 @@ class PlaceOrder
             if ($user['is_lock'] == 1) {
                 throw new TpshopException('提交订单', 0, ['status' => -5, 'msg' => "账号异常已被锁定，不能使用余额支付！", 'result' => '']);
             }
-            if (empty($user['paypwd'])) {
+          /*   if (empty($user['paypwd'])) {
                 throw new TpshopException('提交订单', 0, ['status' => -6, 'msg' => "请先设置支付密码", 'result' => '']);
-            }
-            if (empty($this->payPsw)) {
+            } */
+         /*    if (empty($this->payPsw)) {
                 throw new TpshopException('提交订单', 0, ['status' => -7, 'msg' => "请输入支付密码", 'result' => '']);
             }
             if ($this->payPsw !== $user['paypwd'] && encrypt($this->payPsw) !== $user['paypwd']) {
                 throw new TpshopException('提交订单', 0, ['status' => -8, 'msg' => '支付密码错误', 'result' => '']);
-            }
+            } */
         }
     }
 
@@ -251,6 +251,7 @@ class PlaceOrder
             'add_time' => time(), // 下单时间
             'type'=>$this->type,
             'join_t'=>$this->join_t,//是否参与t+7
+            'ywd_price'=>$this->pay->happy_beans_money,
         ];
         if($orderData["order_amount"] < 0){
             throw new TpshopException("订单入库", 0, ['status' => -8, 'msg' => '订单金额不能小于0', 'result' => '']);

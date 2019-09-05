@@ -252,7 +252,7 @@
                     <span class="err" id="err_shop_price"></span>
                 </dd>
             </dl>
-            <dl class="row">
+          <!--   <dl class="row">
                 <dt class="tit"><em>*</em>
                     <label>市场价</label>
                 </dt>
@@ -261,7 +261,7 @@
                            onKeyUp="this.value=this.value.replace(/[^\d.]/g,'')" onpaste="this.value=this.value.replace(/[^\d.]/g,'')"/>
                     <span class="err" id="err_market_price"></span>
                 </dd>
-            </dl>
+            </dl> -->
             <dl class="row">
                 <dt class="tit">
                     <label>成本价</label>
@@ -389,7 +389,7 @@
                         <input type="text" value="{$goods.store_count}" class="t_mane" name="store_count"
                                onKeyUp="this.value=this.value.replace(/[^\d.]/g,'')" onpaste="this.value=this.value.replace(/[^\d.]/g,'')" />
                     <else />
-                        <input type="text" value="{$tpshop_config[basic_default_storage]}" class="t_mane" name="store_count"
+                        <input type="text" value="1000" class="t_mane" name="store_count"
                                onKeyUp="this.value=this.value.replace(/[^\d.]/g,'')" onpaste="this.value=this.value.replace(/[^\d.]/g,'')" />
                     </if>
                     <span class="err" id="err_store_count"></span>

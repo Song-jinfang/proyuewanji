@@ -220,9 +220,12 @@ class Cart extends MobileBase {
                 $cartLogic->checkStockCartList($userCartList);
                 $pay->payCart($userCartList);
             }
-            $pay->setUserId($this->user_id)->setShopById($shop_id)->delivery($address['district'])->orderPromotion()
-                ->useCouponById($coupon_id)->useUserMoney($user_money)->usePayPoints($pay_points,false,'mobile');
-            // 提交订单
+            $pay->setUserId($this->user_id)->setShopById($shop_id)->delivery($address['district'])->happy_beans()->orderPromotion()
+            ->useCouponById($coupon_id)->useUserMoney($user_money)->usePayPoints($pay_points,false,'mobile');
+            //提交订单
+            
+            $user = M('users')->field('happy_beans')->where('user_id = '.$this->user_id)->find();
+            $profit_cons_beans = M('config')->where("name='profit_cons_beans'")->value('value');//购买商品消耗1%悦豌豆 
             if ($_REQUEST['act'] == 'submit_order') {
                 $placeOrder = new PlaceOrder($pay);
                 if($goodInfo['join_t']){
@@ -234,7 +237,13 @@ class Cart extends MobileBase {
                 $order = $placeOrder->getOrder();
                 $this->ajaxReturn(['status' => 1, 'msg' => '提交订单成功', 'result' => $order['order_sn']]);
             }
-            $this->ajaxReturn(['status' => 1, 'msg' => '计算成功', 'result' => $pay->toArray()]);
+            /** 购买商品消耗悦玩豆***/
+            $orderArr = $pay->toArray();
+            
+            
+            $rate = ceil(($profit_cons_beans/100) * $orderArr['total_amount']);
+            $orderArr['happy_beans'] = $rate;
+            $this->ajaxReturn(['status' => 1, 'msg' => '计算成功', 'result' => $orderArr]);
         } catch (TpshopException $t) {
             $error = $t->getErrorArr();
             $this->ajaxReturn($error);

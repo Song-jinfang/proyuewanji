@@ -14,7 +14,7 @@ class Goods extends Validate
         'cat_id' => 'number|gt:0',
         'goods_sn' => 'unique:goods|max:20',
         'shop_price' => ['require', 'regex' => '([1-9]\d*(\.\d*[1-9])?)|(0\.\d*[1-9])'],
-        'market_price' => 'require|regex:\d{1,10}(\.\d{1,2})?$|checkMarketPrice',
+      /*   'market_price' => 'require|regex:\d{1,10}(\.\d{1,2})?$|checkMarketPrice', */
         'weight' => 'regex:\d{1,10}(\.\d{1,2})?$',
         'give_integral' => 'regex:^\d+$',
         'is_virtual' => 'checkVirtualIndate',
@@ -38,9 +38,9 @@ class Goods extends Validate
         'goods_num.checkGoodsNum' => '抢购数量不能大于库存数量',
         'shop_price.require' => '本店售价必填',
         'shop_price.regex' => '本店售价格式不对',
-        'market_price.require' => '市场价格必填',
-        'market_price.regex' => '市场价格式不对',
-        'market_price.checkMarketPrice' => '市场价不得小于本店价',
+       /*  'market_price.require' => '市场价格必填', */
+      /*   'market_price.regex' => '市场价格式不对', */
+        /* 'market_price.checkMarketPrice' => '市场价不得小于本店价', */
         'weight.regex' => '重量格式不对',
         'give_integral.regex' => '赠送积分必须是正整数',
         'exchange_integral.checkExchangeIntegral' => '积分抵扣金额不能超过商品总额',

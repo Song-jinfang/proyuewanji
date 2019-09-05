@@ -46,6 +46,7 @@ class Pay
     private $orderPromAmount = 0;//订单优惠金额
     private $couponId;
     private $shop;//自提点
+    public $happy_beans_money;
 
     /**
      * 计算订单表的普通订单商品
@@ -136,7 +137,6 @@ class Pay
         }
 
         $goodsListCount = count($this->payList);
-
         for ($payCursor = 0; $payCursor < $goodsListCount; $payCursor++) {
             $this->payList[$payCursor]['goods_fee'] = $this->payList[$payCursor]['goods_num'] * $this->payList[$payCursor]['member_goods_price'];    // 小计
             $this->goodsPrice += $this->payList[$payCursor]['goods_fee']; // 商品总价
@@ -252,6 +252,22 @@ class Pay
         return $this;
     }
 
+    public function happy_beans(){
+        $user = M('users')->field('happy_beans')->where('user_id = '.$this->userId)->find();
+        $profit_cons_beans = M('config')->where("name='profit_cons_beans'")->value('value');//购买商品消耗1%悦豌豆
+        $rate = ceil(($profit_cons_beans/100) * $this->totalAmount);
+        if($user['happy_beans'] < $rate){//计算到总额里面
+            $this->orderAmount = $this->orderAmount + $rate;
+            $this->totalAmount = $this->totalAmount + $rate;
+            return $this;
+        } else{
+            //扣掉悦玩币
+            $this->happy_beans_money = $rate;
+            return $this;
+        }
+        
+    }
+    
     /**
      * 使用余额
      * @throws TpshopException
@@ -286,7 +302,6 @@ class Pay
         $this->orderAmount = $this->orderAmount - $cut_money;
         return $this;
     }
-
     /**
      * 使用优惠券
      * @param $coupon_id
