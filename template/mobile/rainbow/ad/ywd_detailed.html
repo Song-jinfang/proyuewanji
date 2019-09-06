@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <!-- <link rel="stylesheet" href="__CSS__/swiper.min.css" /> -->
+    <link rel="stylesheet" href="__CSS__/mine.css" />
+    <title></title>
+</head>
+<body>
+<div class="header">
+    <a href="javascript:history.go(-1)"><img src="__IMG__/back.png" class="back"></a>悦玩豆明细
+</div>
+<div class="userInfor">
+    <div class="userImg"><img src="{$user.head_pic}" alt=""></div>
+    <p class="nickname">{$user.nickname}</p>
+    <p class="userId"><font>ID：{$user.user_id}</font></p>
+    <p style="width: 100%;display: flex;"><span class="residue">剩余：{$user.happy_beans}豆</span></p>
+    <img src="__IMG__/code.png" class="codeBtn">
+</div>
+<div class="tableDiv">
+    <div class="table">
+        <table border="0" cellspacing="0" cellpadding="0" >
+            <tr>
+                <th>时间</th>
+                <th>个数</th>
+                <th>描述</th>
+            </tr>
+            <volist name="data" id="vo">
+                <tr>
+                    <td>{$vo.add_time|date="Y-m-d H:i",###}</td>
+                    <td>{$vo.user_money}</td>
+                    <td>{$vo.desc}</td>
+                </tr>
+            </volist>
+        </table>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="__JS__/jquery-3.2.1.min.js" ></script>
+<script type="text/javascript" src="__IMG__/swiper.min.js" ></script>
+<script>
+
+</script>
+</html>

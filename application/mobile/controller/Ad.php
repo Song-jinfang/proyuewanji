@@ -588,6 +588,7 @@ class Ad extends MobileBase
     {
         $data = Db::name('sell')->alias('a')
                 ->join('users b','a.user_id = b.user_id')
+                ->where('surplus_num','gt',0)
                 ->order('a.add_time','desc')
                 ->field('a.*,b.nickname,b.head_pic')
                 ->select();
@@ -733,5 +734,57 @@ class Ad extends MobileBase
                 'data'  => [],
             ]);
         }
+    }
+
+    //悦玩豆流水
+    public function ywd_detailed()
+    {
+        $userInfo = session('user');
+        $user_id = $userInfo['user_id'];
+        $user = Db::name('users')->where(['user_id' => $user_id])->field('user_id,nickname,head_pic,happy_beans')->find();
+        $data = Db::name('adv_log')->where(['user_id' => $user_id,'type' => 1])->order('add_time','desc')->select();
+        $this->assign('user',$user);
+        $this->assign('data',$data);
+        return $this->fetch();
+    }
+
+    //我的团队
+    public function team()
+    {
+        $p = request()->get('p');
+        $userInfo = session('user');
+//        $user_id = $userInfo['user_id'];
+        $user_id = 52;
+        if($p == 2){
+            $user_arr = Db::name('users')->where("find_in_set($user_id,pid_list)")->column('pid_list');
+            foreach ($user_arr as &$vo){
+                $vo = explode(',',$vo);
+            }
+            $user_id_arr = [];
+            foreach ($user_arr as $v){
+                $index_id = array_search($user_id,$v);
+                $user_id_arr[] = $v[$index_id + 1];
+            }
+            $user_id_arr = array_unique($user_id_arr);
+            $data = Db::name('users')
+                ->where('user_id','in',$user_id_arr)
+                ->field('nickname,mobile,reg_time')
+                ->select();
+        }else{
+            $user_arr = Db::name('users')->where("find_in_set($user_id,pid_list)")->column('pid_list');
+            $user_id_arr = "";
+            foreach ($user_arr as $v){
+                $user_id_arr .= $v . ",";
+            }
+            $user_id_arr = trim($user_id_arr,',');
+            $user_id_arr = explode(',',$user_id_arr);
+            $data = Db::name('users')
+                ->where('user_id','in',$user_id_arr)
+                ->field('nickname,mobile,reg_time')
+                ->select();
+        }
+        $this->assign('data',$data);
+        $this->assign('p',$p);
+        return $this->fetch();
     }
 }

@@ -66,10 +66,31 @@ class Order extends Base {
         
         $consignee =  ($keyType && $keyType == 'consignee') ? $keywords : I('consignee','','trim');
         $consignee ? $condition['consignee'] = trim($consignee) : false;
-
+        $where = [];
         if($begin && $end){
         	$condition['add_time'] = array('between',"$begin,$end");
+            $where['add_time'] = array('between',"$begin,$end");
         }
+        $count2 = Db::name('order')
+                    ->where($where)
+                    ->where(['pay_status' => 1])
+                    ->count();
+        $order_amount2 = Db::name('order')
+                    ->where($where)
+                    ->where(['pay_status' => 1])
+                    ->sum('order_amount');
+        $start_time = strtotime(date('Y-m-d'),time()) - 3600*24;
+        $end_time = strtotime(date('Y-m-d 23:59:59'),time()) - 3600*24;
+        $count1 = Db::name('order')
+            ->where('add_time','between',"$start_time,$end_time")
+            ->where(['pay_status' => 1])
+            ->count();
+        $order_amount1 = Db::name('order')
+            ->where('add_time','between',"$start_time,$end_time")
+            ->where(['pay_status' => 1])
+            ->sum('order_amount');
+
+
         $condition['prom_type'] = array('lt',5);
         $order_sn = ($keyType && $keyType == 'order_sn') ? $keywords : I('order_sn') ;
         $order_sn ? $condition['order_sn'] = trim($order_sn) : false;
@@ -111,6 +132,10 @@ class Order extends Base {
         $this->assign('orderList',$orderList);
         $this->assign('page',$show);// 赋值分页输出
         $this->assign('pager',$Page);
+        $this->assign('count2',$count2);
+        $this->assign('count1',$count1);
+        $this->assign('order_amount1',$order_amount1);
+        $this->assign('order_amount2',$order_amount2);
         return $this->fetch();
     }
 
