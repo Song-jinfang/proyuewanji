@@ -757,7 +757,6 @@ class Ad extends MobileBase
         $p = request()->get('p');
         $userInfo = session('user');
         $user_id = $userInfo['user_id'];
-        $user_id = 52;
         if($p == 2){
             $user_arr = Db::name('users')->where("find_in_set($user_id,pid_list)")->column('pid_list');
             foreach ($user_arr as &$vo){
@@ -790,6 +789,7 @@ class Ad extends MobileBase
                 }
             }
             $user_id_where = array_unique($user_id_where);
+            dump($user_id_where);die;
             $data = Db::name('users')
                 ->where('user_id','in',$user_id_where)
                 ->field('nickname,mobile,reg_time')
