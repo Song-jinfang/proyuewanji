@@ -239,14 +239,14 @@
     	</volist>
     </div> -->
     
-        <div class="link2">
-    <!-- 	<adv pid ="539" limit="4" item="v">
+   <div class="link2">
+    	<!--<adv pid ="539" limit="4" item="v">
 	    	<a href="{$v['ad_link']}" class="a9">
 	    		<img src="{$v[ad_code]}">
 	    	</a>
     	</adv> -->
     	<volist name="new_goods" id="v">
-    		<a href="{$v['ad_link']}" class="a9">
+    		<a href="/Mobile/Goods/goodsInfo/id/{$v['goods_id']}" class="a9">
 	    		<img src="{$v.original_img}">
 				<p class="proName" style="width:85%;margin-left:7.5%;margin-top:0.3rem">{$v.goods_name}</p>
           		<p class="proPrice" style="width:85%;margin-left:7.5%;margin-top:0.2rem">¥{$v.shop_price}</p>

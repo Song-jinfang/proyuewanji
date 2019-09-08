@@ -90,7 +90,7 @@ class Payment extends MobileBase
         // 订单支付提交
         $config = parse_url_param($this->pay_code); // 类似于 pay_code=alipay&bank_code=CCB-DEBIT 参数
         $config['body'] = getPayBody($order_id);
-        if($order_type == 2){//购买悦玩豆
+        if($order_type == 2 || $order_type == 4 ){//购买悦玩豆
             $config['body'] = '购买悦玩豆';
         }else if($order_type == 3){//购买
             $config['body'] = '购买悦玩集广告';

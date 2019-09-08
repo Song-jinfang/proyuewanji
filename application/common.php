@@ -956,7 +956,7 @@ function update_pay_status($order_sn,$ext=array())
             $preSell->doOrderPayAfter();
         } else {
             // 修改支付状态  已支付
-            $update = array('pay_status'=>1,'pay_time'=>$time);
+            $update = array('pay_status'=>0,'pay_time'=>$time);
             if($order['type'] == 1 && $order['join_t'] == 1){
                 $update['seven_days'] = strtotime('+7 day');
                 $update['fourteen_days'] = strtotime('+14 day');
@@ -977,7 +977,6 @@ function update_pay_status($order_sn,$ext=array())
                 minus_stock($order);
             }
         }
-        
         // 给他升级, 根据order表查看消费记录 给他会员等级升级 修改他的折扣 和 总金额
         $User =new \app\common\logic\User();
         $User->setUserById($order['user_id']);
@@ -986,37 +985,46 @@ function update_pay_status($order_sn,$ext=array())
             if($order['join_t'] == 1){//参与t+7和动态收益
                 $User->updateUserEffective();//给t+7的标志；
                 $user = $parent = M('users')->field('pid_list')->where('user_id='.$order['user_id'])->find();
-               // dump($order['user_id']);
                 if($user['pid_list']){
                     $pidArr = array_reverse(explode(',',$user['pid_list']));
                     unset($pidArr[0]);
                     $conf = M('config')->where('id >=172 and id <=177')->column('value','name');
-                  
                     foreach($pidArr as $k=>$v){
                         if($v){
-                            $pidCount = M('users')->where("first_leader ='$v' and is_effective=1")->count();
-                           
-                            if($pidCount){
-                               // $pidUser =  M('users')->field('user_id')->where("first_leader ='$v' and is_effective=1")->find();
-                                if($k == 1 || $k == 2){
-                                    if($pidCount > 1 && $pidCount <5){
-                                        $rela = ($conf['level_'.$k]/100) * $order['order_amount'];
-                                    }
+                            $pidCount = M('users')->where("first_leader ='$v'")->count();//查询每级用户的直属下级有几个
+                            $orderCount = M('order')->where('user_id='.$v.' and pay_status = 1')->count();//根据订单查询是否是有效用户
+                            $userBurn = M('users')->where("user_id = $v")->value('burn');  //$userBurn为1要进行烧伤   2针对部分用户不进行烧伤
+                            if($k == 1 || $k == 2){
+                                if($orderCount && ($pidCount >= 1 && $pidCount <=5)){
+                                    $order_amount = $order['order_amount'];
+                                    if($userBurn == 1){
+                                           //查询上级最后一个订单的金额，进行烧伤
+                                        $order_amount = getUserBurn($v,$order['order_amount']);
+                                     }
+                                     $rela = ($conf['level_'.$k]/100) * $order_amount;
                                 }
-                                if($k == 3 || $k == 4){
-                                    if($pidCount > 6 && $pidCount < 19){
-                                        if($pidCount){
-                                            $rela = ($conf['level_'.$k]/100) * $order['order_amount'];
-                                        }
+                            }
+                            if($k == 3 || $k == 4){
+                                if(($pidCount > 6 && $pidCount < 19) && $orderCount){
+                                    $order_amount = $order['order_amount'];
+                                    if($userBurn == 1){
+                                        //查询上级最后一个订单的金额，进行烧伤
+                                        $order_amount = getUserBurn($v);
                                     }
+                                    $rela = ($conf['level_'.$k]/100) * $order_amount;
                                 }
-                                if($k == 5 || $k == 6){
-                                    if($pidCount > 20){
-                                        if($pidCount){
-                                            $rela = ($conf['level_'.$k]/100) * $order['order_amount'];
-                                        }
+                            }
+                            if($k == 5 || $k == 6){
+                                if($pidCount > 20 && $orderCount){
+                                    $order_amount = $order['order_amount'];
+                                    if($userBurn == 1){
+                                        //查询上级最后一个订单的金额，进行烧伤
+                                        $order_amount = getUserBurn($v);
                                     }
+                                    $rela = ($conf['level_'.$k]/100) * $order_amount;
                                 }
+                            }
+                            if($rela){
                                 dynamic_profit($v,$rela,'团队用户购买商品获得收益',$order['order_id'],3);
                             }
                         }
@@ -1031,6 +1039,9 @@ function update_pay_status($order_sn,$ext=array())
             }
         }elseif($order['type'] == 2){//购买悦玩豆
             consumption_beans($order['user_id'],$order['ywd_price'],'在线购买悦玩豆');
+        }elseif($order['type'] == 3){
+            M('task')->where('order_id='.$order['order_id'])->update(['status'=>1]);//改变task的状态
+            lose_beans($order['user_id'],$order['ywd_price'],'购买广告');
         }elseif($order['type'] == 4){//快速购买悦玩豆通道
                    $sellArr =  M('buy')->alias('a')->field('a.unit_price,a.purchaser buy_id,a.order_id,a.number,a.unit_price,b.user_id sell_id')->join('sell b','a.sell_id=b.sell_id')
                     ->where('a.order_id='.$order['order_id'])
@@ -1039,8 +1050,7 @@ function update_pay_status($order_sn,$ext=array())
                          $total_price = $sellArr['unit_price'] * $sellArr['number'];
                         /***给卖家+余额-冻结余额***/
                          accountLog($sellArr['sell_id'],$total_price,0,'挂卖悦玩豆获得余额'); //卖家加余额
-                         dump($sellArr['number']);
-                        dump(M('users')->where('user_id='.$sellArr['sell_id'])->setDec('frozen_beans',$sellArr['number']));
+                            M('users')->where('user_id='.$sellArr['sell_id'])->setDec('frozen_beans',$sellArr['number']);
                          /***给买家 +悦玩豆和记录***/
                          consumption_beans($sellArr['buy_id'],$sellArr['number'],'购买获得悦玩豆');
                       } 
@@ -1088,6 +1098,21 @@ function update_pay_status($order_sn,$ext=array())
     }
 }
 
+function getUserBurn($uid,$order_amount){
+    //查询上级最后一个订单的金额，进行烧伤
+    $parentOrder = M('order')->field('order_amount')
+    ->where('user_id='.$uid.' and pay_status = 1')
+    ->order('order_id','desc')
+    ->limit(1)->find();
+    if($parentOrder['order_amount'] > $order_amount){
+        $order_amount = $order_amount;
+    }else{
+        $order_amount = $parentOrder['order_amount'];
+    }
+    return $order_amount;
+}
+
+
 /*
  * 购买订单给上级添加动态收益
  */
@@ -1101,10 +1126,11 @@ function dynamic_profit($user_id,$money,$desc,$order_id = 0,$type){
         'type'=>$type
     );
     /*更新每日订单任务信息 */
-     $update_data = array(
+   /*   $update_data = array(
          'dynamic_profit'        => ['exp','dynamic_profit+'.$money],
     ); 
-     $update = Db::name('users')->where("user_id = $user_id")->save($update_data);
+     $update = Db::name('users')->where("user_id = $user_id")->save($update_data); */
+    M('users')->where("user_id = $user_id")->setInc('dynamic_profit',$money);
     if($update){
         M('adv_log')->add($account_log);
         return true;
