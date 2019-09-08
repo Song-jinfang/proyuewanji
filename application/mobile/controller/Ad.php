@@ -115,12 +115,12 @@ class Ad extends MobileBase
                 $response['adv_type'] = $type;
                 D('task')->add($response);
 
-                $log['user_id'] = $uid;
-                $log['user_money'] = '-' . $ywd_number;
-                $log['add_time'] = time();
-                $log['desc']    = "消耗悦玩豆";
-                $log['type']    = 1;
-                D('adv_log')->add($log);
+//                $log['user_id'] = $uid;
+//                $log['user_money'] = '-' . $ywd_number;
+//                $log['add_time'] = time();
+//                $log['desc']    = "消耗悦玩豆";
+//                $log['type']    = 1;
+//                D('adv_log')->add($log);
 
                 Db::commit();
                 return json([
@@ -325,12 +325,12 @@ class Ad extends MobileBase
             $order['add_time'] = time();
             $order_id = D('order')->add($order);
 
-            $log['user_id'] = $userInfo['user_id'];
-            $log['user_money'] = $number;
-            $log['add_time'] = time();
-            $log['desc']    = "购买悦玩豆";
-            $log['type']    = 1;
-            D('adv_log')->add($log);
+//            $log['user_id'] = $userInfo['user_id'];
+//            $log['user_money'] = $number;
+//            $log['add_time'] = time();
+//            $log['desc']    = "购买悦玩豆";
+//            $log['type']    = 1;
+//            D('adv_log')->add($log);
             Db::commit();
             return json([
                 'code'  =>  1,
@@ -703,12 +703,12 @@ class Ad extends MobileBase
             $order['add_time'] = time();
             $order_id = D('order')->add($order);
 
-            $log['user_id'] = $userInfo['user_id'];
-            $log['user_money'] = $number;
-            $log['add_time'] = time();
-            $log['desc']    = "购买悦玩豆";
-            $log['type']    = 1;
-            D('adv_log')->add($log);
+//            $log['user_id'] = $userInfo['user_id'];
+////            $log['user_money'] = $number;
+////            $log['add_time'] = time();
+////            $log['desc']    = "购买悦玩豆";
+////            $log['type']    = 1;
+////            D('adv_log')->add($log);
 
             $buy['sell_id'] = $sell_id;
             $buy['number'] = $number;
