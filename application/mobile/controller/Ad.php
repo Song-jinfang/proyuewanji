@@ -789,7 +789,6 @@ class Ad extends MobileBase
                 }
             }
             $user_id_where = array_unique($user_id_where);
-            dump($user_id_where);die;
             $data = Db::name('users')
                 ->where('user_id','in',$user_id_where)
                 ->field('nickname,mobile,reg_time')
