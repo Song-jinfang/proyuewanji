@@ -100,7 +100,7 @@
 					}
 				},
 				error:function(){
-					alert('网络异常');
+					layer.msg('网络异常，请稍后再试');
 				}
 			});
 			$(".pop").fadeIn();
@@ -149,7 +149,7 @@
 					}
 				},
 				error:function(e){
-					alert('操作失败，请重新再试');
+					layer.msg('网络异常，请稍后再试');
 				}
 			});
 		}
@@ -173,7 +173,7 @@
 					}
 				},
 				error:function(){
-					alert('操作失败，请重新再试');
+					layer.msg('网络异常，请稍后再试');
 				}
 			});
 		}

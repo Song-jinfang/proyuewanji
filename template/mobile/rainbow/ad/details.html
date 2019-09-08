@@ -77,6 +77,7 @@
 </div>
 </body>
 <script type="text/javascript" src="__JS__/jquery-3.2.1.min.js" ></script>
+<script src="__JS__/layer.js"  type="text/javascript" ></script>
 <script>
     var imgNum = 0;
     $(".upload_img_wrap .upload_img").bind("click", function(ev) {
@@ -225,14 +226,14 @@
             processData:false,
             success:function(res){
                 if(res.code == 1){
-                    alert(res.msg);
+                    layer.msg(res.msg);
                     history.go(-1);
                 }else{
-                    alert(res.msg);
+                    layer.msg(res.msg);
                 }
             },
             error:function(){
-                console.log('请重新上传');
+                layer.msg('网络异常，请重新再试');
             }
         });
     });

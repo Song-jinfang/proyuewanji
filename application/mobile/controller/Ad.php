@@ -36,7 +36,7 @@ class Ad extends MobileBase
             $number = request()->post('number') ?: "";
             $description = request()->post('description') ?: "";
             $desc = request()->post('desc') ?: "";
-            if(!($type || $number || $description || $data || $desc)){
+            if(!($type && $number && $description && $data && $desc)){
                 return json([
                     'code'  =>  -1,
                     'msg'   =>  '缺少必要参数',
@@ -63,8 +63,10 @@ class Ad extends MobileBase
             $beans_price = M('config')->where(['name' => 'beans_price'])->value('value');
             if($type == 1){
                 $total_price = $adv_price * $number;
+                $unit_price = $adv_price;
             }else{
                 $total_price = $adv_price1 * $number;
+                $unit_price = $adv_price1;
             }
             $have_price  = M('users')->where(['user_id' => $uid])->value('happy_beans');
             $ywd_num  = ceil($total_price * 0.1);
@@ -109,6 +111,7 @@ class Ad extends MobileBase
                 $response['uid'] = $uid;
                 $response['order_id'] = $order_id;
                 $response['identity'] = 2;
+                $response['unit_price'] = $unit_price;
                 $response['adv_type'] = $type;
                 D('task')->add($response);
 
@@ -175,15 +178,15 @@ class Ad extends MobileBase
             if($have_price < $data['number']){
                 return json([
                     'code'  =>  -1,
-                    'msg'   =>  '您的余额不足，请重新输入数值或充值',
+                    'msg'   =>  '您的悦玩豆不足，请重新输入数值或充值',
                     'data'  =>  [],
                 ]);
             }
             Db::startTrans();
             try{
                 $pay_id = D('users')->where(['mobile' => $data['id']])->value('user_id');
-                D('users')->where(['mobile' => $data['id']])->setInc('happy_beans',$data['number']);
-                D('users')->where(['user_id' => $uid])->setDec('happy_beans',$data['number']);
+                consumption_beans($pay_id,$data['number'],'悦玩豆转入');
+                lose_beans($uid,$data['number'],'悦玩豆转出');
                 D('turn_out')->add([
                     'uid'      =>  $uid,
                     'pay_id'   => $pay_id,
@@ -623,7 +626,7 @@ class Ad extends MobileBase
         if($numbers > $have_numbers){
             return json([
                 'code'  =>  -1,
-                'msg'   =>  '发布失败，余额不足',
+                'msg'   =>  '发布失败，悦玩豆不足',
                 'data'  =>  [],
             ]);
         }
@@ -753,7 +756,7 @@ class Ad extends MobileBase
     {
         $p = request()->get('p');
         $userInfo = session('user');
-//        $user_id = $userInfo['user_id'];
+        $user_id = $userInfo['user_id'];
         $user_id = 52;
         if($p == 2){
             $user_arr = Db::name('users')->where("find_in_set($user_id,pid_list)")->column('pid_list');
@@ -772,14 +775,23 @@ class Ad extends MobileBase
                 ->select();
         }else{
             $user_arr = Db::name('users')->where("find_in_set($user_id,pid_list)")->column('pid_list');
-            $user_id_arr = "";
-            foreach ($user_arr as $v){
-                $user_id_arr .= $v . ",";
+            foreach ($user_arr as &$vo){
+                $vo = explode(',',$vo);
             }
-            $user_id_arr = trim($user_id_arr,',');
-            $user_id_arr = explode(',',$user_id_arr);
+            $user_id_arr = [];
+            foreach ($user_arr as $v){
+                $index_id = array_search($user_id,$v);
+                $user_id_arr[] = array_slice($v,$index_id + 1);
+            }
+            $user_id_where = [];
+            foreach ($user_id_arr as $i){
+                foreach ($i as $item){
+                    $user_id_where[] = $item;
+                }
+            }
+            $user_id_where = array_unique($user_id_where);
             $data = Db::name('users')
-                ->where('user_id','in',$user_id_arr)
+                ->where('user_id','in',$user_id_where)
                 ->field('nickname,mobile,reg_time')
                 ->select();
         }

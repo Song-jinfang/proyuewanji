@@ -73,6 +73,7 @@
 	
 </body>
 <script type="text/javascript" src="__JS__/jquery-3.2.1.min.js" ></script>
+	<script src="__JS__/layer.js"  type="text/javascript" ></script>
 <script>
 	var clickElement=null;
 	var forum_id = 0;
@@ -95,11 +96,11 @@
 					var val = '评论<font>(' + e.data.count + '条)</font>' ;
 					$("#forum_id-" + e.data.forum_id).html(val);
 				}else{
-					alert(e.msg);
+					layer.msg(e.msg);
 				}
 			},
 			error:function(e){
-				console.log(e);
+				layer.msg('网络异常，请稍后再试');
 			},
 		});
 		var value=$(".commentInput").val();
@@ -131,7 +132,7 @@
 			}
 		},
 		error:function(res){
-			console.log(res);
+			layer.msg('网络异常，请稍后再试');
 		}
 	});
 	}
@@ -153,7 +154,7 @@
 				}
 			},
 			error:function(res){
-				console.log(res);
+				layer.msg('网络异常，请稍后再试');
 			}
 		})
 	}
@@ -173,7 +174,7 @@
 				}
 			},
 			error:function(e){
-				console.log(e);
+				layer.msg('网络异常,请稍后再试');
 			}
 		})
 	}
