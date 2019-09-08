@@ -205,6 +205,10 @@
 		// formData.append('pwd',pwd);
 		// formData.append('number',number);
 		// console.log(formData);
+		if(!(number > 0)){
+			layer.msg('请输入正确的数额');
+			return;
+		}
 		$.ajax({
 			url:'buy_ywd',
 			type:'post',
