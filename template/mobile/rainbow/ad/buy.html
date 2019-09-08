@@ -8,7 +8,7 @@
 	</head>
 	<body>
 	<div class="header">
-		<a href="javascript:history.go(-1);"><img src="__IMG__/back1.png" class="back"></a>我要买
+		<a href="javascript:history.go(-1);"><img src="__IMG__/back1.png" class="back"></a>交易大厅
 	</div>
 	<div class="line"></div>
 	<section>
@@ -124,7 +124,7 @@
 		{
 			var numbers = $("#numbers").val();
 			var unit_price = $("#unit_price").val();
-			if(!(unit_price || numbers)){
+			if(!(unit_price && numbers > 0)){
                 layer.msg('请填写数量和单价');
                 setTimeout(function(){
 
