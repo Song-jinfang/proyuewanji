@@ -90,7 +90,7 @@ class Ad extends MobileBase
                     $total_price -= $ywd_num;
                     $price = $have_price - $ywd_num;
                 }
-                D('users')->where(['user_id' => $uid])->update(['happy_beans' => $price]);
+//                D('users')->where(['user_id' => $uid])->update(['happy_beans' => $price]);
 
                 $order['order_sn'] = date('YmdHis',time()) . rand(1000,9999);
                 $order['user_id']  = $uid;
