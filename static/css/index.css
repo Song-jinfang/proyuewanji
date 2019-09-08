@@ -1,4 +1,8 @@
-	html {
+/*
+ * 首页
+ */
+.yello{color:#f23030;}
+html {
 		width: 100%;
 		font-size: calc(100vw/7.5);
 		font-size: -webkit-calc(100vw/7.5);
@@ -20,7 +24,7 @@
 	.header{
 		width: 100%;
 		height: 1rem;
-		background: #141414;
+		/* background: #141414; */
 		position: fixed;
 		left: 0;
 		top: 0;
@@ -28,9 +32,9 @@
 		z-index: 9;
 	}
 	.searchDiv{
-		width: 4.9rem;
+		width: 6.8rem;
 		height: 0.54rem;
-		background: #616161;
+		background: #ffffff;
 		position: absolute;
 		left: 0;
 		right: 0;
@@ -61,7 +65,7 @@
 		width: 100%;
 		height: 2.55rem;
 		position: relative;
-		background: #201f1e;
+		/* background: #201f1e; */
 	}
 	.bannerbox{
 		width: 6.96rem;
@@ -86,7 +90,7 @@
     	opacity: 1;
     }
     .bannerDiv .swiper-pagination-bullet-active{
-    	background: dodgerblue;
+    	background: #f96c56;
     	opacity: 1;
     }
     .iconBox{
@@ -143,21 +147,23 @@
     	border-radius: 0;
     }
     .lists .swiper-container-horizontal>.swiper-pagination-bullets, .swiper-pagination-custom, .swiper-pagination-fraction{
-    	bottom: -0.2rem;
+    	bottom: -0.1rem;
     }		
     .lists .swiper-container-horizontal>.swiper-pagination-bullets .swiper-pagination-bullet{
     	margin: 0;
     }
     .lists .swiper-pagination-bullet{
     	height: 0.1rem;
-    	width: 0.5rem;
-    	border-radius: 0;
+    	width: 0.1rem;
+    	border-radius: 50%;
+    	magrin-left:0.5rem;
+    	letter-spacing:5px;
     }
     .link1{
-    	width: 6.96rem;
-    	height: 2.22rem;
-    	background:url(../images/banner1.png) no-repeat;
-    	background-size: 100% 100%;
+    	width: 6.95rem;
+    	height: 85px;
+    /* 	background:url(/static/img/banner1.png) no-repeat;
+    	background-size: 100%; */
     	margin: auto;
     	margin-top: 0.3rem;
     	position: relative;
@@ -181,9 +187,11 @@
     }
     .linkBox{
     	width: 6.96rem;
-    	height: 6.95rem;
+    	height: 3.8rem;
     	margin: auto;
-    	background: #240dd3;
+    	background: #ececeb;
+    	/* background:url(/static/img/div_back.png) no-repeat; */
+    	background-size:100% 100%;  
     	position: relative;
     }
     
@@ -191,7 +199,7 @@
     	display: block;
     	position: absolute;
     	border-radius: 5px;
-    	overflow: hidden;
+    /* 	overflow: hidden; */
     }
     .linkBox a img{
     	width: 100%;
@@ -205,41 +213,39 @@
     	height: 100%;
     }
     .a1{
-    	width: 6.68rem;
+    	width: 6.8rem;
     	height: 1.3rem;
     	left: 0.14rem;
-    	top: 0.15rem;
+    	top: 0.05rem;
     }
     .a2{
-    	width: 6.68rem;
-    	height: 1.3rem;
-    	left: 0.14rem;
-    	top: 1.62rem;
+    	width: 6.97rem;
+    	height: 1.66rem;
     }
     .a3{
-        width: 5rem;
-    	height: 1.7rem;
-    	left: 0.14rem;
-    	top: 3.1rem;	
+        width: 3.87rem;
+    	height: 1.9rem;
+    /* 	top: 3.1rem; */	
+    	top: 1.8rem;
     }
     .a4{
-    	width: 1.56rem;
-    	height: 1.7rem;
-    	right: 0.14rem;
-    	top: 3.1rem;
+    	width: 2.95rem;
+    	height: 1.9rem;
+    	right: 0.0rem;
+    	top: 1.8rem;
     }
     .linkList{
-    	width: 6.68rem;
+    	width: 6.8rem;
     	height: 1.7rem;
     	position: absolute;
     	display: flex;
     	display: -webkit-flex;
     	justify-content: space-between;
-    	top: 5rem;
+    	top: 4.0rem;
     	left: 0.14rem;
     }
     .linkBox .linkList a{
-    	width: 1.56rem;
+    	width: 1.65rem;
     	height: 1.7rem;
     	display: block;
     	position: relative;
@@ -248,11 +254,11 @@
 
     .link2{
     	width: 6.96rem;
-    	height: 5.2rem;
+    		
     	display: flex;
     	display: -webkit-flex;
     	flex-wrap: wrap;
-    	background: #fff;
+    /* 	background: #fff; */
     	margin: auto;
     	margin-top: 0.3rem;
     	border-radius: 8px;
@@ -260,30 +266,45 @@
     	position: relative;
     }
     .link2 img{
-    	width: 100%;
-    	height: 100%;
+    	/* width: 85%;
+    	height: 100%; */
+    	margin-left:0.25rem;
+    	width:140px;
+    	height:140px;
+    	border-radius: 8px;
+    	margin-top:0.25rem;
     }
     .link2 a{
-    	width: 50%;
+    	width: 47%;
     	height: 50%;
     	display: block;
+    	text-decoration:none;
+		padding-bottom:0.3rem;
+    	margin-right:1.5%;
+    	margin-left:1.5%;
+    	margin-top:3%;
+    	background:#fff;
+    	border-radius:8px;
     }
-    .link2 a:nth-child(1){	
+    
+
+    
+/*     .link2 a:nth-child(1){	
     	border-right: 1px solid #eee;
     	border-bottom: 1px solid #eee;
-    }
-    .link2 a:nth-child(2){
+    } */
+   /*  .link2 a:nth-child(2){
 
     	border-bottom: 1px solid #eee;    	
     }
     .link2 a:nth-child(3){
 
     	border-right: 1px solid #eee;    	
-    }
+    } */
 
     .link3{
     	width: 6.96rem;
-    	height: 1.87rem;
+    	height: 2.2rem;
     	display: block;
     	margin: auto;
     	margin-top: 0.3rem;
@@ -294,18 +315,19 @@
     }
     .lists{
     	width: 6.96rem;
-    	height: 3.4rem;
+    	height: 3.7rem;
     	background: #fff;
     	margin: auto;
     	padding-top: 0.2rem;
     }
     .lists a{
-    	width: 2.2rem;
+    	width: 2.1rem;
     	display: block;
     	text-decoration: none;
     }
     .lists a img{
-    	width: 100%;
+    	/* width: 100%; */
+    	width:2.1rem
     }
     .proName{
     	width: 100%;
@@ -454,8 +476,8 @@
     	color: #000;
     }
     .footer img{
-    	width: 0.68rem;
-    	height: 0.52rem;
+    	width: 0.5rem;
+    	height: 0.45rem;
     	margin: auto;
     }
     .footer span{
@@ -515,3 +537,10 @@
     	top: 1.25rem;
     	text-decoration: none;
     }
+    .adv_banner{padding:0.02rem 0.1rem 0.02rem  0.1rem;}
+    .a_all a{
+    		height: 100%;
+    		width:100%
+			}
+    
+    

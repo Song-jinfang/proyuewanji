@@ -57,14 +57,24 @@ class Goods extends Base {
             if(IS_GET)
             {
                 $goods_category_info = D('GoodsCategory')->where('id='.I('GET.id',0))->find();
+                
+//                 if($goods_category_info['adv_id']){
+//                     $count = M('ad')->where('id='.$goods_category_info['adv_id'])->count();
+//                     if()
+                    
+//                 }
                 $this->assign('goods_category_info',$goods_category_info);
                 
                 $all_type = M('goods_category')->where("level<3")->getField('id,name,parent_id');//上级分类数据集，限制3级分类，那么只拿前两级作为上级选择
+              
                 if(!empty($all_type)){
                 	$parent_id = empty($goods_category_info) ? I('parent_id',0) : $goods_category_info['parent_id'];
+                
                 	$all_type = $GoodsLogic->getCatTree($all_type);
+               
                 	$cat_select = $GoodsLogic->exportTree($all_type,0,$parent_id);
                 	$this->assign('cat_select',$cat_select);
+                	
                 }
                 
                 //$cat_list = M('goods_category')->where("parent_id = 0")->select(); 
@@ -72,6 +82,7 @@ class Goods extends Base {
                 return $this->fetch('_category');
                 exit;
             }
+            
 
             $GoodsCategory = new GoodsCategory(); // D('GoodsCategory'); //
 
@@ -99,18 +110,21 @@ class Goods extends Base {
                     $par_id = ($GoodsCategory->parent_id > 0) ? $GoodsCategory->parent_id : 0;
                     $sameCateWhere = ['parent_id'=>$par_id , 'name'=>$GoodsCategory['name']];
                     $GoodsCategory->id && $sameCateWhere['id'] = array('<>' , $GoodsCategory->id);
+                    $adv_id = $GoodsCategory->adv_id;
+                    $advCount = M('ad')->where('ad_id='.$adv_id)->count();
+                    if(!$advCount){
+                        $return_arr = array('status' => 0,'msg' => '广告id不存在','data' => '',);
+                        $this->ajaxReturn($return_arr);
+                    }
                     $same_cate = M('GoodsCategory')->where($sameCateWhere)->find();
                     if($same_cate){
                         $return_arr = array('status' => 0,'msg' => '同级已有相同分类存在','data' => '');
                         $this->ajaxReturn($return_arr);
                     }
-                    
                     if ($GoodsCategory->id > 0 && $GoodsCategory->parent_id == $GoodsCategory->id) {
-                        //  编辑
                         $return_arr = array('status' => 0,'msg' => '上级分类不能为自己','data' => '',);
                         $this->ajaxReturn($return_arr);
                     }
-
                     //判断不能为自己的子类
                     if ($GoodsCategory->id > 0) {
                         $category_id_list = db('goods_category')->where('parent_id',$GoodsCategory->id)->field('id')->select();
@@ -120,8 +134,6 @@ class Goods extends Base {
                             $this->ajaxReturn($return_arr);
                         }
                     }
-
-
                     if($GoodsCategory->commission_rate > 100)
                     {
                         //  编辑

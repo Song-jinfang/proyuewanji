@@ -98,8 +98,9 @@ class User extends Base
         $task['time_len'] = $data['time_len'];
         $task['total_num'] = $data['total_num'];
         $task['price'] = $data['adv_price'];
-        //         $task['thumb_img'] = $data['thumb'];
-        //         $task['thumb_img'] = ;
+        $task['identity'] = 1;//后台是管理员发布
+        $task['status'] = 1;//直接把状态设置为显示
+        $task['uid'] = 1;//直接把状态设置为显示
         $file = $data['thumb']?$data['thumb']:$data['video'];
         $task['thumb_img'] = $file;
         if ($data['act'] == 'add') {

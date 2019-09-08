@@ -442,7 +442,7 @@ class UsersLogic extends Model
 			$map['first_leader'] = $invite['user_id'];
 			$map['second_leader'] = $invite['first_leader'];
 			$map['third_leader'] = $invite['second_leader'];
-			$map['pid_list'] = $invite['pid_list']?$invite['pid_list'].','.$invite['user_id']:$invite['user_id'];
+			//$map['pid_list'] = $invite['pid_list']?$invite['pid_list'].','.$invite['user_id']:$invite['user_id'];
             //需要给推荐人送积分
             $integral = tpCache('integral');
             $invite_integral =$integral['invite_integral'];
@@ -466,6 +466,13 @@ class UsersLogic extends Model
         $user_id = Db::name('users')->insertGetId($map);
         if($user_id === false)
             return array('status'=>-1,'msg'=>'注册失败');
+            if(is_array($invite) && !empty($invite)){
+                $pidStr = $invite['pid_list'].','.$user_id;
+            }else{
+                $pidStr = $user_id;
+            }
+            M('users')->where('user_id='.$user_id)->update(['pid_list'=>$pidStr]);
+            
         // 会员注册赠送积分
         $isRegIntegral = tpCache('integral.is_reg_integral');
         if($isRegIntegral==1){

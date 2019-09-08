@@ -47,6 +47,7 @@ class Pay
     private $couponId;
     private $shop;//自提点
     public $happy_beans_money;
+    public $order_consum_ywd;
 
     /**
      * 计算订单表的普通订单商品
@@ -259,10 +260,13 @@ class Pay
         if($user['happy_beans'] < $rate){//计算到总额里面
             $this->orderAmount = $this->orderAmount + $rate;
             $this->totalAmount = $this->totalAmount + $rate;
+            $this->happy_beans_money = $rate;
+            $this->order_consum_ywd = 0;
             return $this;
         } else{
-            //扣掉悦玩币
+            //消耗悦玩币
             $this->happy_beans_money = $rate;
+            $this->order_consum_ywd = 1;
             return $this;
         }
         

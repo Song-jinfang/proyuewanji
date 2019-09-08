@@ -60,6 +60,18 @@
           <p class="notic">如果选择上级分类，那么新增的分类则为被选择上级分类的子分类</p>
         </dd>
       </dl>
+      
+     <dl class="row">
+        <dt class="tit" style="color:red">
+          <label for="t_sort"><em>*</em>如果为推荐分类，请填写广告位置ID</label>
+        </dt>
+        <dd class="opt">
+          <input type="text" class="t_mane" name="adv_id" id="adv_id" value="{$goods_category_info.adv_id}">
+          <span class="err" style="color:#F00; display:none;" id="err_adv_id"></span>
+          <p class="notic">根据排序进行由小到大排列显示。</p>
+        </dd>
+      </dl>
+      
 	  <dl class="row">
         <dt class="tit">
           <label for="t_mane"><em>*</em>导航显示</label>

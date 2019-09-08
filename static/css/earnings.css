@@ -6,7 +6,7 @@
 	}
 	body{
 		width:100%;
-		background: #ececeb;
+		background: #efddd4;
 	}
 	*{
 		margin: 0;
@@ -27,7 +27,9 @@
 		text-align: center;
 		font-size: 0.3rem;
 		position: relative;
-		background: #000;
+	/* 	background: #000; */
+		background: url(/static/img/user_top.png) no-repeat;
+		background-size:100%;
 		color: #fff;
 	}
 	.back{
@@ -57,9 +59,9 @@
 		text-decoration: none;
 		color: #000;
 	}
-	.tab .curr{
+/* 	.tab .curr{
 		color: #c29700;
-	}
+	} */
 	.tab a p{
 		width: 100%;
 		text-align: center;
@@ -78,7 +80,7 @@
 		display: block;
 		width: 1px;
 		height: 0.6rem;
-		background: #787575;
+		background: #e8e4e4;
 	}
 	.list{
 		width: 6.8rem;
@@ -88,7 +90,7 @@
 	.orderLists{
 		width: 100%;
 		padding: 0.1rem;
-		background: #717170;
+		background: #fd7f5e;
 		border-radius:8px ;
 		margin-top: 0.3rem;
 		position: relative;
@@ -108,6 +110,7 @@
 		background: #fff;
 		border-radius: 8px;
 		margin-top: 0.13rem;
+		padding: 10px 0px  10px 0px;
 	}
 	.dayBox{
 		width: 100%;
@@ -116,7 +119,7 @@
 		display: -webkit-flex;
 		flex-wrap: wrap;
 		/* border-bottom: 1px solid #cdcfcd; */
-		border-bottom:1px dashed #cdcfcd;
+		border-bottom:1px dashed #e2e4e2
 		
 	}
 	.dayBox1{
@@ -161,7 +164,7 @@
 	}
 	.btn{
 		width: 1.8rem;
-		height: 0.4rem;
+		height: 0.5rem;
 		border-radius: 4px;
 		display: flex;
 		display: -webkit-flex;
@@ -182,7 +185,7 @@
 		color: #fff;
 	}
 	.btnGreen{
-		background: #1e8706;
+		background: #fc715a;
 		color: #fff;
 	}
 	.btnBlack{
@@ -190,8 +193,8 @@
 		color: #fff;
 	}
 	.btnGray{
-		background: #d1d2d1;
-		color: #000;
+		background: #b8b9b8;
+		color: #ffffff;
 	}
 	.scoreDiv{
 		width: 100%;

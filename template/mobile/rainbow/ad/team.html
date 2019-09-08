@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="header">
-    <a href="javascript:history.go(-1)"><img src="__IMG__/back.png" class="back"></a>我的团队
+    <a <php> if(request()->action() == 'team'){ </php>  href="{:U('User/index')}" <php> }</php> ><img src="__IMG__/back.png" class="back"></a>我的团队
 </div>
 <div class="tab">
     <a href="team.html?p=2" <eq name="p" value="2">class="currents"</eq>>我的直属</a>

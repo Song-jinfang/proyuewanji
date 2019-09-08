@@ -59,6 +59,10 @@
             <p class="recept">注册即视为同意<a href="{:U('Mobile/Article/agreement',['doc_code'=>'agreement'])}">《开源用户注册协议》</a></p>
             <!--<p class="recept">注册即视为同意<a href="javascript:show_agreement();">《开源用户注册协议》</a></p>-->
         </div>
+              <div class="signup-find" id="download" style="margin-top:2rem;text-align:center;display:none">
+            <p class="recept"  style="text-align:center;line-height:25px;">点击<a href="https://www.pgyer.com/eOIB" style="font-size:0.8rem">下载app</a></p>
+       </div>
+        
     </form>
 </div>
 
@@ -193,7 +197,11 @@
             data:$('#regFrom').serialize(),
             success:function(data){
                 if(data.status == 1){
-                    location.href='/index.php/Mobile/User/index';
+                    /* location.href='/index.php/Mobile/User/index'; */
+                	layer.open({content:'注册成功，请下载APP',time:2,end:function(){
+              			 //location.href = data.url;
+                     	 $("#download").show();
+       			 }}); 
                 }else{
                     showErrorMsg(data.msg);
                 }

@@ -11,7 +11,7 @@
 	   <img src="__IMG__/back.png" class="back" onclick="go_nest()">话题吧
 	</div>
 	<style>
-		.lists{letter-spacing:0.05rem;}
+		.lists{letter-spacing:0.01rem;}
 	</style>
 	<div class="lists">
 		<volist name="data" id="vo" key="k">
@@ -20,10 +20,10 @@
 					<div class="userImg">
 						<img src="{$vo.head_pic}" alt="">
 					</div>
-					<p class="userName"><b>{$vo.nickname}</b></p>
+					<p class="userName">{$vo.nickname}</p>
 					<p class="timer">{$vo.add_time|date="y-m-d H:i",###}</p>
 				</div>
-				<p class="commentText"><b>{$vo.title}</b></p>
+				<p class="commentText">{$vo.title}</p>
 				<div class="imgBox">
 					<volist name="vo.photo_list" id="v">
 						<img src="{$v}">

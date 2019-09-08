@@ -4964,11 +4964,11 @@ input:-ms-input-placeholder {
 .sc_list {
 	padding:.51333rem 0;
 	overflow:hidden;
-	border-bottom:1px solid #e0e0e0;
+	/* border-bottom:1px solid #e0e0e0; */
 }
 .addimgchan .maleri30 .sc_list{
 	margin-left:0.64rem;
-	border:1px solid #e0e0e0!important;
+	/* border:1px solid #e0e0e0!important; */
 	padding-top:0;
 	margin-bottom:.51333rem;
 }
@@ -11841,8 +11841,8 @@ pre {
 .icon_tps {
 	display:block;
 	margin:0 auto;
-	width:1.2666rem;
-	height:1.026rem;
+	width:1.00rem;
+	height:0.99rem;
 }
 .icon_tp2 {
 	display:none;

@@ -5,9 +5,8 @@
 		<meta name="viewport" content="width=device-width, user-scalable=no">
 		<title></title>
 		<link rel="stylesheet" href="__CSS__/details.css" />
-		<script src="__JS__/layer.js"  type="text/javascript" ></script>
 		<script src="__JS__/jquery-3.2.1.min.js"  type="text/javascript" ></script>
-		<link rel="stylesheet" href="__JS__/layer.css" />
+			<script src="__JS__/layer.js"  type="text/javascript" ></script>
 	</head>
 	<body>
 	<div class="header">
@@ -23,7 +22,9 @@
 			<div class="text">{$task_info.content}<a href="https://feixiaojie.com/">https://feixiaojie.com/</a></div>
 		    <p class="title">广告详情</p>
 		    <div class="text">
-		    	<img src="{$task_info.thumb_img}">
+		    <volist name="$task_info.thumb_img" id="v">
+		    	<img src="{$v}" style="margin-top:0.2rem">
+		    </volist>
 		    </div>
 		</div>
 	</div>
@@ -58,13 +59,10 @@
 				
 			}
 		},'json');
-	
-	
 	    function callback(){
-	    	alert(order_id);
 	    	if(s == 1){
 	    		$.post('/mobile/index/get_integral',{'task_id':task_id,'order_id':order_id},function(data){
-					layer.open({'content':data.msg});
+					layer.alert(data.msg);
 				},'json');
 	    	}
 	    }

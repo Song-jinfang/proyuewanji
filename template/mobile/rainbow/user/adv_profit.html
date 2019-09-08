@@ -36,21 +36,21 @@
 	</style>
 	<body>
 	<div class="header">
-	    <a id="[back]" <php> if(request()->action() == 'earnings'){ </php>  href="{:U('User/index')}" <php> }else{ </php> href="[href]" <php> } </php> ><img src="__IMG__/back.png" class="back" ></a>广告收益
+	    <a id="[back]" <php> if(request()->action() == 'adv_profit'){ </php>  href="{:U('User/index')}" <php> } </php> ><img src="__IMG__/back.png" class="back" ></a>广告收益
 	</div>
-		<div class="tab">
-			<a href="/Mobile/user/earnings" <php> if(request()->action() == 'earnings'){</php>class="curr" <php>}</php>   >
-				<p>{$profitArr['adv_profit']}<font>(元)</font></p>
+<div class="tab">
+			<a href="/Mobile/user/earnings" class="curr">
+				<p style="color:#FF470E"><b>{$profitArr['adv_profit']}</b><font>(元)</font></p>
 			    <p>单单返</p>
 			</a>
 			<span></span>
-			<a href="/Mobile/user/adv_profit" <php> if(request()->action() == 'adv_profit'){</php>class="curr" <php>}</php> >
-				<p>{$profitArr['share_profit']}<font>(元)</font></p>
+			<a href="/Mobile/user/adv_profit">
+				<p style="color:#FF470E"><b>{$profitArr['share_profit']}</b><font>(元)</font></p>
 			    <p>广告收益</p>
 			</a>
 			<span></span>
-			<a href="/Mobile/user/share_profit" <php> if(request()->action() == 'share_profit'){</php>class="curr" <php>}</php> >
-				<p>{$profitArr['order_profit']}<font>(元)</font></p>
+			<a href="/Mobile/user/share_profit">
+				<p style="color:#FF470E"><b>{$profitArr['order_profit']}</b><font>(元)</font></p>
 			    <p>分享收益</p>
 			</a>
 		</div>

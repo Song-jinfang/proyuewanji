@@ -591,7 +591,7 @@ class User extends MobileBase
     
     //测试生成二维码
     public function t(){
-       $this->getWchatQrcode('141');
+       $this->getWchatQrcode('70');
        // $this->createQrcode('http://yuewanji.hlz4319.com/mobile/User/reg','code','http://yuewanji.hlz4319.com/public/static/yuwanji/img/head_pic.jpg');
     }     
     public function wx_pic(){
@@ -603,7 +603,7 @@ class User extends MobileBase
     
     function getWchatQrcode($users_id){
         //  带LOGO
-        $url = 'http://yuewanji.hlz4319.com/Mobile/User/reg?pid='.$users_id; //二维码内容
+        $url = 'http://ywj.hlz4319.com/Mobile/User/reg?pid='.$users_id; //二维码内容
         $errorCorrectionLevel = 'L';//容错级别
         $matrixPointSize = 12;//生成图片大小
         //生成二维码图片

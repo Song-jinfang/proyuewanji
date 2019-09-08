@@ -4,15 +4,17 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no">
 		<link rel="stylesheet" href="__CSS__/swiper.min.css" />
+				<link rel="stylesheet" href="__CSS__/index.css" />
+		<link rel="stylesheet" href="__CSS__/public.css" />
 		<title></title>
 	</head>
 <body>
-	<div style="background: url(/static/img/top_back.png) no-repeat;">
+	<div style="background: url(/static/img/top_back.png) no-repeat;background-size:100%">
 			<div class="header">
-				<div class="searchDiv">
+				<a href="/mobile/Goods/ajaxSearch.html"><div class="searchDiv">
 					<img src="__IMG__/search.png" class="searchIcon">
 					<input type="text"  class="searchInput"/>
-				</div>
+				</div></a> 
 			</div>
 			<div style="width: 100%;height: 1rem;"></div>
 			<div class="bannerDiv">
@@ -43,7 +45,7 @@
 	            		<span>每日新品</span>
 	            	</a>
 	            	
-	            	<a href="###">
+	            	<a href="/Mobile/Goods/goodsList/id/590">
 	            		<img src="__IMG__/src/makeup.png">
 	            		<span>美妆达人</span>
 	            	</a>
@@ -59,11 +61,11 @@
 	            		<img src="__IMG__/src/sign.png">
 	            		<span>签到有礼</span>
 	            	</a>
-	            	<a href="###">
+	            	<a href="/Mobile/Goods/goodsList/id/589">
 	            		<img src="__IMG__/src/luxury.png">
 	            		<span>轻奢饰品</span>
 	            	</a>
-	            	<a href="###">
+	            	<a href="/Mobile/Order/order_list">
 	            		<img src="__IMG__/src/order.png">
 	            		<span>我的订单</span>
 	            	</a>
@@ -119,32 +121,26 @@
 	       <!--  <div class="swiper-pagination swiper-paginationB"></div> -->
 		</div>		
 	</div>
+	<style>
+		.link1 img{width:6.95rem}
+	</style>
 	<div style="clear:both"></div>
-	<a href="" >
-		<div class="link1">
-		</div>
-	</a>
+		<adv pid ="545" limit="1" item="v">
+			<a href="{$v[ad_link]}" >
+				<div class="link1">
+				<img src="{$v[ad_code]}"/>
+				</div>
+			</a>
+			</adv>
 	<div class="linkBox">
-		
-		
-		
-		
-		<div  class="div a1">
-		 	<adv pid ="2" limit="1" item="v">
-				<img src="{$v[ad_code]}" title="{$v[title]}">
-				<a href="{$v[ad_link]}" class="linkBtn1">立即投放</a>
-			</adv>
-		</div>
-		<div  class="div a2">
+		<div  class="div a2 a_all">
 			<adv pid ="537" limit="1" item="v">
-				<img  src="{$v[ad_code]}" title="{$v[title]}">
-				<a href="{$v[ad_link]}" class="linkBtn2">GO 开聊吧</a>
+				<a href="{$v[ad_link]}"><img  src="{$v[ad_code]}" title="{$v[title]}"></a>
 			</adv>
 		</div>
-		<div class="div a3">
+		<div class="div a3 a_all">
 			<adv pid ="538" limit="1" item="v">
-				<img  src="{$v[ad_code]}" title="{$v[title]}">
-				<a href="{$v[ad_link]}" class="linkBtn3">了解一下</a>
+				<a onclick="music()"><img  src="{$v[ad_code]}" title="{$v[title]}"></a>
 			</adv>
 		</div>
 		<adv pid ="541" limit="1" item="v">
@@ -153,22 +149,22 @@
 			</a>
 		</adv>
 		
-		<div class="linkList">
+	<!-- 	<div class="linkList">
 			<volist name="favourite_goods" id="v">
 				<a href="/Mobile/Goods/goodsInfo/id/{$v[goods_id]}">
 					<img src="{$v.original_img}">
 				</a>
 			</volist>
-		</div>
+		</div> -->
 	</div>
-    <div class="link2">
+   <!--  <div class="link2">
     	<adv pid ="539" limit="4" item="v">
 	    	<a href="{$v['ad_link']}" class="a9">
 	    		<img src="{$v[ad_code]}">
 	    	</a>
     	</adv>
-    </div>
-    <adv pid ="540" limit="1" item="v">
+    </div> -->
+<!--     <adv pid ="540" limit="1" item="v">
 	    <a href="{$v['ad_link']}" class="link3">
 	    	<img src="{$v[ad_code]}">
 	    </a>
@@ -186,14 +182,41 @@
 		            </div>
 	            </volist>
 	        </div>
-	        <!-- Add Pagination -->
+	        Add Pagination
 	        <div class="swiper-pagination swiper-paginationC"></div>
 	    </div>
-    </div>
+    </div> -->
+    
+    
+   <volist name="hot_goods" id="v">
+	    <a href="{$v['ad_link']}" class="link3">
+	    	<img src="{$v[ad_code]}">
+	    </a>
+	    <div class="lists">
+	        <div class="swiper-container swiper-containerC">
+		        <div class="swiper-wrapper">
+		            <volist name="$v['goods_info']" id="v1">
+			            <div class="swiper-slide">
+			            	<a href="/Mobile/Goods/goodsInfo/id/{$v1.goods_id}">
+			            		<img  src="{$v1.original_img}">
+			            		<p class="proName adv_banner">{$v1.goods_name}</p>
+			            		<p class="proPrice adv_banner" style="ma">¥{$v1.shop_price}</p>
+			            	</a>
+			            </div>
+		            </volist>
+		        </div>
+		        Add Pagination
+		        <div class="swiper-pagination swiper-paginationC"></div>
+		    </div>
+	    </div>
+    </volist>
+    
+    
+    
     <div class="titles">
     	<img src="__IMG__/title.png">
     </div>
-    <div class="list1">
+<!--     <div class="list1">
     	<volist name="new_goods" id="v">
 		    	<div class="proList">
 		    		<img src="{$v.original_img}" class="pros">
@@ -214,16 +237,40 @@
 		    		</a>
 		    	</div>
     	</volist>
+    </div> -->
+    
+        <div class="link2">
+    <!-- 	<adv pid ="539" limit="4" item="v">
+	    	<a href="{$v['ad_link']}" class="a9">
+	    		<img src="{$v[ad_code]}">
+	    	</a>
+    	</adv> -->
+    	<volist name="new_goods" id="v">
+    		<a href="{$v['ad_link']}" class="a9">
+	    		<img src="{$v.original_img}">
+				<p class="proName" style="width:85%;margin-left:7.5%;margin-top:0.3rem">{$v.goods_name}</p>
+          		<p class="proPrice" style="width:85%;margin-left:7.5%;margin-top:0.2rem">¥{$v.shop_price}</p>
+	    	</a>
+    	</volist>
     </div>
+    
+    
     <div style="width: 100%;height: 1.8rem;"></div>
-    <a href="###" class="link4">
+  <!--   <a href="###" class="link4">
     	<img src="__IMG__/banner10.png">
-    </a>
+    </a> -->
    <include file="public/footer_nav1" title="个人中心" body=""/>
 </body>
-<script type="text/javascript" src="js/jquery-3.2.1.min.js" ></script>
+
+<script type="text/javascript" src="__JS__/jquery-3.2.1.min.js" ></script>
+			<script src="__JS__/layer.js"  type="text/javascript" ></script>
 <script type="text/javascript" src="__IMG__/swiper.min.js" ></script>
+
+
 <script>
+function music(){
+	layer.msg('此功能暂未开通');    	
+}
     var swiperA = new Swiper('.swiper-containerA', {
         pagination: '.swiper-paginationA',
         paginationClickable: true
@@ -237,5 +284,6 @@
         slidesPerView: 3,
         spaceBetween: 10     
     });
+
 </script>
 </html>

@@ -37,32 +37,24 @@
 	</style>
 	<body>
 	<div class="header">
-	    <a id="[back]" <php> if(request()->action() == 'earnings'){ </php>  href="{:U('User/index')}" <php> }else{ </php> href="[href]" <php> } </php> ><img src="__IMG__/back.png" class="back" ></a>广告收益
+	    <a id="[back]" <php> if(request()->action() == 'share_profit'){ </php>  href="{:U('User/index')}"  href="[href]" <php> } </php> ><img src="__IMG__/back.png" class="back" ></a>广告收益
 	</div>
 		<div class="tab">
-			<a href="/Mobile/user/earnings" <php> if(request()->action() == 'earnings'){</php>class="curr" <php>}</php>   >
-				<p>{$profitArr['adv_profit']}<font>(元)</font></p>
+			<a href="/Mobile/user/earnings" class="curr">
+				<p style="color:#FF470E"><b>{$profitArr['adv_profit']}</b><font>(元)</font></p>
 			    <p>单单返</p>
 			</a>
 			<span></span>
-			<a href="/Mobile/user/adv_profit" <php> if(request()->action() == 'adv_profit'){</php>class="curr" <php>}</php> >
-				<p>{$profitArr['share_profit']}<font>(元)</font></p>
+			<a href="/Mobile/user/adv_profit">
+				<p style="color:#FF470E"><b>{$profitArr['share_profit']}</b><font>(元)</font></p>
 			    <p>广告收益</p>
 			</a>
 			<span></span>
-			<a href="/Mobile/user/share_profit" <php> if(request()->action() == 'share_profit'){</php>class="curr" <php>}</php> >
-				<p>{$profitArr['order_profit']}<font>(元)</font></p>
+			<a href="/Mobile/user/share_profit">
+				<p style="color:#FF470E"><b>{$profitArr['order_profit']}</b><font>(元)</font></p>
 			    <p>分享收益</p>
 			</a>
 		</div>
-	<!-- 	<style>
-			.get_profit span{display:block;font-size:12px;float:left;width:100px;}
-		</style> -->
-		<!--  <div class="tableDiv share_profit">
-		 		<div class="table get_profit">
-		 			<span>待领取：500</span><span style="text-align:center;line-height:28px;background-color:#ccc">领取</span>
-		 		</div>
-		 </div> -->
 		 <style>
 				/* .get_profit{line-height:0.6rem;display:block;width:3.5rem;text-align:center;background-color:#c29700;border-radius:5px;color:#fff;}
 				.tableDiv span{float:left;} */
@@ -71,10 +63,10 @@
 				
 		 </style>
 			  	<div class="get_profit">
-			  		<span>已领取:</span><span style="font-size:18px;color:#459018">{$profitArr['profit_already']}</span>
-			  		<span>待领取:</span><span style="font-size:18px;color:#459018">{$profitArr['dynamic_profit']}</span>
+			  		<span>已领取:</span><span style="font-size:18px;color:#ff470e">{$profitArr['profit_already']}</span>
+			  		<span>待领取:</span><span style="font-size:18px;color:#ff470e">{$profitArr['dynamic_profit']}</span>
 			  		<if condition="$profitArr['dynamic_profit'] gt 0">
-			  			<span onclick="getMoneyToBeans()"  style="margin-left:0.3rem;line-height:0.7rem;background:#459018;width:1.2rem;text-align:center;border-radius:8px;color:#fff">领取</span>
+			  			<span onclick="getMoneyToBeans()"  style="margin-left:0.3rem;line-height:0.7rem;background:#fc705a;width:1.2rem;text-align:center;border-radius:8px;color:#fff">领取</span>
 			  		<else>
 			  			<span style="margin-left:0.3rem;line-height:0.7rem;background:#bbbbbb;width:1.2rem;text-align:center;border-radius:8px;color:#fff">领取</span>
 			  		</if>

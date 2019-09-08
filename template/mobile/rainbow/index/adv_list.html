@@ -8,12 +8,12 @@
 		</head>
 		<body>
 			<div class="header">
-			<img src="__IMG__/back.png" class="back">浏览广告
+				<a href="/"><img src="__IMG__/back.png" class="back"></a>浏览广告
 			</div>
 			<ul class="lists">
 				<volist name="task_list" id="v">
 						<li>
-							<div class="img"></div>
+							<div class="img"><img src="{$v.head_pic}"/></div>
 							<p class="headline">{$v.desc}</p>
 							<p class="score">完成任务获得积分:{$v.price}个</p>
 							<p class="total">总条数：{$v.total_num}条</p>

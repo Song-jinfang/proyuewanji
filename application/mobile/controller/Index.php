@@ -55,16 +55,30 @@ class Index extends MobileBase {
             print_r($signPackage);
         */
         /*热门商品*/
-        $hot_goods = M('goods')->field('goods_id,shop_price,goods_name,original_img')->where("is_hot=1 and is_on_sale=1")->order('goods_id DESC')->limit(8)->select();//首页热卖商品
+       // $hot_goods = M('goods')->field('goods_id,shop_price,goods_name,original_img')->where("is_hot=1 and is_on_sale=1")->order('goods_id DESC')->limit(8)->select();//首页热卖商品
         $thems = M('goods_category')->where('level=1')->order('sort_order')->limit(9)->cache(true,TPSHOP_CACHE_TIME)->select();
         $this->assign('thems',$thems);
-        $this->assign('hot_goods',$hot_goods);
+      //  $this->assign('hot_goods',$hot_goods);
         /**商品精选**/
-        $new_goods = M('goods')->field('goods_id,original_img,shop_price,market_price,goods_name,sales_sum')->where("is_new=1 and is_on_sale=1")->order('sort DESC')->limit(4)->select();//
-        $this->assign('new_goods',$new_goods);
-        //dump($new_goods);
+        $new_goods = M('goods')->field('goods_id,original_img,shop_price,market_price,goods_name,sales_sum')->where("is_new=1 and is_on_sale=1")->order('sort DESC')->limit(20)->cache(true,TPSHOP_CACHE_TIME)->select();//
+        
+            $this->assign('new_goods',$new_goods);
+        $goodsCategory = M('goods_category')->field('id,adv_id')->where('is_hot=1')->select();
+        if(!empty($goodsCategory)){
+            foreach ($goodsCategory as $k=>$v){
+                if($v['adv_id']){
+                    $adv_link = M('ad')->field('ad_link,ad_code')->where('ad_id ='.$v['adv_id'])->find();
+                }
+                $goodsInfo = M('goods')->field('goods_id,goods_name,original_img,shop_price')->where('cat_id='.$v['id'])->select();
+                $goodsCategory[$k]['ad_link'] = $adv_link['ad_link'];
+                $goodsCategory[$k]['ad_code'] = $adv_link['ad_code'];
+                $goodsCategory[$k]['goods_info'] = $goodsInfo;
+            }
+        }
+        $this->assign('hot_goods',$goodsCategory);
+      
         /**推荐商品**/
-        $favourite_goods = M('goods')->field('goods_id,original_img')->where("is_recommend=1 and is_on_sale=1")->order('sort DESC')->limit(4)->select();//首页推荐商品
+        $favourite_goods = M('goods')->field('goods_id,original_img')->where("is_recommend=1 and is_on_sale=1")->order('sort DESC')->limit(4)->cache(true,TPSHOP_CACHE_TIME)->select();//首页推荐商品
      /*    $is_recommend = M('goods')->where('') */
         //秒杀商品
         $now_time = time();  //当前时间
@@ -117,7 +131,8 @@ class Index extends MobileBase {
         if($order_id){
             $this->assign('order_id',$order_id);
         }
-        $task_list = M('task')->field("id,desc,price,FROM_UNIXTIME(add_time,'%Y-%m-%d') add_time,total_num,num")->select();
+        $task_list = M('task')->alias('a')->field("a.id,a.desc,a.price,FROM_UNIXTIME(a.add_time,'%Y-%m-%d') add_time,a.total_num,a.num,b.head_pic")
+                    ->join('users b','a.uid = b.user_id','left')->where('a.status = 1')->select();
         if(!empty($task_list)){
             foreach($task_list as $k=>$v){
                 $task_list[$k]['num'] = $v['total_num'] - $v['num'];
@@ -135,6 +150,9 @@ class Index extends MobileBase {
         $order_id = $param['order_id'];
         if($id){
             $taskInfo = M('task')->field("id,desc,content,thumb_img,price,time_len")->where('id='.$id)->find();
+            if($taskInfo['thumb_img']){
+                $taskInfo['thumb_img'] = explode(',',$taskInfo['thumb_img']);
+            }
             $this->assign('task_info',$taskInfo);
         }
         $this->assign('order_id',$order_id);

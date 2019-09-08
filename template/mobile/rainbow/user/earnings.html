@@ -9,28 +9,28 @@
 	</head>
 	<body>
 	<div class="header">
-	    <a id="[back]" <php> if(request()->action() == 'earnings'){ </php>  href="{:U('User/index')}" <php> }else{ </php> href="[href]" <php> } </php> ><img src="__IMG__/back.png" class="back" ></a>单单返
+	    <a id="[back]" <php> if(request()->action() == 'earnings'){ </php>  href="{:U('User/index')}" <php> }</php>><img src="__IMG__/back.png" class="back" ></a>单单返
 	</div>
 		<div class="tab">
 			<a href="/Mobile/user/earnings" class="curr">
-				<p>{$profitArr['adv_profit']}<font>(元)</font></p>
+				<p style="color:#FF470E"><b>{$profitArr['adv_profit']}</b><font>(元)</font></p>
 			    <p>单单返</p>
 			</a>
 			<span></span>
 			<a href="/Mobile/user/adv_profit">
-				<p>{$profitArr['share_profit']}<font>(元)</font></p>
+				<p style="color:#FF470E"><b>{$profitArr['share_profit']}</b><font>(元)</font></p>
 			    <p>广告收益</p>
 			</a>
 			<span></span>
 			<a href="/Mobile/user/share_profit">
-				<p>{$profitArr['order_profit']}<font>(元)</font></p>
+				<p style="color:#FF470E"><b>{$profitArr['order_profit']}</b><font>(元)</font></p>
 			    <p>分享收益</p>
 			</a>
-			</div>
+		</div>
 		<div class="list">
 		<volist name="orderList" id="v">
 			<div class="orderLists">
-				<p class="orderTitle" style="color:#e2e0e0">①订单号：{$v.order_sn}&nbsp&nbsp&nbsp<font>日期：{$v.add_time}</font></p>
+				<p class="orderTitle" style="color:#ffffff">①订单号：{$v.order_sn}&nbsp&nbsp&nbsp<font>日期：{$v.add_time}</font></p>
 				<div class="form">
 					<div class="dayBox">
 						<div class="div">
@@ -57,7 +57,7 @@
 					</div>
 					
 					<div class="scoreDiv" style="border-bottom:1px dashed #cdcfcd">
-						<p class="scoreTitle">领取收益</p>
+						<p class="scoreTitle" style="color:#ff470e"><b>领取收益</b></p>
 						<div class="dayBox1">
 							<div class="div1" style="width:65%;">
 								<font>订单金额50%</font>
@@ -76,8 +76,8 @@
 						</div>
 					</div>
 					<div class="scoreDiv">
-						<p class="scoreTitle">做任务送现金 <b style="color:#1e8706">（已赚{$v.order_point}元）</b></p>
-						<div class="dayBox1">
+						<p class="scoreTitle">做任务送现金 <b style="color:#ff470e">（已赚{$v.order_point}元）</b></p>
+						<div class="dayBox1" style="margin-top:0.15rem">
 							<div class="div1" style="width:50%;">
 								<font></font>
 								<if condition="$v.adv_task eq 1">

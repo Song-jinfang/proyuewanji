@@ -24,7 +24,7 @@
 .z_user_head{
 	width: 100%;
 	position: relative;
-	height: 8.428rem;
+	height: 7.428rem;
 	background-color: #2e69c1;
 }
 .z_user_icon{
@@ -78,12 +78,12 @@
 	color: #FFFFFF;
 }
 .z_user_down{
-	height: 2.432rem;
+	height: 4.32rem;
 	position: relative;
 	padding: 0 0.4266666666666667rem;
 }
 .user_down_bg {
-	background-color: #000000;
+	/* background-color: #fb8172; */
 	position: absolute;
 	width: 100%;
 	height: 100%;
@@ -91,6 +91,7 @@
 	top: 0;
 	z-index: 8;
 	opacity: 0.6;
+	border-radius:5px;
 }
 
 .z_user_down ul{
@@ -107,6 +108,7 @@
 	width: 33.3%;
 	float: left;
 	color: #ffffff;
+	margin-top:0.6rem
 }
 .z_user_down ul li a{
 	width: 100%;
@@ -114,18 +116,18 @@
 .user_down_dev{
 	font-size: 0.64rem;
 	margin-top: 0.4266666666666667rem;
-	color: #ffff;
+	color: #FF470E;
 }
 .user_down_name{
 	margin-top: 0.213rem;
     font-size: 0.46466rem;
 }
 .user_down_name {
-	color: #FFFFFF;
+	color: #555555;
 }
 .user_list_cont{
 	line-height: 1.92rem;
-	border-bottom: 0.0213rem solid #ddd;
+	 border-bottom:0.0213rem solid #fd645c; 
 	overflow: hidden;
 }
 .user_list_cont .cont_fl img{
@@ -178,11 +180,11 @@
     display: block;
 }
 .z_user_nav ul li a img{
-	width: 1.0666666666666667rem;
-	height: 0.8533333333333334rem;
+	 width: 1.0666666666666667rem;
+	/* height: 0.8533333333333334rem;  */
 }  
 .z_user_nav ul li a p{
 	font-size: 0.5546666666666666rem;
-	margin-top: 0.21333333333333335rem;
+	margin-top: 0.31333333333333335rem;
 	color: #666666;
 } 

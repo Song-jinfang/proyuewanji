@@ -252,6 +252,7 @@ class PlaceOrder
             'type'=>$this->type,
             'join_t'=>$this->join_t,//是否参与t+7
             'ywd_price'=>$this->pay->happy_beans_money,
+            'order_consum_ywd'=>$this->pay->order_consum_ywd
         ];
         if($orderData["order_amount"] < 0){
             throw new TpshopException("订单入库", 0, ['status' => -8, 'msg' => '订单金额不能小于0', 'result' => '']);

@@ -104,7 +104,7 @@
     	width: 100%;
     	height: 100%;
     	position: relative;
-    	border-bottom: 1px solid #c29700;
+    	border-bottom: 1px solid #ecd2b1;
     	padding: 0 0.4rem 0 1.2rem;
     	text-decoration: none;
     	flex-wrap: wrap;
@@ -148,7 +148,7 @@
     	position: fixed;
     	left: 0;
     	top: 0;
-    	background: rgba(255,255,255,0.6);
+    	background: rgba(169, 162, 162, 0.84);
     	z-index: 999;
     	display: none;
     }
@@ -158,7 +158,7 @@
 		position: fixed;
 		left: 0;
 		top: 0;
-		background: rgba(255,255,255,0.6);
+		background: rgba(169, 162, 162, 0.84);
 		z-index: 999;
 		display: none;
 	}
