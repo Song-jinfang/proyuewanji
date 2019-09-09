@@ -181,35 +181,45 @@ class Index extends MobileBase {
           $param = I('post.');
           $order_id = !empty($param['order_id'])?$param['order_id']:'';
           $task_id = $param['task_id'];
+          $data['type'] = 2;
           if($order_id){
               $orderConf = M('config')->where("name='adv_order'")->value('value'); 
               //说明是订单广告，直接按订单百分一
               $orderInfo = M('order')->field('order_amount,order_id')->where('order_id='.$order_id)->find();
              //订单广告收益
               $orderAdvProfit = $orderInfo['order_amount'] * ($orderConf/100);
-              adv_order($this->user['user_id'],$orderAdvProfit,'完成浏览广告获得经验值',$order_id,$type=1);
-              //$this->ajaxReturn(['status'=>0,'msg'=>'获得'.$orderAdvProfit.'个值']);
+              adv_order($this->user['user_id'],$orderAdvProfit,'完成浏览广告获得经验值',$order_id,2);
               $price = $orderAdvProfit;
-              $desc = '完成浏览广告获得经验值';
+              
+              $data['user_id'] = $this->user['user_id'];
+              $data['task_id'] = $task_id;
+              $data['status'] = 1;
+              $data['add_time'] = time();
+              $data['task_money'] = $price;
+              $data['order_id'] = $order_id;
+              M('user_task') ->add($data);
+              $this->ajaxReturn(['status'=>0,'msg'=>'获得'.$price.'个积分']);
           }else{
               $time = strtotime(date('Y-m-d'));
               $task_count = M('user_task')->where('add_time > '.$time.' and user_id='.$this->user['user_id'])->count();
               $taskinfo = M('task')->where('id='.$task_id)->find();
               //0撸和或者会员浏览广告
               $orderCount = M('order')->where('user_id='.$this->user['user_id'].' and pay_status = 1')->count();
-              accountLog($this->user['user_id'],0,$taskinfo['price'],'浏览广告获得积分');
-              //$this->ajaxReturn(['status'=>0,'msg'=>'获得'.$taskinfo['price'].'个积分']);
-              $desc = '获得'.$taskinfo['price'].'个积分';
-              $price = $taskinfo['price'];
+              if(!$orderCount){
+                  accountLog($this->user['user_id'],0,$taskinfo['price'],'浏览广告获得积分');
+                  $price = $taskinfo['price'];
+                  $data['user_id'] = $this->user['user_id'];
+                  $data['task_id'] = $task_id;
+                  $data['status'] = 1;
+                  $data['add_time'] = time();
+                  $data['task_money'] = $price;
+                  $data['order_id'] = $order_id;
+                  M('user_task') ->add($data);
+                  $this->ajaxReturn(['status'=>0,'msg'=>'获得'.$price.'个积分']);
+                  
+              }
+              $this->ajaxReturn(['status'=>0,'msg'=>'获得0个积分']);
           }
-          $data['user_id'] = $this->user['user_id'];
-          $data['task_id'] = $task_id;
-          $data['status'] = 1;
-          $data['add_time'] = time();
-          $data['task_money'] = $price;
-          $data['order_id'] = $order_id;
-          M('user_task') ->add($data);
-          $this->ajaxReturn(['status'=>0,'msg'=>'获得'.$price.'个积分']);
     }
     /*
      * 分享
