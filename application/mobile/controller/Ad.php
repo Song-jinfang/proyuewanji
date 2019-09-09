@@ -381,7 +381,7 @@ class Ad extends MobileBase
                                 'add_time' =>  time(),
                                 'user_id'  =>  $user_id,
                                 'type'     =>  $type,
-                                'goods_id' =>   $data['goods_id']
+                                'goods_id' =>   $post_data['goods_id']
                             ]);
                 $photo_data = [];
                 $num = 0;
