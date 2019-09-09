@@ -66,9 +66,11 @@ class Ad extends MobileBase
             if($type == 1){
                 $total_price = $adv_price * $number;
                 $unit_price = $adv_price;
+                $price = $adv_price;
             }else{
                 $total_price = $adv_price1 * $number;
                 $unit_price = $adv_price1;
+                $price = $adv_price1;
             }
             $have_price  = M('users')->where(['user_id' => $uid])->value('happy_beans');
             $ywd_num  = ceil($total_price * ($profit_cons_beans/100));
@@ -112,6 +114,7 @@ class Ad extends MobileBase
                 $response['identity'] = 2;
                 $response['unit_price'] = $unit_price;
                 $response['adv_type'] = $type;
+                $response['price'] = $price;
                 D('task')->add($response);
 
 //                $log['user_id'] = $uid;
@@ -236,6 +239,34 @@ class Ad extends MobileBase
             $this->assign('user_info',$user_info);
             return $this->fetch();
         }
+    }
+
+    //悦玩豆流向
+    public function mine2()
+    {
+        $session_user = session('user');
+        $uid = $session_user['user_id'];
+        $data = Db::name('sell')
+                ->where(['user_id' => $uid])
+                ->order('add_time','desc')
+                ->select();
+        foreach ($data as &$vo){
+            $number = Db::name('buy')->alias('a')
+                                        ->join('ywj_sell b','a.sell_id = b.sell_id')
+                                        ->join('ywj_order c','a.order_id = c.order_id')
+                                        ->where(['a.sell_id' => $vo['sell_id'],'c.pay_status' => 1])
+                                        ->sum('a.number');
+            $vo['available_amount'] = $number  *$vo['unit_price'];
+            $vo['count_number'] = Db::name('buy')->alias('a')
+                                    ->join('ywj_sell b','a.sell_id = b.sell_id')
+                                    ->join('ywj_order c','a.order_id = c.order_id')
+                                    ->where(['a.sell_id' => $vo['sell_id'],'c.pay_status' => 0])
+                                    ->sum('a.number');
+        }
+        $user_info = D('users')->where(['user_id' => $uid])->field('nickname,happy_beans,user_id,head_pic')->find();
+        $this->assign('user_info',$user_info);
+        $this->assign('data',$data);
+        return $this->fetch();
     }
 
     //个人广告列表

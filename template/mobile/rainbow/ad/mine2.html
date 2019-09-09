@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <!-- 	<link rel="stylesheet" href="__CSS__/swiper.min.css" /> -->
+    <link rel="stylesheet" href="__CSS__/mine.css" />
+    <title></title>
+</head>
+<body>
+<div class="header">
+    <a href="home.html"><img src="__IMG__/back.png" class="back"></a>交易明细
+</div>
+<div class="userInfor">
+    <div class="userImg"><img src="{$user_info.head_pic}" alt=""></div>
+    <p class="nickname">{$user_info.nickname}</p>
+    <p class="userId"><font>ID：{$user_info.user_id}</font></p>
+    <p style="width: 100%;display: flex;"><span class="residue">剩余：{$user_info.happy_beans}豆</span></p>
+    <img src="__IMG__/code.png" class="codeBtn">
+</div>
+<div class="tab">
+    <a href="mine.html">我的订单</a>
+    <a href="mine1.html">我的转让</a>
+    <a href="mine2.html" class="currents">我的挂外</a>
+</div>
+<div class="tableDiv">
+    <div class="table">
+        <table border="0" cellspacing="0" cellpadding="0" >
+            <tr>
+                <th>挂卖总数</th>
+                <th>剩余个数</th>
+                <th>获得金额</th>
+                <th>冻结个数</th>
+            </tr>
+            <volist name="data" id="vo">
+                <tr>
+                    <td>{$vo.total_num}</td>
+                    <td>{$vo.surplus_num}</td>
+                    <td>{$vo.available_amount}</td>
+                    <td>{$vo.count_number}</td>
+                </tr>
+            </volist>
+        </table>
+    </div>
+</div>
+
+
+
+</body>
+<script type="text/javascript" src="__JS__/jquery-3.2.1.min.js" ></script>
+<script type="text/javascript" src="__IMG__/swiper.min.js" ></script>
+<script src="__JS__/layer.js"  type="text/javascript" ></script>
+<script>
+
+</script>
+</html>
