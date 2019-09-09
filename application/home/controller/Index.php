@@ -14,6 +14,7 @@
  *
  */ 
 namespace app\home\controller;
+use think\Exception;
 use think\Page;
 use think\Verify;
 use think\Image;
@@ -228,6 +229,44 @@ class Index extends Base {
         $this->assign('favourite_goods',$favourite_goods);
         return $this->fetch();
     }
-    
+
+    //定时任务
+    public function timing_asks()
+    {
+        $data = Db::name('buy')->alias('a')
+                ->join('ywj_order b','a.order_id = b.order_id')
+                ->where(['b.pay_status' => 0])
+                ->field('a.buy_id,a.add_time')
+                ->select();
+        $buy_id_arr = [];
+        foreach ($data as $vo){
+            if((time() - $vo['add_time']) > 7200){
+                $buy_id_arr[] = $vo['buy_id'];
+            }
+        }
+        Db::startTrans();
+        try{
+            $order_id_arr = Db::name('buy')->where('buy_id','in',$buy_id_arr)->column('order_id');
+            $sell_data = Db::name('buy')->where('buy_id','in',$buy_id_arr)->select();
+            foreach ($sell_data as $v){
+                Db::name('sell')->where(['sell_id' => $v['sell_id']])->setInc('surplus_num',$v['number']);
+            }
+            Db::name('order')->where('order_id','in',$order_id_arr)->delete();
+            Db::name('buy')->where('buy_id','in',$buy_id_arr)->delete();
+            Db::commit();
+            return json([
+                'code'  =>  1,
+                'msg'   =>  '操作成功',
+                'data'  =>  []
+            ]);
+        }catch (Exception $exception){
+            Db::rollback();
+            return json([
+                'code'  =>  -1,
+                'msg'   =>  '网络异常',
+                'data'  =>  [],
+            ]);
+        }
+    }
     
 }
