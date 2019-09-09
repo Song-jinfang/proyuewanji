@@ -76,7 +76,7 @@
 						</div>
 					</div>
 					<div class="scoreDiv">
-						<p class="scoreTitle">做任务送现金 <b style="color:#ff470e">（已赚{$v.order_point}元）</b></p>
+						<p class="scoreTitle">做任务送现金 <b style="color:#ff470e">（已赚{$v.order_point}元）</b><span style="color:#b8b9b8">领取余额后能提现</span></p>
 						<div class="dayBox1" style="margin-top:0.15rem">
 							<div class="div1" style="width:50%;">
 								<font></font>
@@ -88,7 +88,7 @@
 							</div>
 							<div class="div1" style="width:50%;">
 								<if condition="$v.fifteen_status eq 1 || $v.fifteen_status eq 2">
-									<span class="btn btnGreen" onclick="get_advEarnings_to_balance('{$v.order_id}')">领取收益</span>
+									<span class="btn btnGreen" onclick="get_advEarnings_to_balance('{$v.order_id}')">领取到余额</span>
 								<elseif condition="$v.fifteen_status eq 3">
 									<span class="btn btnGray">已失效</span>
 								<else/>

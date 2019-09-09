@@ -190,7 +190,7 @@ class Index extends MobileBase {
               $orderAdvProfit = $orderInfo['order_amount'] * ($orderConf/100);
               adv_order($this->user['user_id'],$orderAdvProfit,'完成浏览广告获得经验值',$order_id,2);
               $price = $orderAdvProfit;
-              
+                M('task')->where('id = '.$task_id)->setInc('num');
               $data['user_id'] = $this->user['user_id'];
               $data['task_id'] = $task_id;
               $data['status'] = 1;
@@ -205,6 +205,7 @@ class Index extends MobileBase {
               $taskinfo = M('task')->where('id='.$task_id)->find();
               //0撸和或者会员浏览广告
               $orderCount = M('order')->where('user_id='.$this->user['user_id'].' and pay_status = 1')->count();
+              M('task')->where('id = '.$task_id)->setInc('num');
               if(!$orderCount){
                   accountLog($this->user['user_id'],0,$taskinfo['price'],'浏览广告获得积分');
                   $price = $taskinfo['price'];
@@ -218,7 +219,7 @@ class Index extends MobileBase {
                   $this->ajaxReturn(['status'=>0,'msg'=>'获得'.$price.'个积分']);
                   
               }
-              $this->ajaxReturn(['status'=>0,'msg'=>'获得0个积分']);
+              //$this->ajaxReturn(['status'=>0,'msg'=>'获得0个积分']);
           }
     }
     /*
