@@ -8,7 +8,7 @@
 	</head>
 	<body>
 	<div class="header">
-	   <img src="__IMG__/back.png" class="back">发布话题
+		<a href="javascript:history.go(-1)"><img src="__IMG__/back.png" class="back"></a>发布话题
 	</div>
 	<div class="main">
 		<textarea class="textarea"  id='title' placeholder="说点什么...."></textarea>
@@ -183,6 +183,10 @@
 			formData.append('images[]',images1[0]);
 			formData.append('images[]',images2[0]);
 			formData.append('images[]',images3[0]);
+			if(!(title && images1[0])){
+				layer.msg('请添加完整信息');
+				return;
+			}
 			$.ajax({
 				url:"add_forum",
 				type:"post",
