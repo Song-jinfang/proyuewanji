@@ -111,10 +111,12 @@ class Goods extends Base {
                     $sameCateWhere = ['parent_id'=>$par_id , 'name'=>$GoodsCategory['name']];
                     $GoodsCategory->id && $sameCateWhere['id'] = array('<>' , $GoodsCategory->id);
                     $adv_id = $GoodsCategory->adv_id;
-                    $advCount = M('ad')->where('ad_id='.$adv_id)->count();
-                    if(!$advCount){
-                        $return_arr = array('status' => 0,'msg' => '广告id不存在','data' => '',);
-                        $this->ajaxReturn($return_arr);
+                    if($adv_id){
+                        $advCount = M('ad')->where('ad_id='.$adv_id)->count();
+                        if(!$advCount){
+                            $return_arr = array('status' => 0,'msg' => '广告id不存在','data' => '',);
+                            $this->ajaxReturn($return_arr);
+                        }
                     }
                     $same_cate = M('GoodsCategory')->where($sameCateWhere)->find();
                     if($same_cate){
