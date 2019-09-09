@@ -27,8 +27,10 @@ class Ad extends MobileBase
         if(request()->isGet()){
             $adv_price = M('config')->where(['name' => 'adv_pic_price'])->value('value');
             $adv_price1 = M('config')->where(['name' => 'adv_video_price'])->value('value');
+            $adv_price2 = M('config')->where(['name' => 'profit_cons_beans'])->value('value');
             $this->assign('pic_price',$adv_price);
             $this->assign('video_price',$adv_price1);
+            $this->assign('profit_cons_beans',$adv_price2);
             return $this->fetch();
         }else{
             $data = request()->file('images') ?: [];
@@ -60,7 +62,7 @@ class Ad extends MobileBase
             $uid = $session_user['user_id'];
             $adv_price = M('config')->where(['name' => 'adv_pic_price'])->value('value');
             $adv_price1 = M('config')->where(['name' => 'adv_video_price'])->value('value');
-            $beans_price = M('config')->where(['name' => 'beans_price'])->value('value');
+            $profit_cons_beans = M('config')->where(['name' => 'profit_cons_beans'])->value('value');
             if($type == 1){
                 $total_price = $adv_price * $number;
                 $unit_price = $adv_price;
@@ -69,7 +71,7 @@ class Ad extends MobileBase
                 $unit_price = $adv_price1;
             }
             $have_price  = M('users')->where(['user_id' => $uid])->value('happy_beans');
-            $ywd_num  = ceil($total_price * 0.1);
+            $ywd_num  = ceil($total_price * ($profit_cons_beans/100));
             $total_price += $ywd_num;
             $total_amount = $total_price;
 //            if($have_price < $total_price){
@@ -82,15 +84,12 @@ class Ad extends MobileBase
             Db::startTrans();
             try{
                 if($have_price < $ywd_num){
-                    $ywd_number = $ywd_num - $have_price;
-                    $total_price = $total_price - $ywd_number;
-                    $price = 0;
+                    $ywd_number = $have_price;
+                    $total_price = $total_price - $have_price;
                 }else{
                     $ywd_number = $ywd_num;
                     $total_price -= $ywd_num;
-                    $price = $have_price - $ywd_num;
                 }
-//                D('users')->where(['user_id' => $uid])->update(['happy_beans' => $price]);
 
                 $order['order_sn'] = date('YmdHis',time()) . rand(1000,9999);
                 $order['user_id']  = $uid;

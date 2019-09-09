@@ -8,7 +8,7 @@
 	</head>
 	<body>
 	<div class="header">
-	   <img src="__IMG__/back.png" class="back">投放广告
+		<a href="javascript:history.go(-1)"><img src="__IMG__/back.png" class="back"></a>投放广告
 	</div>
 	<div class="main">
 		<div class="titleDiv">
@@ -22,6 +22,7 @@
 				<input type="hidden" id="pic_price" value="{$pic_price}">
 				<div id="video">视频广告</div>
 				<input type="hidden" id="video_price" value="{$video_price}">
+				<input type="hidden" id="profit_cons_beans" value="{$profit_cons_beans}">
 			</div>
 			<p class="title2">购买数量</p>
 			<div class="addBox">
@@ -258,7 +259,8 @@
 	$(function(){
 		$("#total").bind('DOMNodeInserted',function(){
 			var total = $("#total").html();
-			var num = Math.ceil(parseInt(total.substring(1).substring(1).substring(1).substring(1)) * 0.1);
+			var profit_cons_beans = $("#profit_cons_beans").val();
+			var num = Math.ceil(parseInt(total.substring(1).substring(1).substring(1).substring(1)) * (profit_cons_beans / 100));
 			document.getElementById("ywd").innerHTML = "消耗悦玩豆:" + num + "个";
 		});
 	});

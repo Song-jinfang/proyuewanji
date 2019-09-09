@@ -202,7 +202,7 @@ class User extends Base
             ]);
         }
         if($type == 3){
-            $response = D('task')->where(['id' => $task_id])->update(['exam' => 1,'is_open' => 1]);
+            $response = D('task')->where(['id' => $task_id])->update(['exam' => 1,'status' => 1]);
         }else{
             $response = D('task')->where(['id' => $task_id])->update(['exam' => 2]);
         }
