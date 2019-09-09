@@ -233,6 +233,10 @@ class User extends MobileBase
         $order_id = I('post.order_id');
         $day_mark = I('post.day');
         $start_time = strtotime(date('Y-m-d'));
+        
+        if($happy_beans < $orderBeansProfit){
+            $this->ajaxReturn(array('status'=>-1,'msg'=>'悦玩豆余额不足'));
+        }
         $count =  M('withdrawal_balance')->where('order_id='.$order_id.' and add_time >'.$start_time)->count();
         if($count){
             $this->ajaxReturn(

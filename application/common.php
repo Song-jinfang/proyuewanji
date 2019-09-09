@@ -1048,20 +1048,22 @@ function update_pay_status($order_sn,$ext=array())
         }elseif($order['type'] == 2){//购买悦玩豆
             consumption_beans($order['user_id'],$order['ywd_price'],'在线购买悦玩豆');
         }elseif($order['type'] == 3){
-            M('task')->where('order_id='.$order['order_id'])->update(['status'=>1]);//改变task的状态
-            lose_beans($order['user_id'],$order['ywd_price'],'购买广告');
+           // M('task')->where('order_id='.$order['order_id'])->update(['status'=>1]);//改变task的状态
+           if($order['ywd_price']){
+                lose_beans($order['user_id'],$order['ywd_price'],'购买广告');
+           }
         }elseif($order['type'] == 4){//快速购买悦玩豆通道
-                   $sellArr =  M('buy')->alias('a')->field('a.unit_price,a.purchaser buy_id,a.order_id,a.number,a.unit_price,b.user_id sell_id')->join('sell b','a.sell_id=b.sell_id')
-                    ->where('a.order_id='.$order['order_id'])
-                    ->find();
-                     if(!empty($sellArr)){
-                         $total_price = $sellArr['unit_price'] * $sellArr['number'];
-                        /***给卖家+余额-冻结余额***/
-                         accountLog($sellArr['sell_id'],$total_price,0,'挂卖悦玩豆获得余额'); //卖家加余额
-                            M('users')->where('user_id='.$sellArr['sell_id'])->setDec('frozen_beans',$sellArr['number']);
-                         /***给买家 +悦玩豆和记录***/
-                         consumption_beans($sellArr['buy_id'],$sellArr['number'],'购买获得悦玩豆');
-                      } 
+               $sellArr =  M('buy')->alias('a')->field('a.unit_price,a.purchaser buy_id,a.order_id,a.number,a.unit_price,b.user_id sell_id')->join('sell b','a.sell_id=b.sell_id')
+                ->where('a.order_id='.$order['order_id'])
+                ->find();
+                 if(!empty($sellArr)){
+                     $total_price = $sellArr['unit_price'] * $sellArr['number'];
+                    /***给卖家+余额-冻结余额***/
+                     accountLog($sellArr['sell_id'],$total_price,0,'挂卖悦玩豆获得余额'); //卖家加余额
+                        M('users')->where('user_id='.$sellArr['sell_id'])->setDec('frozen_beans',$sellArr['number']);
+                     /***给买家 +悦玩豆和记录***/
+                     consumption_beans($sellArr['buy_id'],$sellArr['number'],'购买获得悦玩豆');
+                  } 
             
         }
        /*  else{//支付投放广告

@@ -1,5 +1,11 @@
 <include file="public/header" title="注册" body=""/>
-<include file="public/header_nav" title="注册" href="javascript:history.back(-1)"/>
+<div class="classreturn loginsignup ">
+    <div class="content">
+        <div class="ds-in-bl search center">
+            <span>注册</span>
+        </div>
+    </div>
+</div>
 <style>
     #verify_code_img{
         padding: .55467rem .21333rem;
@@ -54,16 +60,21 @@
         <div class="lsu-submit">
             <input type="button" name="" id="" onclick="checkSubmit()" value="注 册"/>
         </div>
+         <div class="signup-find p" style="margin-bottom:1rem">
+        <a class="note fl" href="{:U('User/login')}">快速登录</a>
+    </div>
         <div class="signup-find">
 
-            <p class="recept">注册即视为同意<a href="{:U('Mobile/Article/agreement',['doc_code'=>'agreement'])}">《开源用户注册协议》</a></p>
+            <p class="recept">注册即视为同意<a href="{:U('Mobile/Article/agreement',['doc_code'=>'agreement'])}">《悦玩集用户注册协议》</a></p>
             <!--<p class="recept">注册即视为同意<a href="javascript:show_agreement();">《开源用户注册协议》</a></p>-->
+        
         </div>
               <div class="signup-find" id="download" style="margin-top:2rem;text-align:center;display:none">
             <p class="recept"  style="text-align:center;line-height:25px;">点击<a href="https://www.pgyer.com/eOIB" style="font-size:0.8rem">下载app</a></p>
        </div>
         
     </form>
+   
 </div>
 
 

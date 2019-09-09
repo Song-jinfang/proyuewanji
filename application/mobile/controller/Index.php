@@ -69,7 +69,7 @@ class Index extends MobileBase {
                 if($v['adv_id']){
                     $adv_link = M('ad')->field('ad_link,ad_code')->where('ad_id ='.$v['adv_id'])->find();
                 }
-                $goodsInfo = M('goods')->field('goods_id,goods_name,original_img,shop_price')->where('cat_id='.$v['id'])->select();
+                $goodsInfo = M('goods')->field('goods_id,goods_name,original_img,shop_price')->where('cat_id='.$v['id'].' and is_hot=1')->select();
                 $goodsCategory[$k]['ad_link'] = $adv_link['ad_link'];
                 $goodsCategory[$k]['ad_code'] = $adv_link['ad_code'];
                 $goodsCategory[$k]['goods_info'] = $goodsInfo;

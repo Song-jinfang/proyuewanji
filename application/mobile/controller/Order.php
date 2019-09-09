@@ -65,6 +65,7 @@ class Order extends MobileBase
             'user_id'=>$this->user_id,
             'deleted'=>0,//删除的订单不列出来
             'prom_type'=>['lt',5],//虚拟拼团订单不列出来
+            'type'=>1
         ];
         if($is_shop){
             $where_arr['shop_id'] = ['gt', 0];

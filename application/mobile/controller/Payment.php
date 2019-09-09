@@ -71,7 +71,6 @@ class Payment extends MobileBase
         // 修改订单的支付方式 苹果支付完成，再次打开本地址，不会带上order_id
         $order_id = I('order_id/d'); // 订单id
         $order_type = I('order_type/d');
-       // dump($order_type);exit;
         
         if(is_ios()  && empty($order_id)){
             $order_id = session('pay_order_id');
@@ -97,7 +96,6 @@ class Payment extends MobileBase
         }else{
             $config['body'] = getPayBody($order_id);
         }
-        
         if ($this->pay_code == 'weixin' && $_SESSION['openid'] && strstr($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger')) {
             //微信JS支付
             $code_str = $this->payment->getJSAPI($order);
@@ -111,9 +109,11 @@ class Payment extends MobileBase
             $this->assign('deeplink', $return['result']);
             if(!isset($deeplink_flag)) $deeplink_flag = 1;
             $this->assign('deeplink_flag', $deeplink_flag); */
-            
+            dump($config);
+            dump($order);exit;
             //微信H5支付
             $return = $this->payment->get_code($order, $config);
+        
             //dump($return);exit;
             if ($return['status'] != 1) {
                 $this->error($return['msg']);

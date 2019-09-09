@@ -1,5 +1,11 @@
 <include file="public/header" title="登录"  body=""/>
-<include file="public/header_nav" title="登录"  href="javascript:history.back(-1);"/>
+<div class="classreturn loginsignup ">
+    <div class="content">
+        <div class="ds-in-bl search center">
+            <span>登录</span>
+        </div>
+    </div>
+</div>
 <div class="logo-wrap-bg">
 </div>
 
@@ -15,13 +21,13 @@
             <span class="ico ico-password"></span>
             <input type="password" name="password" id="password" value="" placeholder="请输入密码"/>
         </div>
-        <notempty name="first_login">
+       <!--  <notempty name="first_login">
         <div class="lsu">
             <span class="ico ico-v-code"></span>
             <input class="v-code-input" type="text" name="verify_code" id="verify_code" value="" placeholder="请输入验证码"/>
             <img class="v-code-pic"  id="verify_code_img" src="{:U('Mobile/User/verify')}" onClick="verify()"/>
         </div>
-        </notempty>
+        </notempty> -->
         <div class="lsu-submit">
             <input type="button"  value="登 录"  onclick="submitverify()" class="btn_big1"  />
         </div>
@@ -32,13 +38,13 @@
     </div>
 <!--登录表单-e-->
     <!--第三方登陆-s-->
-    <div class="thirdlogin">
+<!--     <div class="thirdlogin">
         <h4>第三方登陆</h4>
         <div class="third-login-list">
         <tpshop sql="select * from __PREFIX__plugin where type='login' AND status = 1" item="v" key="k">
-            <!--<if condition="$v['code'] eq 'weixin' AND is_weixin() neq 1">
+            <if condition="$v['code'] eq 'weixin' AND is_weixin() neq 1">
                 <a class="item-ico ico-wechat-login" href="{:U('LoginApi/login',array('oauth'=>'weixin'))}" target="_blank" title="weixin"></a>
-       </if>-->
+       </if>
             <if condition="$v['code'] eq 'qqq' AND is_qq() neq 1">
                 <a class="item-ico ico-qq-login" href="{:U('LoginApi/login',array('oauth'=>'qq'))}" target="_blank" title="QQ"></a>
             </if>
@@ -50,7 +56,7 @@
             </if>
         </tpshop>
         </div>
-    </div>
+    </div> -->
      <!--第三方登陆-e-->
 </div>
 
