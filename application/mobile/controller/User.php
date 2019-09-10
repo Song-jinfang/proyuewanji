@@ -143,7 +143,7 @@ class User extends MobileBase
      * 广告收益
      */
     function adv_profit(){
-        $data = M('adv_log')->field("from_unixtime(add_time,'%m-%d %H:%i') as add_time,desc,user_money")->where('type=2')->select();
+        $data = M('adv_log')->field("from_unixtime(add_time,'%m-%d %H:%i') as add_time,desc,user_money")->where('type=2  and user_id='.$this->user_id)->select();
         $profitArr['adv_profit'] = M('adv_log')->where('type=2 and user_id='.$this->user_id)->sum('user_money');
         $profitArr['share_profit'] = M('adv_log')->where('type=3 and user_id = '.$this->user_id)->sum('user_money');
         $profitArr['order_profit'] = M('withdrawal_balance')->where('user_id='.$this->user_id.' and type=1')->sum('money');
@@ -156,7 +156,7 @@ class User extends MobileBase
      * 分享收益
      */
     function share_profit(){
-        $data = M('adv_log')->field("from_unixtime(add_time,'%m-%d %H:%i') as add_time,desc,user_money")->where('type=3')->select();//
+        $data = M('adv_log')->field("from_unixtime(add_time,'%m-%d %H:%i') as add_time,desc,user_money")->where('type=3 and user_id='.$this->user_id)->select();//
         $profitArr['adv_profit'] = M('adv_log')->where('type=2 and user_id='.$this->user_id)->sum('user_money');//广告收益
         $profitArr['share_profit'] = M('adv_log')->where('type=3 and user_id='.$this->user_id)->sum('user_money');//分享总收益
         $profitArr['order_profit'] = M('withdrawal_balance')->where('user_id='.$this->user_id .' and type=1')->sum('money');//分享总提取到余额的额度

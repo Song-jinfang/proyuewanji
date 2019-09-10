@@ -27,13 +27,13 @@
             <input type="text" name="username" id="username" value="" placeholder="请输入手机号"  class="c-form-txt-normal">
             <span id="mobile_phone_notice"></span>
         </div>
-     	<if condition="$regis_sms_enable eq 1">
+       <!--  <if condition="$regis_sms_enable eq 1">
             <div class="lsu">
                 <span class="ico ico-v-code"></span>
                 <input class="v-code-input" type="text" id="mobile_code" value="" name="mobile_code" placeholder="请输入验证码" >
                 <a class="btn-text-message" rel="mobile" onClick="sendcode(this)">获取验证码</a>
             </div>
-        </if>
+        </if> -->
         <div class="lsu">
             <span class="ico ico-password"></span>
             <input type="password" id="password" value="" maxlength="16" placeholder="请设置6-16位登录密码" class="c-form-txt-normal" onBlur="check_password();">
@@ -49,14 +49,14 @@
         <!--<div class="lsu boo zc_se">-->
         <!--<input type="text"  value="" name="verify_code" placeholder="请输入验证码" >-->
         <!--<img src="/index.php?m=Home&c=User&a=verify" id="verify_code_img" onclick="verify()">-->
-        <!--</div>
-        <if condition="$tpshop_config['integral_invite'] eq 1" >
+        <!--</div>-->
+      <!--   <if condition="$tpshop_config['integral_invite'] eq 1" >
             <div class="lsu">
                 <span class="ico ico-referee"></span>
                 <input type="text" name="invite" id="invite" value="" placeholder="推荐人手机号(选填)"  class="c-form-txt-normal" >
                 <span id="invite_phone_notice"></span>
             </div>
-        </if>
+        </if> -->
         <div class="lsu-submit">
             <input type="button" name="" id="" onclick="checkSubmit()" value="注 册"/>
         </div>
@@ -64,7 +64,10 @@
         <a class="note fl" href="{:U('User/login')}">快速登录</a>
     </div>
         <div class="signup-find">
+
             <p class="recept">注册即视为同意<a href="{:U('Mobile/Article/agreement',['doc_code'=>'agreement'])}">《悦玩集用户注册协议》</a></p>
+            <!--<p class="recept">注册即视为同意<a href="javascript:show_agreement();">《开源用户注册协议》</a></p>-->
+        
         </div>
               <div class="signup-find" id="download" style="margin-top:2rem;text-align:center;display:none">
             <p class="recept"  style="text-align:center;line-height:25px;">点击<a href="https://www.pgyer.com/eOIB" style="font-size:0.8rem">下载app</a></p>
