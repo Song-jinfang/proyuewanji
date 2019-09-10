@@ -885,6 +885,9 @@ class Ad extends MobileBase
                 ->where('user_id','in',$user_id_where)
                 ->field('nickname,mobile,reg_time')
                 ->select();
+            foreach ($data as &$datum){
+                $datum['mobile'] = substr_replace($datum['mobile'], '****', 3, 4);
+            }
         }
         $this->assign('data',$data);
         $this->assign('p',$p);
