@@ -177,9 +177,14 @@ class User extends MobileBase
                         ->sum('order_amount');
         $orderMoney = $sumOrderamount * 0.5*0.7;
         //查询过了15天的订单
-        $orderlist = M('order')->field('order_amount,order_id,order_point')
-                    ->where('fifteen_days < '.$time.' and twenty_eight_days > '.$time.' and fifteen_status = 0 and pay_status=1')
+     /*     $orderlist = M('order')->field('order_amount,order_id,order_point')
+                    ->where('fifteen_days < '.$time.' and twenty_eight_days > '.$time.' and fifteen_status < 1 and pay_status=1')
+                    ->order('pay_time','ASC')->select();  */
+        
+                     $orderlist = M('order')->field('order_amount,order_id,order_point')
+                    ->where("order_id in(565,54)")
                     ->order('pay_time','ASC')->select();
+                    dump($orderlist);
         $s = 0;
         $order_ids = '';
         //在范围内的订单吧状态改成2，可以领取收益。
@@ -191,8 +196,9 @@ class User extends MobileBase
                 }
             }
         }
+        $can_receive =  strtotime(date("Y-m-d",strtotime("+1 day")));//可领取时间向后延长一天
         if($order_ids){
-            M('order')->where('order_id','in',$order_ids)->update(['fifteen_status'=>2]);
+           M('order')->where('order_id','in',$order_ids)->update(['fifteen_status'=>2,'can_receive'=>$can_receive]);
         }
         //过了28天还不符合条件的改为3,表示收益过期，赋等额的悦玩豆；
         $s = 0;

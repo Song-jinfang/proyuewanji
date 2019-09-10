@@ -109,8 +109,6 @@ class Payment extends MobileBase
             $this->assign('deeplink', $return['result']);
             if(!isset($deeplink_flag)) $deeplink_flag = 1;
             $this->assign('deeplink_flag', $deeplink_flag); */
-            dump($config);
-            dump($order);exit;
             //微信H5支付
             $return = $this->payment->get_code($order, $config);
         
