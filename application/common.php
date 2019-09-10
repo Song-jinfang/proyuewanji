@@ -956,7 +956,7 @@ function update_pay_status($order_sn,$ext=array())
             $preSell->doOrderPayAfter();
         } else {
             // 修改支付状态  已支付
-            $update = array('pay_status'=>0,'pay_time'=>$time);
+            $update = array('pay_status'=>1,'pay_time'=>$time);
             if($order['type'] == 1 && $order['join_t'] == 1){
                /*  $update['seven_days'] = strtotime('+7 day');
                 $update['fourteen_days'] = strtotime('+14 day');

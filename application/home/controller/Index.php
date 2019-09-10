@@ -240,7 +240,7 @@ class Index extends Base {
                 ->select();
         $buy_id_arr = [];
         foreach ($data as $vo){
-            if((time() - $vo['add_time']) > 7200){
+            if((time() - $vo['add_time']) > 300){
                 $buy_id_arr[] = $vo['buy_id'];
             }
         }
