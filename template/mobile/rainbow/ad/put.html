@@ -20,14 +20,14 @@
 			<div class="select">
 				<div class="current" id="pic">图片广告</div>
 				<input type="hidden" id="pic_price" value="{$pic_price}">
-				<div id="video">视频广告</div>
+<!--				<div id="video">视频广告</div>-->
 				<input type="hidden" id="video_price" value="{$video_price}">
 				<input type="hidden" id="profit_cons_beans" value="{$profit_cons_beans}">
 			</div>
 			<p class="title2">购买数量</p>
 			<div class="addBox">
 				<div class="minus" id="dec">-</div>
-				<div class="number" id="number"></div>
+				<div class="number" id="number" style="width: 100px"></div>
 				<div class="add" id="inc">+</div>
 			</div>
 		</div>
@@ -198,12 +198,12 @@
         $(".number").html(numbers);		
 		$(".minus").click(function(){
 			if(numbers>0){
-				numbers--;
+				numbers = numbers -1000;
 			}
 			$(".number").html(numbers);
 		})
-		$(".add").click(function(){			
-				numbers++;
+		$(".add").click(function(){
+			numbers = numbers +1000;
 				$(".number").html(numbers);
 		})
 		$(".close").click(function(){
