@@ -1144,7 +1144,7 @@ function getUserBurn($uid,$order_amount){
     }else{
         $order_amount1 = $parentOrder['order_amount'];
     }
-    return $order_amount;
+    return $order_amount1;
 }
 
 

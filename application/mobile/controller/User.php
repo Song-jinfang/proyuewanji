@@ -622,7 +622,7 @@ class User extends MobileBase
     
     //测试生成二维码
     public function t(){
-       $this->getWchatQrcode('70');
+       $this->getWchatQrcode('700');
        // $this->createQrcode('http://yuewanji.hlz4319.com/mobile/User/reg','code','http://yuewanji.hlz4319.com/public/static/yuwanji/img/head_pic.jpg');
     }     
     public function wx_pic(){
