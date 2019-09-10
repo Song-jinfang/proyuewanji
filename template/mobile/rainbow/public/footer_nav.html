@@ -2,7 +2,7 @@
     <div class="footer">
         <ul>
             <li>
-                <a <if condition="CONTROLLER_NAME eq 'Index'">class="yello" </if>  href="{:U('Index/index')}">
+                <a   href="{:U('Index/index')}">
                     <div class="icon">
                         <div class="icon_tp1 icon_tps"><img src="/static/img/src/a1_gray.png"/> </div>
                        <!--  <div class="icon_tp2 icon_tps"><img src="/static/img/src/a1_gray.png"/> </div> -->
@@ -11,7 +11,7 @@
                 </a>
             </li>
             <li>
-                <a <if condition="CONTROLLER_NAME eq 'Goods'">class="yello" </if> href="{:U('Ad/home')}">
+                <a href="{:U('Ad/home')}">
                     <div class="icon">
                     	<div class="icon_tp1 icon_tps"><img src="/static/img/src/a2_gray.png"/> </div>
                         <div class="icon_tp2 icon_tps"><img src="/static/img/src/a2_gray.png"/> </div>
@@ -20,7 +20,7 @@
                 </a>
             </li>
             <li>
-                <a <if condition="CONTROLLER_NAME eq 'Cart'">class="yello" </if> href="{:U('Cart/index')}">
+                <a href="{:U('Cart/index')}">
                     <div class="icon">
                         	<div class="icon_tp1 icon_tps"><img src="/static/img/src/a3_gray.png"/> </div>
                        		 <div class="icon_tp2 icon_tps"><img src="/static/img/src/a3_gray.png"/> </div>
@@ -31,7 +31,9 @@
             <li>
                 <a <if condition="CONTROLLER_NAME eq 'User'">class="yello" </if> href="{:U('User/index')}">
                     <div class="icon">
-                        <div class="icon_tp2 icon_tps"><img src="/static/img/src/a4_red.png"/> </div>
+                        		
+                        	<div class="icon_tp2 icon_tps"><img src="/static/img/src/a4_red.png"/> </div>
+                        	 <div class="icon_tp1 icon_tps"><img src="/static/img/src/a4_gray.png"/> </div>                       	
                         <p>我的</p>
                     </div>
                 </a>

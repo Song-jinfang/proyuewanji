@@ -122,6 +122,12 @@ class Index extends MobileBase {
         
     }
     
+    public function connect(){
+        
+        return $this->fetch();
+    }
+    
+    
     /*
      * 广告列表 
      * 
