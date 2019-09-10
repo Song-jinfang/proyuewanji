@@ -857,4 +857,39 @@ class Ad extends MobileBase
         $this->assign('p',$p);
         return $this->fetch();
     }
+
+    //撤销挂卖悦玩豆订单
+    public function revoke()
+    {
+        $sell_id = request()->post('sell_id');
+        if(!$sell_id){
+            return json([
+                'code'  =>  -1,
+                'msg'   =>  '网络异常，请重新再试',
+                'data'  =>  [],
+            ]);
+        }
+        $surplus_num = Db::name('sell')->where(['sell_id' => $sell_id])->value('surplus_num');
+        $user_id     = Db::name('sell')->where(['sell_id' => $sell_id])->value('user_id');
+        Db::startTrans();
+        try{
+            Db::name('users')->where(['user_id' => $user_id])->setInc('happy_beans',$surplus_num);
+            Db::name('users')->where(['user_id' => $user_id])->setDec('frozen_beans',$surplus_num);
+            Db::name('sell')->where(['sell_id' => $sell_id])->delete();
+            Db::commit();
+            return json([
+                'code'  =>  1,
+                'msg'   =>  '操作成功',
+                'data'  =>  [],
+            ]);
+        }catch (Exception $exception){
+            Db::rollback();
+            return json([
+                'code'  =>  -1,
+//                'msg'   =>  '网络异常，请稍后再试',
+                'msg'   =>  $exception->getMessage(),
+                'data'  =>  []
+            ]);
+        }
+    }
 }
