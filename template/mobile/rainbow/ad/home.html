@@ -63,14 +63,16 @@
     			<span>用户与用户之间可以互相转让</span>
     		</a>   		
     	</li>
-    	<li>
-    		<a  class="payPop1">
-    			<img src="__IMG__/icon-3.png" class="iconName">
-    			<img src="__IMG__/next.png" class="next">
-    			<font>购买</font>
-    			<span>购买悦玩豆</span>
-    		</a>   		
-    	</li>
+    	<if condition="$type eq 0">
+			<li>
+				<a  class="payPop1">
+					<img src="__IMG__/icon-3.png" class="iconName">
+					<img src="__IMG__/next.png" class="next">
+					<font>购买</font>
+					<span>购买悦玩豆</span>
+				</a>
+			</li>
+		</if>
     	<li>
     		<a href="mine">
     			<img src="__IMG__/icon-4.png" class="iconName">

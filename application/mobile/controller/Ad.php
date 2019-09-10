@@ -152,7 +152,9 @@ class Ad extends MobileBase
             $uid = $session_user['user_id'];
             $have_price  = M('users')->where(['user_id' => $uid])->value('happy_beans');
             $data = Db::name('notify')->where(['type' => 1,'status' => 1])->select();
+            $type = Db::name('sell')->where('surplus_num','gt',0)->count();
             $this->assign('data',$data);
+            $this->assign('type',$type);
             $this->assign('have_price',$have_price);
             return $this->fetch();
         }else{
@@ -650,8 +652,35 @@ class Ad extends MobileBase
                 'data'  =>  [],
             ]);
         }
+        $max_number = M('config')->where(['name' => 'beans_number_max'])->value('value');
+        if($numbers > 100 || $numbers <= 0){
+            return json([
+                'code'  =>  -1,
+                'msg'   =>  "挂卖数量请在1---".$max_number."个之间",
+                'data'  =>  [],
+            ]);
+        }
+        $beans_price = M('config')->where(['name' => 'beans_price'])->value('value');
+        $beans_price_float = M('config')->where(['name' => 'beans_price_float'])->value('value');
+        $min = $beans_price * (1-$beans_price_float);
+        $max = $beans_price * (1+$beans_price_float);
+        if(!(($unit_price >= $min) && ($unit_price <= $max))){
+            return json([
+                'code'  =>  -1,
+                'msg'   =>  "发布价格请在$min". "---" .$max . "之间",
+                'data'  =>  [],
+            ]);
+        }
         $userInfo = session('user');
         $user_id = $userInfo['user_id'];
+        $sell_id = Db::name('sell')->where(['user_id' => $user_id])->value('sell_id');
+        if($sell_id){
+            return json([
+                'code'  =>  -1,
+                'msg'   =>  "您已有挂卖的悦玩豆，暂不能挂卖！",
+                'data'  =>  [],
+            ]);
+        }
         $have_numbers = Db::name('users')->where(['user_id' => $user_id])->value('happy_beans');
         if($numbers > $have_numbers){
             return json([
