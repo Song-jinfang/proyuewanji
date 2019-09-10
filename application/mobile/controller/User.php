@@ -196,7 +196,7 @@ class User extends MobileBase
                 }
             }
         }
-        $can_receive =  strtotime(date("Y-m-d",strtotime("+1 day")));//可领取时间向后延长一天
+        $can_receive =  time();//可领取时间向后延长一天
         if($order_ids){
            M('order')->where('order_id','in',$order_ids)->update(['fifteen_status'=>2,'can_receive'=>$can_receive]);
         }
@@ -239,6 +239,30 @@ class User extends MobileBase
         $order_id = I('post.order_id');
         $day_mark = I('post.day');
         $start_time = strtotime(date('Y-m-d'));
+        $orderInfo = M('order')->field('order_amount,can_receive')->where('order_id='.$order_id)
+        ->find();
+        $end_time = $orderInfo['can_receive']+strtotime('+1 day');//下单最晚的时间不能超过改时间点，超过则订单失效
+         if($day_mark == 'fifteen'){//如果为15-28天的话查询当天有没有订单生成
+            $order =  M('order')->where('user_id = '.$this->user_id .' and add_time >'.$orderInfo['can_receive'].' and add_time<'.$end_time.' pay_status = 1')->find();
+            if(time() > $end_time){
+                $this->ajaxReturn(
+                    array(
+                        'status'=>1,
+                        'msg'=>'您在规定的时间里面没有及时下单，此收益和广告收益已失效',
+                        'url'=>'/Mobile/User/earnings'
+                    ));
+                M('order')->where('order_id = '.$order_id)->update(['fifteen_status'=>3]);
+            }
+            
+            if($orderInfo['order_amount'] >$order){
+                $this->ajaxReturn(
+                    array(
+                        'status'=>-1,
+                        'msg'=>'在当日24点之前购买大于等于此订单金额才能提取',
+                        'url'=>'/Mobile/User/earnings'
+                    ));
+            }
+        }
         
         if($happy_beans < $orderBeansProfit){
             $this->ajaxReturn(array('status'=>-1,'msg'=>'悦玩豆余额不足'));
@@ -253,11 +277,9 @@ class User extends MobileBase
                     
                 ));
         }
-        $orderInfo = M('order')->where('order_id='.$order_id)
-                    ->value('order_amount');
         $profit_status = $day_mark.'_status';
         $day_mark = $day_mark.'_profit';
-        $orderProfit = $orderInfo * ($confBeans[$day_mark]/100);
+        $orderProfit = $orderInfo['order_amount'] * ($confBeans[$day_mark]/100);
         $orderBeansProfit = ($confBeans['profit_cons_beans']/100) * $orderProfit;
         //领取订单收益消费悦豌豆百分比
         $orderBeansProfit = ceil($orderBeansProfit);
