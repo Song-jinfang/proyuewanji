@@ -389,6 +389,8 @@ class Ad extends MobileBase
         if(request()->isGet()){
             $userInfo = session('user');
             $user_id = $userInfo['user_id'];
+            $forum_number = Db::name('config')->where(['name' => 'forum_number'])->value('value');
+            $this->assign('forum_number',$forum_number);
             $this->assign('user_id',$user_id);
             return $this->fetch();
         }else{
@@ -406,8 +408,39 @@ class Ad extends MobileBase
             }else{
                 $type = 1;
             }
+            $term_time = Db::name('forum_term')->where(['user_id' => $user_id])->value('term_time');
+            if((!$term_time) || $term_time < time()){
+                $have_beans = Db::name('users')->where(['user_id' => $user_id])->value('happy_beans');
+                if($have_beans < 5){
+                    return json([
+                        'code'  =>  -1,
+                        'msg'   =>  '悦玩豆不足，请到交易大厅购买',
+                        'data'  =>  [],
+                    ]);
+                }
+            }
+            $status = 0;
+            if($term_time && $term_time > time()){
+                $status = 1;
+            }
+            $forum_number = Db::name('config')->where(['name' => 'forum_number'])->value('value');
             Db::startTrans();
             try{
+                if($status != 1){
+                    Db::name('forum_term')->insert([
+                        'user_id'  => $user_id,
+                        'add_time' => time(),
+                        'term_time' => time() + 30 * 24 * 3600,
+                    ]);
+                    Db::name('users')->where(['user_id' => $user_id])->setDec('happy_beans',$forum_number);
+                    Db::name('adv_log')->insert([
+                        'user_id'    =>  $user_id,
+                        'user_money' =>  0 - $forum_number,
+                        'add_time'   =>  time(),
+                        'desc'       =>  "购买发布话题",
+                        'type'       =>  1
+                    ]);
+                }
                 $forum_id = D('forum')->add([
                                 'title'    =>  $post_data['title'],
                                 'add_time' =>  time(),
