@@ -958,15 +958,15 @@ function update_pay_status($order_sn,$ext=array())
             // 修改支付状态  已支付
             $update = array('pay_status'=>1,'pay_time'=>$time);
             if($order['type'] == 1 && $order['join_t'] == 1){
-                /*  $update['seven_days'] = strtotime('+7 day');
+                  $update['seven_days'] = strtotime('+7 day');
                  $update['fourteen_days'] = strtotime('+14 day');
                  $update['fifteen_days'] = strtotime('+15 day');
-                 $update['twenty_eight_days'] = strtotime('+28 day'); */
-                $time = time();
+                 $update['twenty_eight_days'] = strtotime('+28 day'); 
+              /*   $time = time();
                 $update['seven_days'] = $time+(3*60);
                 $update['fourteen_days'] =  $time+(6*60);
                 $update['fifteen_days'] =  $time+(9*60);
-                $update['twenty_eight_days'] =  $time+(10*60);
+                $update['twenty_eight_days'] =  $time+(10*60); */
                 
             }
             if(isset($ext['transaction_id'])) $update['transaction_id'] = $ext['transaction_id'];
@@ -1004,8 +1004,8 @@ function update_pay_status($order_sn,$ext=array())
                                 $userBurn = M('users')->where("user_id = $v")->value('burn');  //$userBurn为1要进行烧伤   2针对部分用户不进行烧伤
                                 $rela = 0;
                                 if($k == 1 || $k == 2){
-                                    //                                 if($orderCount && ($pidCount >= 1 && $pidCount <=5)){
-                                    if($orderCount && ($pidCount >= 1 && $pidCount <=2)){
+                                     if($orderCount && ($pidCount >= 1 && $pidCount <=5)){
+                                    //if($orderCount && ($pidCount >= 1 && $pidCount <=2)){
                                         $order_amount = $order['order_amount'];
                                         if($userBurn == 1){
                                             //查询上级最后一个订单的金额，进行烧伤
@@ -1019,8 +1019,8 @@ function update_pay_status($order_sn,$ext=array())
                                 }
                                 if($k == 3 || $k == 4){
                                     
-                                    //                                 if(($pidCount > 6 && $pidCount < 19) && $orderCount){
-                                    if(($pidCount >= 3 && $pidCount <= 4) && $orderCount){
+                                    if(($pidCount > 6 && $pidCount < 19) && $orderCount){
+                                   // if(($pidCount >= 3 && $pidCount <= 4) && $orderCount){
                                         $order_amount = $order['order_amount'];
                                         if($userBurn == 1){
                                             //查询上级最后一个订单的金额，进行烧伤

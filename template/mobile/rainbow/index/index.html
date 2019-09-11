@@ -11,10 +11,12 @@
 <body>
 	<div style="background: url(/static/img/top_back.png) no-repeat;background-size:100%">
 			<div class="header">
-				<a href="/mobile/Goods/ajaxSearch.html"><div class="searchDiv">
-					<img src="__IMG__/search.png" class="searchIcon">
-					<input type="text"  class="searchInput"/>
-				</div></a> 
+				<a href="/mobile/Goods/ajaxSearch.html">
+					<div class="searchDiv" style="color:#ccc;opacity: 0.6">
+						<img src="__IMG__/search.png" class="searchIcon">
+						<input type="text" placeholder="搜索商品"  class="searchInput" />
+					</div>
+				</a> 
 			</div>
 			<div style="width: 100%;height: 1rem;"></div>
 			<div class="bannerDiv">
@@ -49,6 +51,15 @@
 	            		<img src="__IMG__/src/makeup.png">
 	            		<span>美妆达人</span>
 	            	</a>
+	            		<a href="/Mobile/Goods/goodsList/id/589">
+	            		<img src="__IMG__/src/luxury.png">
+	            		<span>轻奢饰品</span>
+	            	</a>
+	            	
+	            	<a href="/mobile/Goods/categoryList">
+	            		<img src="__IMG__/src/categroy.png">
+	            		<span>商品分类</span>
+	            	</a>
 	            	<a href="/Mobile/Index/share">
 	            		<img src="__IMG__/src/share.png">
 	            		<span>分享赚钱</span>
@@ -57,29 +68,21 @@
 	            		<img src="__IMG__/src/task.png">
 	            		<span>任务区</span>
 	            	</a>
-	            	<a href="###">
+	            	<a onclick="music()">
 	            		<img src="__IMG__/src/sign.png">
 	            		<span>签到有礼</span>
-	            	</a>
-	            	<a href="/Mobile/Goods/goodsList/id/589">
-	            		<img src="__IMG__/src/luxury.png">
-	            		<span>轻奢饰品</span>
 	            	</a>
 	            	<a href="/Mobile/Order/order_list">
 	            		<img src="__IMG__/src/order.png">
 	            		<span>我的订单</span>
 	            	</a>
-	            	<a href="###">
+	            	<a onclick="music()">
 	            		<img src="__IMG__/src/guide.png">
-	            		<span>新手指南</span>
+	            		<span>悦玩集攻略</span>
 	            	</a>
-	            	<a href="###">
+	            	<a href="/mobile/Index/connect">
 	            		<img src="__IMG__/src/customer.png">
 	            		<span>客服中心</span>
-	            	</a>
-	            	<a href="/mobile/Goods/categoryList">
-	            		<img src="__IMG__/src/categroy.png">
-	            		<span>商品分类</span>
 	            	</a>
 	            </div>
 <!-- 	            <div class="swiper-slide">
@@ -205,7 +208,7 @@
 			            </div>
 		            </volist>
 		        </div>
-		        Add Pagination
+		        	Add Pagination
 		        <div class="swiper-pagination swiper-paginationC"></div>
 		    </div>
 	    </div>
@@ -265,25 +268,42 @@
 <script type="text/javascript" src="__JS__/jquery-3.2.1.min.js" ></script>
 			<script src="__JS__/layer.js"  type="text/javascript" ></script>
 <script type="text/javascript" src="__IMG__/swiper.min.js" ></script>
+<style>
+.img_div{width:100%;height:100%}
+.img_div img{width:100%}
 
-
+</style>
 <script>
-function music(){
-	layer.msg('此功能暂未开通');    	
-}
+	function music(){
+		layer.msg('此功能暂未开通');    	
+	}
     var swiperA = new Swiper('.swiper-containerA', {
         pagination: '.swiper-paginationA',
-        paginationClickable: true
+        paginationClickable: true,
+     	autoplay : 2000,
+        loop : true,
+
     });
     var swiperB = new Swiper('.swiper-containerB', {
         pagination: '.swiper-paginationB',
-        paginationClickable: true
+        paginationClickable: true,
+
     });
     var swiperC = new Swiper('.swiper-containerC', {
         pagination: '.swiper-paginationC',
         slidesPerView: 3,
-        spaceBetween: 10     
+        spaceBetween: 10,
     });
+    
+    layer.open({
+    	  type: 1,
+    	  title: false,
+    	  closeBtn: 0,
+    	  shadeClose: true,
+    	  skin: 'yourclass',
+    	  content: "<div class='img_div' onclick='s()'><img src='__IMG__/activity.png'/></div>",
+    	});
+    
 
 </script>
 </html>

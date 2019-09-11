@@ -6,11 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta name="viewport" content="width=device-width" viewport-fit="cover">
-    <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
-	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-	<script type="text/javascript" src="__STATIC__/happypig/js/lib/jquery-1.11.0.js"></script>
-	<script type="text/javascript" src="__STATIC__/happypig/js/lib/touche.js"></script>
-	<script type="text/javascript" src="__STATIC__/happypig/js/p-pull-refresh.js"></script>
+	<link rel="stylesheet" href="/static/css/banner.css">
     <title>抽奖</title>
     <style>
     	*{
@@ -32,16 +28,18 @@
     </script>
 </head>
 <body  style="position: relative;">
-
+<div class="header">
+				<a href="/"><img src="/static/img/back.png" class="back"></a>浏览广告
+			</div>
 		<article class="content"  id="content">
-			<img width="100%;height:100%" style="position:absolute;" src="__STATIC__/happypig/img/connect.jpg"/>
+			<img width="100%;height:100%" style="position:absolute;" src="__IMG__/connect.jpg"/>
 			<div style="position:relative;width:200px;" id="ss">
 				<img id="code" width="170px" src="{$info.code_img}"/>
 			</div>
 		</article>
-			<div class="ds-in-bl return"  style="position: absolute;top:20px;left:20px;">
+			<!-- <div class="ds-in-bl return"  style="position: absolute;top:20px;left:20px;">
 	        	<a id="[back]" href="javascript:history.go(-1)"><img width="20rem" src="__STATIC__/images/return.png" alt="返回"></a>
-	    	</div>
+	    	</div> -->
 </body>
 </html>
   <script>
