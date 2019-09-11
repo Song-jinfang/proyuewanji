@@ -122,7 +122,8 @@
 	        </div>
 	        <!-- Add Pagination -->
 	       <!--  <div class="swiper-pagination swiper-paginationB"></div> -->
-		</div>		
+		</div>
+		<input type="hidden" id="is_coupon" value="{$is_coupon}">
 	</div>
 	<style>
 		.link1 img{width:6.95rem}
@@ -294,16 +295,34 @@
         slidesPerView: 3,
         spaceBetween: 10,
     });
-    
-    layer.open({
-    	  type: 1,
-    	  title: false,
-    	  closeBtn: 0,
-    	  shadeClose: true,
-    	  skin: 'yourclass',
-    	  content: "<div class='img_div' onclick='s()'><img src='__IMG__/activity.png'/></div>",
-    	});
-    
+	var is_coupon;
+	$(document).ready(function(){
+		is_coupon = $("#is_coupon").val();
+		if(is_coupon == 1){
+            layer.open({
+                type: 1,
+                title: false,
+                closeBtn: 0,
+                shadeClose: true,
+                skin: 'yourclass',
+                content: "<div class='img_div' onclick='s()'><img src='__IMG__/activity.png'/></div>",
+            });
+		}
+	});
+
+    function s(){
+		$.ajax({
+			url:'index/first_order_coupon',
+			type:'post',
+			success:function(e){
+				layer.msg(e.msg);
+				history.go(0);
+			},
+			error:function(){
+				layer.msg('网络异常，请稍后再试');
+			}
+		});
+	}
 
 </script>
 </html>

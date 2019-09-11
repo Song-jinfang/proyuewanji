@@ -94,8 +94,18 @@ class Index extends MobileBase {
             ->join('__SPEC_GOODS_PRICE__ s','s.prom_id = f.id AND g.goods_id = s.goods_id','LEFT')
             ->where("start_time >= $start_time and end_time <= $end_time and f.is_end=0")
             ->limit(3)->select();
+
+        //判断是否已经领取注册优惠券
+        $userInfo = session('user');
+        $user_id = $userInfo['user_id'];
+        $coupon = Db::name('first_order_coupon')->where(['user_id' => $user_id])->value('id');
+        $is_coupon = 1;
+        if($coupon){
+            $is_coupon =2;
+        }
         $action = request()->action();
         $controller = request()->controller();
+        $this->assign('is_coupon',$is_coupon);
         $this->assign('action',$action);
         $this->assign('controller',$controller);
         $this->assign('flash_sale_list',$flash_sale_list);
@@ -103,6 +113,32 @@ class Index extends MobileBase {
         $this->assign('end_time',$end_time);
         $this->assign('favourite_goods',$favourite_goods);
         return $this->fetch();
+    }
+
+    //领取注册优惠券
+    public function first_order_coupon()
+    {
+        $userInfo = session('user');
+        $user_id = $userInfo['user_id'];
+        $id = Db::name('first_order_coupon')->where(['user_id' => $user_id,'type' => 1])->value('id');
+        if($id){
+            return json([
+                'code'  =>  -1,
+                'msg'   =>  '您已领取过次优惠券',
+                'data'  =>  [],
+            ]);
+        }else{
+            Db::name('first_order_coupon')->insert([
+                'user_id'  =>  $user_id,
+                'add_time' =>   time(),
+                'type'     =>   1,
+            ]);
+            return json([
+                'code'  =>  1,
+                'msg'   =>  '恭喜您，领取成功',
+                'data'  =>  [],
+            ]);
+        }
     }
     
     
