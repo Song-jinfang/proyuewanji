@@ -319,6 +319,7 @@ html {
     	background: #fff;
     	margin: auto;
     	padding-top: 0.2rem;
+    	margin-top:0.2rem;
     }
     .lists a{
     	width: 2.1rem;
@@ -356,8 +357,8 @@ html {
     }
     .titles{
     	width: 6.96rem;
-    	height: 0.56rem;
-    	margin: 0.3rem auto;
+    	height: 0.56rem; 
+    	margin: 0.3rem auto; 
     }
     .titles img{
     	height: 0.56rem;

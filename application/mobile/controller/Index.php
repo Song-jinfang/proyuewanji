@@ -62,7 +62,7 @@ class Index extends MobileBase {
         /**商品精选**/
         $new_goods = M('goods')->field('goods_id,original_img,shop_price,market_price,goods_name,sales_sum')->where("is_new=1 and is_on_sale=1")->order('sort DESC')->limit(20)->cache(true,TPSHOP_CACHE_TIME)->select();//
         
-            $this->assign('new_goods',$new_goods);
+        $this->assign('new_goods',$new_goods);
         $goodsCategory = M('goods_category')->field('id,adv_id')->where('is_hot=1')->select();
         if(!empty($goodsCategory)){
             foreach ($goodsCategory as $k=>$v){
@@ -78,7 +78,7 @@ class Index extends MobileBase {
         $this->assign('hot_goods',$goodsCategory);
       
         /**推荐商品**/
-        $favourite_goods = M('goods')->field('goods_id,original_img')->where("is_recommend=1 and is_on_sale=1")->order('sort DESC')->limit(4)->cache(true,TPSHOP_CACHE_TIME)->select();//首页推荐商品
+        $favourite_goods = M('goods')->field('goods_id,original_img,shop_price,market_price,goods_name,sales_sum')->where("is_recommend=1 and is_on_sale=1")->order('sort DESC')->limit(10)->cache(true,TPSHOP_CACHE_TIME)->select();//首页推荐商品
      /*    $is_recommend = M('goods')->where('') */
         //秒杀商品
         $now_time = time();  //当前时间
@@ -118,7 +118,7 @@ class Index extends MobileBase {
     //领取注册优惠券
     public function first_order_coupon()
     {
-        $userInfo = session('user');
+        $userInfo = $this->user;
         $user_id = $userInfo['user_id'];
         $id = Db::name('first_order_coupon')->where(['user_id' => $user_id,'type' => 1])->value('id');
         if($id){
@@ -133,6 +133,8 @@ class Index extends MobileBase {
                 'add_time' =>   time(),
                 'type'     =>   1,
             ]);
+            $register_integral = Db::name('config')->where(['name' => 'register_integral'])->value('value');
+            accountLog($user_id,0,$register_integral,'领取注册首页积分');
             return json([
                 'code'  =>  1,
                 'msg'   =>  '恭喜您，领取成功',

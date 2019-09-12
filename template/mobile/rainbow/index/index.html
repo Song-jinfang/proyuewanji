@@ -129,14 +129,14 @@
 		.link1 img{width:6.95rem}
 	</style>
 	<div style="clear:both"></div>
-		<adv pid ="545" limit="1" item="v">
+	<!-- 	<adv pid ="545" limit="1" item="v">
 			<a href="{$v[ad_link]}" >
 				<div class="link1">
 				<img src="{$v[ad_code]}"/>
 				</div>
 			</a>
-			</adv>
-	<div class="linkBox">
+			</adv> -->
+<!-- 	<div class="linkBox">
 		<div  class="div a2 a_all">
 			<adv pid ="537" limit="1" item="v">
 				<a href="{$v[ad_link]}"><img  src="{$v[ad_code]}" title="{$v[title]}"></a>
@@ -153,14 +153,14 @@
 			</a>
 		</adv>
 		
-	<!-- 	<div class="linkList">
+		<div class="linkList">
 			<volist name="favourite_goods" id="v">
 				<a href="/Mobile/Goods/goodsInfo/id/{$v[goods_id]}">
 					<img src="{$v.original_img}">
 				</a>
 			</volist>
-		</div> -->
-	</div>
+		</div>
+	</div> -->
    <!--  <div class="link2">
     	<adv pid ="539" limit="4" item="v">
 	    	<a href="{$v['ad_link']}" class="a9">
@@ -190,8 +190,22 @@
 	        <div class="swiper-pagination swiper-paginationC"></div>
 	    </div>
     </div> -->
-    
-    
+      	    <div class="lists">
+	        <div class="swiper-container swiper-containerC">
+		        <div class="swiper-wrapper">
+		            <volist name="favourite_goods" id="v1">
+			            <div class="swiper-slide">
+			            	<a href="/Mobile/Goods/goodsInfo/id/{$v1.goods_id}">
+			            		<img  src="{$v1.original_img}" style="position:relative;">
+			            		<p class="proName adv_banner">{$v1.goods_name}</p>
+			            		<p class="proPrice adv_banner" style="ma">¥{$v1.shop_price}</p>
+			            		<img  src="__IMG__/hot.png" style="position:absolute;top:0px;left:0px;z-index:999px;width:25px;">
+			            	</a>
+			            </div>
+		            </volist>
+		        </div>
+		    </div>
+	    </div>
    <volist name="hot_goods" id="v">
 	    <a href="{$v['ad_link']}" class="link3">
 	    	<img src="{$v[ad_code]}">
@@ -272,7 +286,7 @@
 <style>
 .img_div{width:100%;height:100%}
 .img_div img{width:100%}
-
+ .yourclass{left:0px;top:200px;} 
 </style>
 <script>
 	function music(){
@@ -280,6 +294,19 @@
 	}
     var swiperA = new Swiper('.swiper-containerA', {
         pagination: '.swiper-paginationA',
+        paginationClickable: true,
+     	autoplay : 2000,
+        loop : true,
+
+    });
+    var swipereE = new Swiper('.swiper-containerE', {
+        pagination: '.swiper-paginationE',
+        paginationClickable: true,
+     	autoplay : 2000,
+        loop : true,
+    });
+    var swipereF = new Swiper('.swiper-containerF', {
+        pagination: '.swiper-paginationF',
         paginationClickable: true,
      	autoplay : 2000,
         loop : true,
@@ -308,21 +335,23 @@
                 content: "<div class='img_div' onclick='s()'><img src='__IMG__/activity.png'/></div>",
             });
 		}
+		$(".yourclass").css('top','200px');
+		$(".yourclass").css('left','0px');
 	});
-
     function s(){
 		$.ajax({
-			url:'index/first_order_coupon',
+			url:'/mobile/index/first_order_coupon',
 			type:'post',
 			success:function(e){
 				layer.msg(e.msg);
-				history.go(0);
+				setTimeout(function(){history.go(0)},2000);
 			},
 			error:function(){
 				layer.msg('网络异常，请稍后再试');
 			}
-		});
+		}); 
 	}
+
 
 </script>
 </html>
