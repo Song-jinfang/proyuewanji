@@ -1061,4 +1061,38 @@ exit("请联系TPshop官网客服购买高级版支持此功能");
         }
         $this->ajaxReturn($return);
     }
+     //首页分类的添加
+    public function home_class()
+    {
+        $data = Db::name('home_class')->where(['status' => 1])->order('sort','desc')->select();
+        $this->assign('data',$data);
+        return $this->fetch();
+    }
+
+    //编辑
+    public function edit_class()
+    {
+        if(request()->isGet()){
+            $class_id = request()->get('class_id');
+            $data = Db::name('home_class')->where(['class_id' => $class_id])->find();
+            $this->assign('data',$data);
+            return $this->fetch();
+        }else{
+            $data = request()->post();
+            $res = Db::name('home_class')->update($data);
+            if($res === false){
+                return json([
+                    'code'  =>  -1,
+                    'msg'   =>  '网络异常，请稍后再试',
+                    'data'  =>  [],
+                ]);
+            }else{
+                return json([
+                    'code'  =>  1,
+                    'msg'   =>  '操作成功',
+                    'data'  =>  [],
+                ]);
+            }
+        }
+    }
 }

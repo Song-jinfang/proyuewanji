@@ -151,7 +151,7 @@ return	array(
 			array('name'=>'会员等级','act'=>'levelList','op'=>'User'),
 		    array('name'=>'任务列表','act'=>'tasklist','op'=>'User'),
 		    array('name'=>'任务审核','act'=>'user_task','op'=>'User'),
-		    
+		    array('name'=>'首页分类','act'=>'home_class','op'=>'User'),
 		)),
 		array('name' => '充值提现','child'=>array(
 			array('name'=>'充值记录','act'=>'recharge','op'=>'User'),

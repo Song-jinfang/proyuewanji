@@ -1,0 +1,95 @@
+<include file="public/layout" />
+<body style="background-color: #FFF; overflow: auto;">
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title"><a class="back" href="javascript:history.back();" title="返回列表"><i class="fa fa-arrow-circle-o-left"></i></a>
+            <div class="subject">
+                <h3>品牌详情</h3>
+                <h5>品牌添加与管理</h5>
+            </div>
+        </div>
+    </div>
+    <!--表单数据-->
+    <form method="post">
+        <div class="ncap-form-default">
+            <dl class="row">
+                <dt class="tit">
+                    <label for="ac_name"><em>*</em>分类名称</label>
+                </dt>
+                <dd class="opt">
+                    <input type="text" placeholder="名称" class="input-txt" id="class_name"   name="name" value="{$data.class_name}">
+                    <span class="err" id="err_name" style="color:#F00; display:none;"></span>
+                    <p class="notic"></p>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <label for="ac_name">排序</label>
+                </dt>
+                <dd class="opt">
+                    <input type="number" class="input-txt" name="url"  id="sort" min="0" value="{$data.sort}">排序：数值越大排序越靠前
+                    <span  class="err" id="err_url" style="color:#F00; display:none;"></span>
+                    <p class="notic"></p>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <label for="ac_sort">图标</label>
+                </dt>
+                <dd class="opt">
+                    <img src="{$data.pic_address}" alt=""> <input type="text" class="input-txt" name="url"  id="pic_address" min="0" value="{$data.pic_address}">
+                </dd>
+            </dl>
+            <input type="button" id="button" onclick="tijiao()"  value="提交">
+            <input type="button" id="button1" onclick="fanhui()" value="返回">
+            <input type="hidden" id="class_id" name="class_id" value="{$data.class_id}">
+        </div>
+    </form>
+</div>
+<script>
+
+    function fanhui(){
+        history.go(-1);
+    }
+
+    function tijiao()
+    {
+        var class_id = $("#class_id").val();
+        var class_name = $("#class_name").val();
+        var sort = $("#sort").val();
+        var pic_address = $("#pic_address").val();
+        if(!(class_id && class_name && sort && pic_address)){
+            layer.msg('请将信息填写完整');
+            return;
+        }
+        $.ajax({
+            url:'edit_class',
+            type:'post',
+            data:{'class_id':class_id,'class_name':class_name,'sort':sort,'pic_address':pic_address},
+            success:function(e){
+                layer.msg(e.msg);
+                setTimeout(function(){
+                    history.go(-1);
+                },1000);
+            },
+            error:function(){
+                layer.msg('网络异常，请稍后再试');
+            }
+        });
+    }
+
+    window.onload = function(){
+        var brand_cat_id = parseInt('{$brand.cat_id}');
+        if(brand_cat_id > 0 ){
+            get_category($("#parent_id_1").val(),'parent_id_2',brand_cat_id);
+        }
+    }
+    function img_call_back(fileurl_tmp)
+    {
+        $("#logo").val(fileurl_tmp);
+        $("#img_a").attr('href', fileurl_tmp);
+        $("#img_i").attr('onmouseover', "layer.tips('<img src="+fileurl_tmp+">',this,{tips: [1, '#fff']});");
+    }
+</script>
+</body>
+</html>

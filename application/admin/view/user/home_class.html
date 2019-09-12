@@ -1,0 +1,213 @@
+<include file="public/layout" />
+<body style="background-color: rgb(255, 255, 255); overflow: auto; cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>首页分类管理</h3>
+                <h5>首页分类管理</h5>
+            </div>
+        </div>
+    </div>
+    <!-- 操作说明 -->
+    <div id="explanation" class="explanation" style="color: rgb(44, 188, 163); background-color: rgb(237, 251, 248); width: 99%; height: 100%;">
+        <div id="checkZoom" class="title"><i class="fa fa-lightbulb-o"></i>
+            <h4 title="提示相关设置操作时应注意的要点">操作提示</h4>
+            <span title="收起提示" id="explanationZoom" style="display: block;"></span>
+        </div>
+        <ul>
+            <li>广告管理, 由总平台设置管理.</li>
+        </ul>
+    </div>
+    <div class="flexigrid">
+        <!--     <div class="mDiv">
+              <div class="ftitle">
+                <h3>文章列表</h3>
+                <h5>(共{$pager->totalRows}条记录)</h5>
+              </div>
+              <div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
+              <form class="navbar-form form-inline" action="{:U('Admin/Article/articleList')}" method="post">
+              <div class="sDiv">
+                <div class="sDiv2">
+                  <select  name="cat_id" class="select">
+                    <option value="">选择文章类别</option>
+                    <foreach name="cats" item="vo">
+                    <option value="{$vo.cat_id}" <if condition="$vo[cat_id] eq $cat_id">selected</if>>{$vo.cat_name}</option>
+                    </foreach>
+                  </select>
+                  <input type="text" size="30" name="keywords" class="qsbox" placeholder="搜索相关数据...">
+                  <input type="submit" class="btn" value="搜索">
+                </div>
+              </div>
+             </form>
+            </div> -->
+        <div class="hDiv">
+            <div class="hDivBox">
+                <table cellspacing="0" cellpadding="0">
+                    <thead>
+                    <tr>
+                        <th class="sign" axis="col0">
+                            <div style="width: 24px;"><i class="ico-check"></i></div>
+                        </th>
+                        <th align="left" abbr="article_title" axis="col3" class="">
+                            <div style="text-align: left; width: 40px;" class="">分类id</div>
+                        </th>
+                        <th align="left" abbr="article_title" axis="col3" class="">
+                            <div style="text-align: left; width: 240px;" class="">分类名称</div>
+                        </th>
+                        <th align="left" abbr="article_title" axis="col3" class="">
+                            <div style="text-align: left; width: 240px;" class="">图片</div>
+                        </th>
+                        <!--  <th align="center" abbr="article_time" axis="col6" class="">
+                          <div style="text-align: center; width: 160px;" class="">任务操作步骤</div>
+                        </th> -->
+
+                        <th align="center" abbr="article_show" axis="col5" class="">
+                            <div style="text-align: center; width: 80px;" class="">排序</div>
+                        </th>
+                        <th align="center" abbr="article_time" axis="col6" class="">
+                            <div style="text-align: center; width: 160px;" class="">发布时间</div>
+                        <th align="center" axis="col1" class="handle">
+                            <div style="text-align: center; width: 150px;">操作</div>
+                        </th>
+                        <th style="width:100%" axis="col7">
+                            <div></div>
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="tDiv">
+            <!--      <div class="tDiv2">-->
+            <!--&lt;!&ndash;          <div class="fbutton"> &ndash;&gt;-->
+            <!--&lt;!&ndash;        		<a href="{:U('Admin/User/user_task',array('type'=>1,'task'=>'one'))}"><div class="add" <if condition="$type eq 1 && $task eq 'one'">style="background-color:#091215;"</if> title="新增任务"><span><i class="fa fa-plus"></i>待审核一</span></div></a> &ndash;&gt;-->
+            <!--&lt;!&ndash;          </div>&ndash;&gt;-->
+            <!--&lt;!&ndash;           <div class="fbutton"> &ndash;&gt;-->
+            <!--&lt;!&ndash;        		<a href="{:U('Admin/User/user_task',array('type'=>1,'task'=>'two'))}"><div class="add"  <if condition="$type eq 1 && $task eq 'two'">style="background-color:#091215;"</if> title="新增任务"><span><i class="fa fa-plus"></i>待审核二</span></div></a> &ndash;&gt;-->
+            <!--&lt;!&ndash;          </div>&ndash;&gt;-->
+            <!--&lt;!&ndash;           <div class="fbutton"> &ndash;&gt;-->
+            <!--&lt;!&ndash;        		<a href="{:U('Admin/User/user_task',array('type'=>2,'task'=>'one'))}"><div class="add" <if condition="$type eq 2 && $task eq 'one'">style="background-color:#091215;"</if> title="新增广告"><span><i class="fa fa-plus"></i>审核通过一</span></div></a> &ndash;&gt;-->
+            <!--&lt;!&ndash;          </div>&ndash;&gt;-->
+            <!--&lt;!&ndash;           <div class="fbutton"> &ndash;&gt;-->
+            <!--&lt;!&ndash;        		<a href="{:U('Admin/User/user_task',array('type'=>2,'task'=>'two'))}"><div class="add" <if condition="$type eq 2 && $task eq 'two'">style="background-color:#091215;"</if> title="新增广告"><span><i class="fa fa-plus"></i>审核通过二</span></div></a> &ndash;&gt;-->
+            <!--&lt;!&ndash;          </div>&ndash;&gt;-->
+            <!--&lt;!&ndash;          &ndash;&gt;-->
+            <!--&lt;!&ndash;             <div class="fbutton"> &ndash;&gt;-->
+            <!--&lt;!&ndash;        		<a href="{:U('Admin/User/user_task',array('type'=>3,'task'=>'one'))}"><div <if condition="$type eq 3 && $task eq 'one'">style="background-color:#091215;"</if> class="add" title="任务审核"><span><i class="fa fa-plus"></i>审核失败一</span></div></a> &ndash;&gt;-->
+            <!--&lt;!&ndash;          </div>&ndash;&gt;-->
+            <!--&lt;!&ndash;          &ndash;&gt;-->
+            <!--&lt;!&ndash;          &ndash;&gt;-->
+            <!--&lt;!&ndash;          <div class="fbutton"> &ndash;&gt;-->
+            <!--&lt;!&ndash;        		<a href="{:U('Admin/User/user_task',array('type'=>3,'task'=>'two'))}"><div <if condition="$type eq 3 && $task eq 'two'">style="background-color:#091215;"</if> class="add" title="任务审核"><span><i class="fa fa-plus"></i>审核失败二</span></div></a> &ndash;&gt;-->
+            <!--&lt;!&ndash;          </div>&ndash;&gt;-->
+            <!--&lt;!&ndash;           <div class="fbutton"> &ndash;&gt;-->
+            <!--&lt;!&ndash;        		<a href="{:U('Admin/User/user_task',array('type'=>4))}"><div class="add" title="任务审核"><span><i class="fa fa-plus"></i>任务失效</span></div></a> &ndash;&gt;-->
+            <!--&lt;!&ndash;          </div>&ndash;&gt;-->
+            <!--        &lt;!&ndash;    <div class="fbutton"> -->
+            <!--        		<a href="{:U('Admin/User/user_task',array('task'=>'one'))}"><div class="add" title="任务审核"><span><i class="fa fa-plus"></i>任务one</span></div></a> -->
+            <!--          </div>-->
+            <!--           <div class="fbutton"> -->
+            <!--        		<a href="{:U('Admin/User/user_task',array('task'=>''))}"><div class="add" title="任务审核"><span><i class="fa fa-plus"></i>任务two</span></div></a> -->
+            <!--          </div> &ndash;&gt;-->
+            <!--          -->
+            <!--          &lt;!&ndash; <div class="fbutton"><div class="del" title="将选定行数据批量删除"><span><i class="fa fa-trash"></i>批量删除</span></div></div>&ndash;&gt;-->
+            <!--      </div>-->
+            <!--      <div style="clear:both"></div>-->
+        </div>
+        <div class="bDiv" style="height: auto;">
+            <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                <table>
+                    <tbody>
+                    <foreach name="data" item="vo" key="k" >
+                        <tr>
+                            <td class="sign">
+                                <div style="width: 24px;"><i class="ico-check"></i></div>
+                            </td>
+
+                            <td align="left" class="">
+                                <div style="text-align: left; width: 40px;">{$vo.class_id}</div>
+                            </td>
+                            <td align="left" class="">
+                                <div style="text-align: left; width: 240px;">{$vo.class_name}</div>
+                            </td>
+
+                            <td align="left" class="">
+                                <img width="160px;"  src="{$vo.pic_address}"/>
+                            </td>
+                            <td align="center" class="">
+<!--                                <div style="text-align: center; width: 160px;">{:date('Y-m-d H:i:s',$vo.add_time)}</div>-->
+                                <div style="text-align: center; width: 160px;">{$vo.sort}</div>
+                            </td>
+                            <td align="center" class="">
+                                <div style="text-align: left; width: 240px;">{$vo.add_time|date="Y-m-d H:i",###}</div>
+                            </td>
+                            <td align="center" class="handle">
+                                <div style="text-align: center; width: 170px; max-width:170px;">
+<!--                                    <a class="btn blue" target="_self" href="{:U('/Admin/User/task_edit',array('id'=>$vo[id]))}"><i class="fa fa-search"></i>查看</a>-->
+                                    <!--  <notin name="vo.article_id" value="$article_able_id"> <a class="btn red"  href="javascript:void(0)" data-url="{:U('Article/aticleHandle')}" data-id="{$vo.article_id}" onClick="delfun(this)"><i class="fa fa-trash-o"></i>删除</a> </notin> -->
+                                    <!--  <in name="vo.article_id" value="$article_able_id"> <a class="btn red"  href="javascript:;" onclick="layer.alert('系统文章不得删除!',{icon:2});"><i class="fa fa-trash-o"></i>删除</a> </in> -->
+                                    <a href="/admin/user/edit_class?class_id={$vo.class_id}" class="btn blue"><i class="fa fa-pencil-square-o"></i>编辑</a>
+                                </div>
+                            </td>
+                            <td align="" class="" style="width: 100%;">
+                                <div>&nbsp;</div>
+                            </td>
+                        </tr>
+                    </foreach>
+                    </tbody>
+                </table>
+            </div>
+            <div class="iDiv" style="display: none;"></div>
+        </div>
+        <!--分页位置-->
+
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        // 表格行点击选中切换
+        $('#flexigrid > table>tbody >tr').click(function(){
+            $(this).toggleClass('trSelected');
+        });
+
+        // 点击刷新数据
+        $('.fa-refresh').click(function(){
+            location.href = location.href;
+        });
+
+    });
+    function delfun(obj) {
+        // 删除按钮
+        layer.confirm('确认删除？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            $.ajax({
+                type: 'post',
+                url: $(obj).attr('data-url'),
+                data: {act: 'del', article_id: $(obj).attr('data-id')},
+                dataType: 'json',
+                success: function (data) {
+                    layer.closeAll();
+                    if (data) {
+                        $(obj).parent().parent().parent().remove();
+                    } else {
+                        layer.alert('删除失败', {icon: 2});  //alert('删除失败');
+                    }
+                }
+            })
+        }, function () {
+            layer.closeAll();
+        });
+    }
+    function pass(class_id){
+        $.post('/Admin/User/edit_class',{'class_id':class_id},function(data){
+            layer.open({content: data.msg});
+            setTimeout(function(){history.go(0)}, 1000);
+        },'json');
+    }
+</script>
+</body>
+</html>
