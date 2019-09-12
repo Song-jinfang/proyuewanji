@@ -105,8 +105,10 @@ class Index extends MobileBase {
         }
         $action = request()->action();
         $controller = request()->controller();
+        $data = Db::name('home_class')->select();
         $this->assign('is_coupon',$is_coupon);
         $this->assign('action',$action);
+        $this->assign('data',$data);
         $this->assign('controller',$controller);
         $this->assign('flash_sale_list',$flash_sale_list);
         $this->assign('start_time',$start_time);

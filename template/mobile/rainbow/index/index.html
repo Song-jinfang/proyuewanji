@@ -41,49 +41,12 @@
 		<div class="swiper-container swiper-containerB">
 	        <div class="swiper-wrapper">
 	            <div class="swiper-slide">
-	            
-	            	<a href="/mobile/Goods/categoryList">
-	            		<img src="__IMG__/src/new.png">
-	            		<span>每日新品</span>
+	            	<volist name="data" id="vo">
+	            	<a href="{$vo.link}">
+	            		<img src="{$vo.pic_address}">
+	            		<span>{$vo.class_name}</span>
 	            	</a>
-	            	
-	            	<a href="/Mobile/Goods/goodsList/id/590">
-	            		<img src="__IMG__/src/makeup.png">
-	            		<span>美妆达人</span>
-	            	</a>
-	            		<a href="/Mobile/Goods/goodsList/id/589">
-	            		<img src="__IMG__/src/luxury.png">
-	            		<span>轻奢饰品</span>
-	            	</a>
-	            	
-	            	<a href="/mobile/Goods/categoryList">
-	            		<img src="__IMG__/src/categroy.png">
-	            		<span>商品分类</span>
-	            	</a>
-	            	<a href="/Mobile/Index/share">
-	            		<img src="__IMG__/src/share.png">
-	            		<span>分享赚钱</span>
-	            	</a>
-	            	<a href="/mobile/index/adv_list">
-	            		<img src="__IMG__/src/task.png">
-	            		<span>任务区</span>
-	            	</a>
-	            	<a onclick="music()">
-	            		<img src="__IMG__/src/sign.png">
-	            		<span>签到有礼</span>
-	            	</a>
-	            	<a href="/Mobile/Order/order_list">
-	            		<img src="__IMG__/src/order.png">
-	            		<span>我的订单</span>
-	            	</a>
-	            	<a onclick="music()">
-	            		<img src="__IMG__/src/guide.png">
-	            		<span>悦玩集攻略</span>
-	            	</a>
-	            	<a href="/mobile/Index/connect">
-	            		<img src="__IMG__/src/customer.png">
-	            		<span>客服中心</span>
-	            	</a>
+					</volist>
 	            </div>
 <!-- 	            <div class="swiper-slide">
 	            	<a href="###">
