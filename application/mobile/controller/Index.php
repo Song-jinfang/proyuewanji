@@ -282,6 +282,11 @@ class Index extends MobileBase {
         
         return $this->fetch();
     }
+
+    public function explain()
+    {
+        return $this->fetch();
+    }
     public function ajaxFileUpload(){
        // $file = request()->file();
       $dir_base ='fileupload/';//配置你的上传目录
