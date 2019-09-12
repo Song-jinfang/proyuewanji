@@ -60,7 +60,7 @@ class Index extends MobileBase {
         $this->assign('thems',$thems);
       //  $this->assign('hot_goods',$hot_goods);
         /**商品精选**/
-        $new_goods = M('goods')->field('goods_id,original_img,shop_price,market_price,goods_name,sales_sum')->where("is_new=1 and is_on_sale=1")->order('sort DESC')->limit(20)->cache(true,TPSHOP_CACHE_TIME)->select();//
+        $new_goods = M('goods')->field('goods_id,original_img,shop_price,market_price,goods_name,sales_sum')->where("is_new=1 and is_on_sale=1")->order('sort DESC')->limit(10)->cache(true,TPSHOP_CACHE_TIME)->select();//
         
         $this->assign('new_goods',$new_goods);
         $goodsCategory = M('goods_category')->field('id,adv_id')->where('is_hot=1')->select();
@@ -509,7 +509,7 @@ class Index extends MobileBase {
         return $this->fetch();
     }
     
-    public function ajaxGetMore(){
+/*     public function ajaxGetMore(){
     	$p = I('p/d',1);
         $where = [
             'is_recommend' => 1,
@@ -520,7 +520,24 @@ class Index extends MobileBase {
     	$favourite_goods = Db::name('goods')->where($where)->order('sort DESC')->page($p,C('PAGESIZE'))->cache(true,TPSHOP_CACHE_TIME)->select();//首页推荐商品
     	$this->assign('favourite_goods',$favourite_goods);
     	return $this->fetch();
+    } */
+    
+    public function ajaxGetMore(){
+        $p = I('p/d',1);
+        $pageNum = 10;
+        $where = [
+            'is_new' => 1,
+            'is_on_sale' => 1,
+        ];
+        $count = M('goods')->where($where)->count();
+        $Page  = new \think\Page($count,4);
+        $off = $p * $pageNum;
+        $favourite_goods = M('goods')->where($where)->order('sort desc')->limit($off.','.$Page->listRows)->select();
+        $this->assign('favourite_goods',$favourite_goods);
+        return $this->fetch();
     }
+    
+    
     
     //微信Jssdk 操作类 用分享朋友圈 JS
     public function ajaxGetWxConfig()
