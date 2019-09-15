@@ -195,6 +195,9 @@ class Cart extends MobileBase {
         $is_virtual = input('is_virtual/d',0);
         $data = input('request.');
         $cart_validate = Loader::validate('Cart');
+        if($coupon_id && $pay_points){
+            $this->ajaxReturn(['status' => -1, 'msg' => '优惠券和积分不能重叠使用']);
+        }
         if($is_virtual === 1){
             $cart_validate->scene('is_virtual');
         }
@@ -220,8 +223,8 @@ class Cart extends MobileBase {
                 $cartLogic->checkStockCartList($userCartList);
                 $pay->payCart($userCartList);
             }
-            $pay->setUserId($this->user_id)->setShopById($shop_id)->delivery($address['district'])->happy_beans()->orderPromotion()
-            ->useCouponById($coupon_id)->useUserMoney($user_money)->usePayPoints($pay_points,false,'mobile');
+            $pay->setUserId($this->user_id)->setShopById($shop_id)->delivery($address['district'])->orderPromotion()
+            ->useCouponById($coupon_id)->useUserMoney($user_money)->usePayPoints($pay_points,false,'mobile')->happy_beans();
             //提交订单
             
             $user = M('users')->field('happy_beans')->where('user_id = '.$this->user_id)->find();

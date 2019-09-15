@@ -52,6 +52,9 @@
         <td align="left"  axis="col1" align="center">
             <div style="text-align: left; width: 150px;">{$list.invoice_title}</div>
         </td>
+         <td align="left"  axis="col1" align="center">
+            <div style="text-align: left; width: 150px;"><if condition="$list['is_resale'] eq 1"><b style="color:red">转售</b><else/>不转售</if></div>
+        </td>
 		<td style="width: 100%;">
             <div style="text-align: left; ">
                 <a class="btn green" href="{:U('Admin/order/detail',array('order_id'=>$list['order_id']))}"><i class="fa fa-list-alt"></i>查看</a>

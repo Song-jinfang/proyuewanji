@@ -44,9 +44,15 @@
                         </h2>
                         <p class="pall0">购买时间：{$v1.add_time|date='Y-m-d H:i',###}</p>
                     </div>
-                    <div class="dyeai">
+                    <div class="dyeai" style="padding:0.5rem">
                         <if condition="$v1[is_comment] eq 0">
                             <a class="compj" href="{:U('Mobile/Order/add_comment',array('rec_id'=>$v1[rec_id]))}"><i class="said"></i>评价订单</a>
+                            <if condition="$v1['is_resale'] eq 1">
+                            	 <a class="compj" onclick="goods_resale({$v1['order_id']})"><i class="said"></i>已转售</a>
+                            <else/>
+                            	 <a class="compj" onclick="goods_resale({$v1['order_id']})"><i class="said"></i>商品转售</a>
+                            </if>
+                            
                         <else/>
                             <a class="compj nomar" href="{:U('Mobile/Order/comment_info',array('comment_id'=>$v1[comment_id]))}"><i class="said c23"></i>查看评价</a>
                         </if>
@@ -58,6 +64,7 @@
     </if>
 </div>
 <script type="text/javascript" src="__STATIC__/js/sourch_submit.js"></script>
+	<script src="__JS__/layer.js"  type="text/javascript" ></script>
 <script type="text/javascript">
     /**
      * ajax加载更多商品
@@ -79,6 +86,16 @@
             }
         });
     }
+    function goods_resale(order_id){
+    	$.post('/mobile/order/resale',{'order_id':order_id},function(data){
+    		if(data.status == 1){
+    			layer.msg(data.msg);
+    			setTimeout(function(){window.location.href=data.url},'2000');
+    		}
+    	},'json');
+    	
+    }
+    
 </script>
 </body>
 </html>

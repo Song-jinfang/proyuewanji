@@ -537,7 +537,23 @@ class Order extends MobileBase
         $this->assign('order_info', $order_info);
         return $this->fetch();
     }
-
+    /*商品转售*/
+    public function resale(){
+        $order_id  = I('post.order_id');
+        if($order_id){
+            $goods_resale = M('config')->where("name='goods_resale'")->value('value');
+            $orderInfo = Db::name('order')->field('order_amount')->where("order_id", $order_id)->find();
+            if($orderInfo['order_amount'] > 0){
+                $money = $orderInfo['order_amount'] * ($goods_resale/100);
+               $update =  M('order')->where('order_id='.$order_id)->update(['is_resale'=>1]);
+               if($update){
+                   accountLog($this->user_id,$money,0,'商品转售获得订单金额'.$money);
+                   $this->ajaxReturn(['status'=>1,'msg'=>'转售成功，已退还'.$money.'到余额','url'=>'/Mobile/Order/comment']);
+               }
+            }
+        }
+    }
+    
     /**
      * 待收货列表
 

@@ -153,7 +153,7 @@ class Index extends MobileBase {
     
     public function test_order(){
         
-        update_pay_status('201909081809335453');
+        update_pay_status('201909151743132764');
     }
     
     public function test(){
@@ -167,6 +167,14 @@ class Index extends MobileBase {
         return $this->fetch();
     }
     
+    
+    
+    /*
+     * APP下载
+     */
+    public function download(){
+        return $this->fetch();
+    }
     
     /*
      * 广告列表 
@@ -521,7 +529,6 @@ class Index extends MobileBase {
     	$this->assign('favourite_goods',$favourite_goods);
     	return $this->fetch();
     } */
-    
     public function ajaxGetMore(){
         $p = I('p/d',1);
         $pageNum = 10;
@@ -532,7 +539,7 @@ class Index extends MobileBase {
         $count = M('goods')->where($where)->count();
         $Page  = new \think\Page($count,4);
         $off = $p * $pageNum;
-        $favourite_goods = M('goods')->where($where)->order('sort desc')->limit($off.','.$Page->listRows)->select();
+        $favourite_goods = M('goods')->where($where)->order('sort desc')->limit($off.','.$pageNum)->select();
         $this->assign('favourite_goods',$favourite_goods);
         return $this->fetch();
     }

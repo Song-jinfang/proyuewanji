@@ -316,16 +316,24 @@ class Pay
             $couponList = new CouponList();
             $userCoupon = $couponList->where(['uid'=>$this->user['user_id'],'id'=>$coupon_id])->find();
             if($userCoupon){
-                $coupon = Db::name('coupon')->where(['id'=>$userCoupon['cid'],'status'=>1])->find(); // 获取有效优惠券类型表
-                if($coupon){
-                    $this->couponId = $coupon_id;
+                if($userCoupon['coupon_type'] == 1){//全场八折券
                     if ($this->orderAmount > 0) {
-                        if ($coupon['money'] > $this->orderAmount) {
-                            $this->couponPrice = $this->orderAmount;
-                            $this->orderAmount = 0;
-                        } else {
-                            $this->couponPrice = $coupon['money'];
-                            $this->orderAmount = $this->orderAmount - $this->couponPrice;
+                        $coupon_rale = M('config')->where("name='coupon_rale'")->value('value');
+                        $this->couponPrice = sprintf("%.3f",$this->orderAmount * ($coupon_rale/100));
+                        $this->orderAmount =  $this->orderAmount - $this->couponPrice;
+                    }
+                }else{
+                    $coupon = Db::name('coupon')->where(['id'=>$userCoupon['cid'],'status'=>1])->find(); // 获取有效优惠券类型表
+                    if($coupon){
+                        $this->couponId = $coupon_id;
+                        if ($this->orderAmount > 0) {
+                            if ($coupon['money'] > $this->orderAmount) {
+                                $this->couponPrice = $this->orderAmount;
+                                $this->orderAmount = 0;
+                            } else {
+                                $this->couponPrice = $coupon['money'];
+                                $this->orderAmount = $this->orderAmount - $this->couponPrice;
+                            }
                         }
                     }
                 }

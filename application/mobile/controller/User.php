@@ -241,20 +241,19 @@ class User extends MobileBase
         $start_time = strtotime(date('Y-m-d'));
         $orderInfo = M('order')->field('order_amount,can_receive')->where('order_id='.$order_id)
         ->find();
-        $end_time = $orderInfo['can_receive']+strtotime('+1 day');//下单最晚的时间不能超过改时间点，超过则订单失效
          if($day_mark == 'fifteen'){//如果为15-28天的话查询当天有没有订单生成
-            $order =  M('order')->where('user_id = '.$this->user_id .' and add_time >'.$orderInfo['can_receive'].' and add_time<'.$end_time.' pay_status = 1')->find();
-            if(time() > $end_time){
-                $this->ajaxReturn(
-                    array(
-                        'status'=>1,
-                        'msg'=>'您在规定的时间里面没有及时下单，此收益和广告收益已失效',
-                        'url'=>'/Mobile/User/earnings'
-                    ));
-                M('order')->where('order_id = '.$order_id)->update(['fifteen_status'=>3]);
-            }
-            
-            if($orderInfo['order_amount'] >$order){
+             $end_time = $orderInfo['can_receive']+strtotime('+1 day');//下单最晚的时间不能超过该时间点，超过则订单失效
+             if(time() > $end_time){
+                 $this->ajaxReturn(
+                     array(
+                         'status'=>1,
+                         'msg'=>'您在规定的时间里面没有及时下单，此收益和广告收益已失效',
+                         'url'=>'/Mobile/User/earnings'
+                     ));
+                 M('order')->where('order_id = '.$order_id)->update(['fifteen_status'=>3]);
+             }
+             $order =  M('order')->field('order_amount')->where('user_id = '.$this->user_id .' and add_time >'.$orderInfo['can_receive'].' and add_time<'.$end_time.' pay_status = 1')->find();
+            if($orderInfo['order_amount'] >$order['order_amount']){
                 $this->ajaxReturn(
                     array(
                         'status'=>-1,
@@ -264,9 +263,6 @@ class User extends MobileBase
             }
         }
         
-        if($happy_beans < $orderBeansProfit){
-            $this->ajaxReturn(array('status'=>-1,'msg'=>'悦玩豆余额不足'));
-        }
         $count =  M('withdrawal_balance')->where('order_id='.$order_id.' and add_time >'.$start_time)->count();
         if($count){
             $this->ajaxReturn(
@@ -511,7 +507,8 @@ class User extends MobileBase
         $logic = new UsersLogic();
         $res = $logic->login($username, $password);
         if ($res['status'] == 1) {
-            $res['url'] = htmlspecialchars_decode(I('post.referurl'));
+            //$res['url'] = htmlspecialchars_decode(I('post.referurl'));
+            $res['url'] = '/Mobile/index/index';
             session('user', $res['result']);
             setcookie('user_id', $res['result']['user_id'], null, '/');
             setcookie('is_distribut', $res['result']['is_distribut'], null, '/');

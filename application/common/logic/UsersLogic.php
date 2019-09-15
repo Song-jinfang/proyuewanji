@@ -402,6 +402,7 @@ class UsersLogic extends Model
             $map['mobile_validated'] = 1;
             $map['mobile'] = $username; //手机注册
         }
+        /***生成nickname***/
         if($is_validated != 1)
             return array('status'=>-1,'msg'=>'请用手机号或邮箱注册','result'=>'');
         $map['nickname'] = $nickname ? $nickname : $username;
@@ -471,7 +472,8 @@ class UsersLogic extends Model
             }else{
                 $pidStr = $user_id;
             }
-            M('users')->where('user_id='.$user_id)->update(['pid_list'=>$pidStr]);
+            $nickname = 'YWJ'.$user_id;
+            M('users')->where('user_id='.$user_id)->update(['pid_list'=>$pidStr,'nickname'=>$nickname]);
             
         // 会员注册赠送积分
         $isRegIntegral = tpCache('integral.is_reg_integral');

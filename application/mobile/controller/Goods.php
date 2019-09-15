@@ -106,8 +106,11 @@ class Goods extends MobileBase
         $page = new Page($count, C('PAGESIZE'));
         if ($count > 0) {
             $sort_asc = $sort_asc == 'asc' ? 'desc' : 'asc'; // 防注入
-            $sort_arr = ['sales_sum','shop_price','is_new','comment_count','sort'];
-            if(!in_array($sort,$sort_arr)) $sort='sort'; // 防注入
+            $sort_arr = ['sales_sum','shop_price','is_new','comment_count'];
+            if(!in_array($sort,$sort_arr)){
+                $sort = 'goods_id'; // 防注入
+                $sort_asc = 'desc';
+            }
 
             $goods_list = M('goods')->where("goods_id", "in", implode(',', $filter_goods_id))->order([$sort => $sort_asc])->limit($page->firstRow . ',' . $page->listRows)->select();
             $filter_goods_id2 = get_arr_column($goods_list, 'goods_id');
