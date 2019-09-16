@@ -73,21 +73,21 @@ class Order extends Base {
         }
         $count2 = Db::name('order')
                     ->where($where)
-                    ->where(['pay_status' => 1])
+                    ->where(['pay_status' => 1,'type' => 1])
                     ->count();
         $order_amount2 = Db::name('order')
                     ->where($where)
-                    ->where(['pay_status' => 1])
+                    ->where(['pay_status' => 1,'type' => 1])
                     ->sum('order_amount');
         $start_time = strtotime(date('Y-m-d'),time()) - 3600*24;
         $end_time = strtotime(date('Y-m-d 23:59:59'),time()) - 3600*24;
         $count1 = Db::name('order')
             ->where('add_time','between',"$start_time,$end_time")
-            ->where(['pay_status' => 1])
+            ->where(['pay_status' => 1,'type' => 1])
             ->count();
         $order_amount1 = Db::name('order')
             ->where('add_time','between',"$start_time,$end_time")
-            ->where(['pay_status' => 1])
+            ->where(['pay_status' => 1,'type' => 1])
             ->sum('order_amount');
 
 
@@ -128,7 +128,7 @@ class Order extends Base {
         $count = Db::name('order')->where($condition)->count();
         $Page  = new AjaxPage($count,20);
         $show = $Page->show();
-        $orderList = Db::name('order')->where($condition)->limit($Page->firstRow,$Page->listRows)->order($sort_order)->select();
+        $orderList = Db::name('order')->where($condition)->where(['type' => 1])->limit($Page->firstRow,$Page->listRows)->order($sort_order)->select();
         $this->assign('orderList',$orderList);
         $this->assign('page',$show);// 赋值分页输出
         $this->assign('pager',$Page);
