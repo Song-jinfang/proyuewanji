@@ -879,7 +879,7 @@ class Ad extends MobileBase
                     ->join('ywj_users b','a.user_id = b.user_id')
                     ->where('a.user_id','in',$user_id_arr)
                     ->where(['a.type' => 1])
-                    ->field('b.nickname,a.add_time,a.order_amount')
+                    ->field('b.nickname,a.add_time,a.order_amount,a.shipping_status')
                     ->select();
             $count = Db::name('order')->alias('a')
                      ->join('ywj_users b','a.user_id = b.user_id')

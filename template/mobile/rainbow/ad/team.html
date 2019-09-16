@@ -24,12 +24,14 @@
                     <th>昵称</th>
                     <th>下单时间</th>
                     <th>订单金额</th>
+                    <th>确认</th>
                 </tr>
                 <volist name="data" id="vo">
                     <tr>
                         <td>{$vo.nickname}</td>
                         <td>{$vo.add_time|date="Y-m-d H:i",###}</td>
                         <td>{$vo.order_amount}</td>
+                        <td><if condition="$vo.shipping_status eq 1">是<else/>否</if></td>
                     </tr>
                 </volist>
             </table>
