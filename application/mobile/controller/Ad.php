@@ -864,6 +864,29 @@ class Ad extends MobileBase
                 ->where('user_id','in',$user_id_arr)
                 ->field('nickname,mobile,reg_time')
                 ->select();
+        }elseif ($p == 3){
+            $user_arr = Db::name('users')->where("find_in_set($user_id,pid_list)")->column('pid_list');
+            foreach ($user_arr as &$vo){
+                $vo = explode(',',$vo);
+            }
+            $user_id_arr = [];
+            foreach ($user_arr as $v){
+                $index_id = array_search($user_id,$v);
+                $user_id_arr[] = $v[$index_id + 1];
+            }
+            $user_id_arr = array_unique($user_id_arr);
+            $data = Db::name('order')->alias('a')
+                    ->join('ywj_users b','a.user_id = b.user_id')
+                    ->where('a.user_id','in',$user_id_arr)
+                    ->where(['a.type' => 1])
+                    ->field('b.nickname,a.add_time,a.order_amount')
+                    ->select();
+            $count = Db::name('order')->alias('a')
+                     ->join('ywj_users b','a.user_id = b.user_id')
+                     ->where('a.user_id','in',$user_id_arr)
+                     ->where(['a.type' => 1])
+                     ->sum('a.order_amount');
+            $this->assign('count',$count);
         }else{
             $user_arr = Db::name('users')->where("find_in_set($user_id,pid_list)")->column('pid_list');
             foreach ($user_arr as &$vo){

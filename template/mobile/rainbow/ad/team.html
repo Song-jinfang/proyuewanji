@@ -14,25 +14,70 @@
 <div class="tab">
     <a href="team.html?p=2" <eq name="p" value="2">class="currents"</eq>>我的直属</a>
     <a href="team.html?p=1" <eq name="p" value="1">class="currents"</eq>>我的团队</a>
+    <a href="team.html?p=3" <eq name="p" value="3">class="currents"</eq>>直属订单</a>
 </div>
-<div class="tableDiv">
-    <div class="table">
-        <table border="0" cellspacing="0" cellpadding="0" >
-            <tr>
-                <th>名称</th>
-                <th>手机号</th>
-                <th>注册时间</th>
-            </tr>
-            <volist name="data" id="vo">
+<eq name="p" value="3">
+    <div class="tableDiv">
+        <div class="table">
+            <table border="0" cellspacing="0" cellpadding="0" >
                 <tr>
-                    <td>{$vo.nickname}</td>
-                    <td>{$vo.mobile}</td>
-                    <td>{$vo.reg_time|date="Y-m-d H:i",###}</td>
+                    <th>昵称</th>
+                    <th>下单时间</th>
+                    <th>订单金额</th>
                 </tr>
-            </volist>
-        </table>
+                <volist name="data" id="vo">
+                    <tr>
+                        <td>{$vo.nickname}</td>
+                        <td>{$vo.add_time|date="Y-m-d H:i",###}</td>
+                        <td>{$vo.order_amount}</td>
+                    </tr>
+                </volist>
+            </table>
+        </div>
+        <div style="text-align: right"><font size="3px" color="red">总计：{$count ? $count : 0}元</font>&nbsp;&nbsp;&nbsp;&nbsp;</div>
     </div>
-</div>
+</eq>
+<eq name="p" value="2">
+    <div class="tableDiv">
+        <div class="table">
+            <table border="0" cellspacing="0" cellpadding="0" >
+                <tr>
+                    <th>名称</th>
+                    <th>手机号</th>
+                    <th>注册时间</th>
+                </tr>
+                <volist name="data" id="vo">
+                    <tr>
+                        <td>{$vo.nickname}</td>
+                        <td>{$vo.mobile}</td>
+                        <td>{$vo.reg_time|date="Y-m-d H:i",###}</td>
+                    </tr>
+                </volist>
+            </table>
+        </div>
+    </div>
+</eq>
+<eq name="p" value="1">
+    <div class="tableDiv">
+        <div class="table">
+            <table border="0" cellspacing="0" cellpadding="0" >
+                <tr>
+                    <th>名称</th>
+                    <th>手机号</th>
+                    <th>注册时间</th>
+                </tr>
+                <volist name="data" id="vo">
+                    <tr>
+                        <td>{$vo.nickname}</td>
+                        <td>{$vo.mobile}</td>
+                        <td>{$vo.reg_time|date="Y-m-d H:i",###}</td>
+                    </tr>
+                </volist>
+            </table>
+        </div>
+    </div>
+</eq>
+
 </body>
 <script type="text/javascript" src="__JS__/jquery-3.2.1.min.js" ></script>
 <script type="text/javascript" src="__IMG__/swiper.min.js" ></script>
