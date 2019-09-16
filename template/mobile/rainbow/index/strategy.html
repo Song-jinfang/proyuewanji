@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta name="viewport" content="width=device-width" viewport-fit="cover">
+    <link rel="stylesheet" href="/static/css/banner.css">
+    <title>说明</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            font-family: "微软雅黑";
+        }
+        /* body{
+            background: #d039f8;
+        } */
+
+        body {
+            padding-bottom: constant(safe-area-inset-bottom);
+            height:667px;
+        }
+    </style>
+    <script type="text/javascript">
+
+    </script>
+</head>
+<body  style="position: relative;">
+<div class="header">
+    <a href="javascript:history.go(-1)"><img src="/static/img/back.png" class="back"></a>新手攻略
+</div>
+<article class="content"  id="content">
+    <img width="100%;height:100%" style="position:absolute;" src="__IMG__/a448049b52c0bcd21a24d6735d5ef3f.jpg"/>
+    <div style="position:relative;width:200px;" id="ss">
+        <img id="code" width="170px" src="{$info.code_img}"/>
+    </div>
+</article>
+<!-- <div class="ds-in-bl return"  style="position: absolute;top:20px;left:20px;">
+    <a id="[back]" href="javascript:history.go(-1)"><img width="20rem" src="__STATIC__/images/return.png" alt="返回"></a>
+</div> -->
+</body>
+</html>
+<script>
+    var height =  $(window).height();
+    $("#ss").css('top',parseFloat(height) * parseFloat(0.56));
+    $("#content").css('width',$(window).width());
+    var width = window.screen.width;
+    $("#ss").css('left',parseFloat(width) * parseFloat(0.29));
+</script>
