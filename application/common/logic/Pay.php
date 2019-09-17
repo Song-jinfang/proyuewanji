@@ -257,13 +257,13 @@ class Pay
         $user = M('users')->field('happy_beans')->where('user_id = '.$this->userId)->find();
         $profit_cons_beans = M('config')->where("name='profit_cons_beans'")->value('value');//购买商品消耗1%悦豌豆
         $rate = ceil(($profit_cons_beans/100) * $this->totalAmount);
-        if($user['happy_beans'] < $rate){//计算到总额里面
-            $this->orderAmount = $this->orderAmount + $rate;
-            $this->totalAmount = $this->totalAmount + $rate;
+        if($user['happy_beans'] > $rate){//计算到总额里面
+          /*   $this->orderAmount = $this->orderAmount + $rate;
+            $this->totalAmount = $this->totalAmount + $rate; */
             $this->happy_beans_money = $rate;
             $this->order_consum_ywd = 0;
             return $this;
-        } else{
+        }else{
             //消耗悦玩币
             $this->happy_beans_money = $rate;
             $this->order_consum_ywd = 1;

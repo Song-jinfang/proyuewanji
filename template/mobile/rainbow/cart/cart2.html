@@ -3,7 +3,7 @@
 <script src="__PUBLIC__/js/md5.min.js"></script>
 <script type="text/javascript" src="__STATIC__/js/date.js"></script>
 <script type="text/javascript" src="//api.map.baidu.com/api?ak=iR2qhnXd5vrFI9wUuIRG9AWGIqykVNok&type=lite&v=1.0"></script>
-<div id="wrapBody">
+	<div id="wrapBody">
     <div id="pagePay">
         <form name="cart2_form" id="cart2_form" method="post">
             <input type="hidden" name="is_virtual" value="{$cartList[0]['goods']['is_virtual']?$cartList[0]['goods']['is_virtual']:0}">
@@ -27,6 +27,7 @@
             <input type="hidden" name="mobile" value="">
             <input type="hidden" name="shop_id" value="">
             <input type="hidden" name="take_time" value="">
+             <input type="hidden" name="resale" id="resale" value="0"/>
         </form>
         <!--地址-s-->
         <div class="edit_gtfix shipping_div" id="addressDefault">
@@ -228,6 +229,56 @@
                         </div>
                     </div>
                 </div>
+                  <div class="invoice list7">
+                    <div class="myorder p">
+                        <div class="content30">
+                            <a class="remain" href="javascript:void(0);">
+                                <div class="order">
+                                    <div class="fl">
+                                        <span>是否转售</span>
+                                    </div>
+                                    <div class="fr z-toggle-btn">
+                                        <label class="z-toggle z-toggle-royal">
+                                            <input type="checkbox" value="0"/>
+                                            <div class="z-tarck">
+                                                <div class="z-handle">
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                	$(".z-tarck").click(function(){
+                		if($("#resale").val() == 0){
+                			$("#resale").val('1');
+                		}else{
+                			$("#resale").val('0');
+                		}
+                	});
+                </script>
+			  <div class="invoice list7">
+                    <div class="myorder p">
+                        <div class="content30">
+                            <a class="remain" href="javascript:void(0);">
+                                <div class="order">
+                                    <div class="fl">
+                                        <span>悦玩豆个数</span>
+                                        <p style="color:#232326">余额：{$user['happy_beans']}<i>个</i></p>
+                                    </div>
+                                    
+                                </div>
+                                <a href='/mobile/ad/home.html'> <div style="font-size:0.5rem " >购买此订单需消耗1%的悦玩豆 &nbsp<span style="color:red">购买悦玩豆</span></div></a>	
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+
+			
 
              <!--   
                 <div id="balance-li" class="invoice list7">
@@ -339,14 +390,14 @@
                             <a> ￥<span id="balance">0</span>元</a>
                         </div>
                     </div>
-                      <div class="p z-monry-cont">
+                     <!--  <div class="p z-monry-cont">
                         <div class="fl">
                          购买此订单需消耗悦玩豆：
                         </div>
                         <div class="fr">
                             <a><span id="happy_beans">20</span>个</a>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -1165,6 +1216,19 @@
                 }else{
 					$("#happy_beans").html(data.result.happy_beans);
                 	$('.submit_price a').removeClass("disable");
+                	if(data.result.user_happy_beans < data.result.happy_beans){
+                		/* layer.msg('领取收益需消耗'+data.result.happy_beans+'个悦玩豆', {
+  						  time: 0 //不自动关闭
+  						  ,btn: ['去购买', '暂不购买']
+  						  ,yes: function(index){
+  						    layer.close(index);
+  							window.location.href='/mobile/ad/home';
+  						  }
+  						});      */     
+  						
+                	    layer.open({icon: 2, content: '领取收益需消耗'+data.result.happy_beans+'个悦玩豆', time: 1});
+  						
+                	}
                     refresh_price(data);
                 }
             }
@@ -1223,6 +1287,9 @@
             dataType: "json",
             success: function (data) {
                 layer.closeAll();
+              /*   if(data.status == -1){
+                	layer.open({icon: 2, content: '领取收益需消耗'+data.result.happy_beans+'个悦玩豆', time: 1});
+                } */
                 if (data.status != 1) {
                     showErrorMsg(data.msg);  //执行有误
                     // 登录超时

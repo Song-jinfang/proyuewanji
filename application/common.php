@@ -1020,9 +1020,9 @@ function update_pay_status($order_sn,$ext=array())
                                         //查询上级最后一个订单的金额，进行烧伤处理
                                         $order_amount = getUserBurn($v,$order['order_amount']);
                                     }
-                                    if($order['order_consum_ywd'] == 0 && $order_amount > 0){
+                                 /*    if($order['order_consum_ywd'] == 0 && $order_amount > 0){
                                         $order_amount = $order_amount - $order['ywd_price'];
-                                    }
+                                    } */
                                     if($k == 1 || $k == 2){
                                         if((count($s) >=20 && $team_num >=300) || in_array($v,$arr)){
                                             $rela = ($vip_level_conf['vip_level_'.$k]/100) * $order_amount;
@@ -1053,7 +1053,7 @@ function update_pay_status($order_sn,$ext=array())
                 /*
                  * 根据悦玩豆ywd_price 消耗悦玩豆
                  */
-                if($order['order_consum_ywd']){//需要扣悦玩豆
+                if($order['order_consum_ywd'] == 0){//需要扣悦玩豆
                     lose_beans($order['user_id'],$order['ywd_price'],'购买商品消耗悦玩豆');
                 }
             }elseif($order['type'] == 2){//购买悦玩豆

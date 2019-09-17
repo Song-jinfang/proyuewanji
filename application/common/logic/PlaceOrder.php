@@ -49,6 +49,7 @@ class PlaceOrder
     private $preSell;
     private $type;
     private $join_t;
+    private $resale;
     /**
      * PlaceOrder constructor.
      * @param Pay $pay
@@ -251,8 +252,10 @@ class PlaceOrder
             'add_time' => time(), // 下单时间
             'type'=>$this->type,
             'join_t'=>$this->join_t,//是否参与t+7
-            'ywd_price'=>$this->pay->happy_beans_money,
-            'order_consum_ywd'=>$this->pay->order_consum_ywd
+            'ywd_price'=>$this->pay->happy_beans_money,//该订单消耗悦玩豆个数
+            'is_resale'=>$this->resale, //是否转售
+/*             'ywd_price'=>$this->pay->happy_beans_money,
+            'order_consum_ywd'=>$this->pay->order_consum_ywd */
         ];
         if($orderData["order_amount"] < 0){
             throw new TpshopException("订单入库", 0, ['status' => -8, 'msg' => '订单金额不能小于0', 'result' => '']);
@@ -477,6 +480,16 @@ class PlaceOrder
         $this->userAddress = $userAddress;
         return $this;
     }
+    
+    /**
+     * 添加转售到订单里面
+     */
+    public function setResale($resale){
+        
+        $this->resale = $resale;
+        return $this;
+    }
+    
     
     
     public function setShop($shop)
