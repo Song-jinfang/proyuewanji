@@ -350,6 +350,7 @@ class User extends MobileBase
             $this->ajaxReturn(['status'=>-1,'msg'=>'悦玩豆不足']);
         }
         if($dynamic_profit['dynamic_profit']){
+            accountLog($this->user_id,$dynamic_profit['dynamic_profit'],0,'领取分享收益',$order_id);
             withdrawal_balance_finance($this->user_id,$dynamic_profit['dynamic_profit'],'领取分享收益',0,2);
            $update =  M('users')->where('user_id='.$this->user_id)->update(['dynamic_profit'=>0]);
            if($update){

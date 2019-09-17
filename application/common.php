@@ -997,56 +997,54 @@ function update_pay_status($order_sn,$ext=array())
                         $pidArr = array_reverse(explode(',',$user['pid_list']));
                         unset($pidArr[0]);
                         $conf = M('config')->where('id >=172 and id <=177')->column('value','name');
-                        foreach($pidArr as $k=>$v){
-                            if($v){
-                                $pidCount = M('users')->where("first_leader ='$v'")->count();//查询每级用户的直属下级有几个
-                                $orderCount = M('order')->where('user_id='.$v.' and pay_status = 1')->count();//根据订单查询是否是有效用户
-                                $userBurn = M('users')->where("user_id = $v")->value('burn');  //$userBurn为1要进行烧伤   2针对部分用户不进行烧伤
-                                $rela = 0;
-                                if($k == 1 || $k == 2){
-                                     if($orderCount && ($pidCount >= 1 && $pidCount <=5)){
-                                    //if($orderCount && ($pidCount >= 1 && $pidCount <=2)){
-                                        $order_amount = $order['order_amount'];
-                                        if($userBurn == 1){
-                                            //查询上级最后一个订单的金额，进行烧伤
-                                            $order_amount = getUserBurn($v,$order['order_amount']);
+                        $vip_level_conf = M('config')->where('id >=192 and id <=197')->column('value','name');
+                        $arr = array();
+                        if(!empty($pidArr)){
+                            foreach($pidArr as $k=>$v){
+                                if($v){
+                                    $s = array();
+                                    $pidCount = M('users')->where("first_leader ='$v'")->column('user_id');
+                                    if(!empty($pidCount)){
+                                        foreach($pidCount as $k1=>$v1){
+                                            $p = M('order')->where('user_id = '.$v1.' and pay_status = 1 and type = 1')->count();
+                                            if($p>0){
+                                                $s[] = $v1;
+                                            }
                                         }
-                                        if($order['order_consum_ywd'] == 0){
-                                            $order_amount = $order_amount - $order['ywd_price'];
-                                        }
-                                        $rela = ($conf['level_'.$k]/100) * $order_amount;
                                     }
-                                }
-                                if($k == 3 || $k == 4){
-                                    
-                                    if(($pidCount > 6 && $pidCount < 19) && $orderCount){
-                                   // if(($pidCount >= 3 && $pidCount <= 4) && $orderCount){
-                                        $order_amount = $order['order_amount'];
-                                        if($userBurn == 1){
-                                            //查询上级最后一个订单的金额，进行烧伤
-                                            $order_amount = getUserBurn($v);
-                                        }
-                                        if($order['order_consum_ywd'] == 0){
-                                            $order_amount = $order_amount - $order['ywd_price'];
-                                        }
-                                        $rela = ($conf['level_'.$k]/100) * $order_amount;
+                                    $userBurn = M('users')->where("user_id = $v")->value('burn');  //$userBurn为1要进行烧伤   2针对部分用户不进行烧伤
+                                    $rela = 0;
+                                    $team_num = team_num($v);
+                                    $order_amount = $order['order_amount'];
+                                    if($userBurn == 1){
+                                        //查询上级最后一个订单的金额，进行烧伤处理
+                                        $order_amount = getUserBurn($v,$order['order_amount']);
                                     }
-                                }
-                                if($k == 5 || $k == 6){
-                                    if($pidCount >= 20 && $orderCount){
-                                        $order_amount = $order['order_amount'];
-                                        if($userBurn == 1){
-                                            //查询上级最后一个订单的金额，进行烧伤
-                                            $order_amount = getUserBurn($v);
-                                        }
-                                        if($order['order_consum_ywd'] == 0){
-                                            $order_amount = $order_amount - $order['ywd_price'];
-                                        }
-                                        $rela = ($conf['level_'.$k]/100) * $order_amount;
+                                    if($order['order_consum_ywd'] == 0 && $order_amount > 0){
+                                        $order_amount = $order_amount - $order['ywd_price'];
                                     }
-                                }
-                                if($rela){
-                                    dynamic_profit($v,$rela,'团队用户购买商品获得收益',$order['order_id'],3);
+                                    if($k == 1 || $k == 2){
+                                        if((count($s) >=20 && $team_num >=300) || in_array($v,$arr)){
+                                            $rela = ($vip_level_conf['vip_level_'.$k]/100) * $order_amount;
+                                        }else if(count($s) >= 1 && count($s) <=5){
+                                            $rela = ($conf['level_'.$k]/100) * $order_amount;
+                                        }
+                                    }
+                                    if($k == 3 || $k == 4){
+                                        if((count($s) >=20 && $team_num >=300) || in_array($v,$arr)){
+                                            $rela = ($vip_level_conf['vip_level_'.$k]/100) * $order_amount; //返额10 8 5 3 1 0.5
+                                        }else if(count($s) >= 6 && count($s) <=19){
+                                             $rela = ($conf['level_'.$k]/100) * $order_amount;//返额10 5 3 1 
+                                         }
+                                    }
+                                    if($k == 5 || $k == 6){//直推用户大于等于20，团队人数小于等于300
+                                        if((count($s) >=20 && $team_num >=300) || in_array($v,$arr)){
+                                            $rela = ($vip_level_conf['vip_level_'.$k]/100) * $order_amount;
+                                        }
+                                    }
+                                    if($rela >0){
+                                        dynamic_profit($v,$rela,'团队用户购买商品获得收益',$order['order_id'],3);
+                                    }
                                 }
                             }
                         }
@@ -1132,6 +1130,38 @@ function update_pay_status($order_sn,$ext=array())
             $wechat->sendTemplateMsgOnPaySuccess($order);
     }
 }
+/***获取团队总人数***/
+function team_num ($user_id){
+    $user_arr = Db::name('users')->where("find_in_set($user_id,pid_list)")->column('pid_list');
+    foreach ($user_arr as &$vo){
+        $vo = explode(',',$vo);
+    }
+    $user_id_arr = [];
+    foreach ($user_arr as $v){
+        $index_id = array_search($user_id,$v);
+        $user_id_arr[] = array_slice($v,$index_id + 1);
+    }
+    $user_id_where = [];
+    foreach ($user_id_arr as $i){
+        foreach ($i as $item){
+            $user_id_where[] = $item;
+        }
+    }
+    $user_id_where = array_unique($user_id_where);
+    //得到所有的下级，查询是否是有效用户
+    $s = array();
+    if(!empty($user_id_where)){
+        foreach($user_id_where as $k=>$v){
+            $p = M('order')->where('user_id = '.$v.' and pay_status = 1 and type = 1')->count();
+            if($p>0){
+                $s[] = $v;
+            }
+        }
+    }
+    return count($s);
+}
+
+
 
 function getUserBurn($uid,$order_amount){
     //查询上级最后一个订单的金额，进行烧伤

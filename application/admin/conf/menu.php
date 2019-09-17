@@ -157,6 +157,7 @@ return	array(
 			array('name'=>'充值记录','act'=>'recharge','op'=>'User'),
 			array('name'=>'提现申请','act'=>'withdrawals','op'=>'User'),
 			array('name'=>'提现设置','act'=>'cash','op'=>'System'),
+		    array('name'=>'汇款记录','act'=>'remittance','op'=>'User'),
 		)),
 		array('name' => '签到管理','child'=>array(
 			array('name'=>'签到记录','act'=>'signList','op'=>'User'),

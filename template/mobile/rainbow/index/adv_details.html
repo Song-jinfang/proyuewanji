@@ -18,9 +18,9 @@
 	<input type="hidden" id="order_id" name="order_id" value="{$order_id}"/>
 	<div class="detailsList">
 		<div class="list">
-			<p class="title">广告标题</p>
-			<div class="text">{$task_info.content}</div>
-		    <p class="title">广告详情</p>
+		    <p class="title">文案</p>
+		    <div class="text">{$task_info.description}</div>
+		     <p class="title">图文详情</p>
 		    <div class="text">
 		    <volist name="$task_info.thumb_img" id="v">
 		    	<img src="{$v}" style="margin-top:0.2rem">

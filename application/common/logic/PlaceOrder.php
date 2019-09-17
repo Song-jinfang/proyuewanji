@@ -477,6 +477,8 @@ class PlaceOrder
         $this->userAddress = $userAddress;
         return $this;
     }
+    
+    
     public function setShop($shop)
     {
         $this->shop = $shop;

@@ -231,10 +231,10 @@ class Cart extends MobileBase {
             $profit_cons_beans = M('config')->where("name='profit_cons_beans'")->value('value');//购买商品消耗1%悦豌豆 
             if ($_REQUEST['act'] == 'submit_order') {
                 $placeOrder = new PlaceOrder($pay);
-                if($goodInfo['join_t']){
+               /*  if($goodInfo['join_t']){
                     $placeOrder->setJoin_t($goodInfo['join_t']);
-                }
-                $placeOrder->setMobile($mobile)->setUserAddress($address)->setConsignee($consignee)->setInvoiceTitle($invoice_title)
+                } */
+                $placeOrder->setMobile($mobile)->setUserAddress($address)->setConsignee($consignee)->setInvoiceTitle($invoice_title)->setJoin_t('1')
                     ->setUserNote($user_note)->setTaxpayer($taxpayer)->setInvoiceDesc($invoice_desc)->setPayPsw($pay_pwd)->setTakeTime($take_time)->setType(1)->addNormalOrder();
                 $cartLogic->clear();
                 $order = $placeOrder->getOrder();
