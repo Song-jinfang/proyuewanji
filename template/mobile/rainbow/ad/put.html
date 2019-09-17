@@ -61,8 +61,8 @@
 			
 		
 		<div class="total">
-			<span id="ywd">消耗悦玩豆:0个</span>
-			<span id="total">总计:¥0.0</span>
+<!--			<span id="ywd">消耗悦玩豆:0个</span>-->
+			<span id="total">消耗悦玩豆:0个</span>
 			<div class="payBtn">去结算</div>
 		</div>
 		<div class="pop" style="display: none">
@@ -244,8 +244,7 @@
 					processData:false,
 					success:function(res){
 						if(res.code == 1){
-							// alert(res.msg);
-							window.location.href = "/index.php?m=Mobile&c=Cart&a=cart4&order_id=" + res.data.order_id;
+                            layer.msg(res.msg);
 						}else{
 							layer.msg(res.msg);
 						}
@@ -256,25 +255,17 @@
 				});
 			});
 		});
-	$(function(){
-		$("#total").bind('DOMNodeInserted',function(){
-			var total = $("#total").html();
-			var profit_cons_beans = $("#profit_cons_beans").val();
-			var num = Math.ceil(parseInt(total.substring(1).substring(1).substring(1).substring(1)) * (profit_cons_beans / 100));
-			document.getElementById("ywd").innerHTML = "消耗悦玩豆:" + num + "个";
-		});
-	});
 	$("#pic").click(function(){
 		var number = $("#number").html();
 		var pic_price = $("#pic_price").val();
 		var total = number * pic_price;
-		document.getElementById("total").innerHTML = "总计:￥" + total + ".0";
+		document.getElementById("total").innerHTML = "消耗悦玩豆:" + total + "个";
 	});
 	$("#video").click(function(){
 		var number = $("#number").html();
 		var video_price = $("#video_price").val();
 		var total = number * video_price;
-		document.getElementById("total").innerHTML = "总计:￥" + total + ".0";
+		document.getElementById("total").innerHTML = "消耗悦玩豆:" + total + "个";
 	});
 	$("#dec").click(function(){
 		var number = $("#number").html();
@@ -293,7 +284,7 @@
 		}else{
 			total = number * video_price;
 		}
-		document.getElementById("total").innerHTML = "总计:￥" + total + ".0";
+		document.getElementById("total").innerHTML = "消耗悦玩豆:" + total + "个";
 	});
 		$("#inc").click(function(){
 			var number = $("#number").html();
@@ -312,7 +303,7 @@
 			}else{
 				total = number * video_price;
 			}
-			document.getElementById("total").innerHTML = "总计:￥" + total + ".0";
+			document.getElementById("total").innerHTML = "消耗悦玩豆:" + total + "个";
 		});
 	</script>
 </html>

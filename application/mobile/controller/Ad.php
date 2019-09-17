@@ -64,44 +64,20 @@ class Ad extends MobileBase
             $adv_price1 = M('config')->where(['name' => 'adv_video_price'])->value('value');
             $profit_cons_beans = M('config')->where(['name' => 'profit_cons_beans'])->value('value');
             if($type == 1){
-                $total_price = $adv_price * $number;
-                $unit_price = $adv_price;
-                $price = $adv_price;
+                $ywd_num = $adv_price * $number;
             }else{
-                $total_price = $adv_price1 * $number;
-                $unit_price = $adv_price1;
-                $price = $adv_price1;
+                $ywd_num = $adv_price1 * $number;
             }
             $have_price  = M('users')->where(['user_id' => $uid])->value('happy_beans');
-            $ywd_num  = ceil($total_price * ($profit_cons_beans/100));
-            $total_price += $ywd_num;
-            $total_amount = $total_price;
-//            if($have_price < $total_price){
-//                return json([
-//                    'code'  =>  -1,
-//                    'msg'   =>  '余额不足',
-//                    'data'  =>  [],
-//                ]);
-//            }
+            if($have_price < $ywd_num){
+                return json([
+                    'code'  =>  -1,
+                    'msg'   =>  '悦玩豆不足，请到交易大厅购买',
+                    'data'  =>  [],
+                ]);
+            }
             Db::startTrans();
             try{
-                if($have_price < $ywd_num){
-                    $ywd_number = $have_price;
-                    $total_price = $total_price - $have_price;
-                }else{
-                    $ywd_number = $ywd_num;
-                    $total_price -= $ywd_num;
-                }
-
-                $order['order_sn'] = date('YmdHis',time()) . rand(1000,9999);
-                $order['user_id']  = $uid;
-                $order['total_amount'] = $total_amount;
-                $order['ywd_price'] = $ywd_number;
-                $order['order_amount'] = $total_price;
-                $order['add_time'] = time();
-                $order['type'] = 3;
-                $order_id = D('order')->add($order);
-
                 $response['type'] = 2;
                 $response['status'] = 0;
                 $response['add_time'] = time();
@@ -110,28 +86,22 @@ class Ad extends MobileBase
                 $response['thumb_img'] = $file_path;
                 $response['total_num'] = $number;
                 $response['uid'] = $uid;
-                $response['order_id'] = $order_id;
                 $response['identity'] = 2;
-                $response['unit_price'] = $unit_price;
                 $response['adv_type'] = $type;
-                $response['price'] = $price;
                 D('task')->add($response);
 
-//                $log['user_id'] = $uid;
-//                $log['user_money'] = '-' . $ywd_number;
-//                $log['add_time'] = time();
-//                $log['desc']    = "消耗悦玩豆";
-//                $log['type']    = 1;
-//                D('adv_log')->add($log);
+                $log['user_id'] = $uid;
+                $log['user_money'] = '-' . $ywd_num;
+                $log['add_time'] = time();
+                $log['desc']    = "消耗悦玩豆";
+                $log['type']    = 1;
+                D('adv_log')->add($log);
 
                 Db::commit();
                 return json([
                     'code'  =>  1,
                     'msg'   =>  '购买成功',
-                    'data'  =>  [
-                        'order_id'  =>  $order_id,
-                        'http'      =>  $_SERVER['SERVER_NAME']
-                    ],
+                    'data'  =>  [],
                 ]);
             }catch (Exception $exception){
                 Db::rollback();
@@ -657,7 +627,7 @@ class Ad extends MobileBase
         $data = Db::name('sell')->alias('a')
                 ->join('users b','a.user_id = b.user_id')
                 ->where('surplus_num','gt',0)
-                ->order('a.add_time','desc')
+                ->order('a.add_time','asc')
                 ->field('a.*,b.nickname,b.head_pic')
                 ->select();
         foreach ($data as &$vo){

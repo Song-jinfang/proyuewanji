@@ -39,7 +39,11 @@
                     <td>{$vo.surplus_num}</td>
                     <td>{$vo.available_amount}</td>
                     <td>{$vo.count_number}</td>
-                    <td><input type="button" id="button" onclick="revoke({$vo.sell_id})" style="background-color: green;color:#fff" value="撤销"></td>
+                    <td>
+                          <neq name="$vo.surplus_num" value="0">
+                            <input type="button" id="button" onclick="revoke({$vo.sell_id})" style="background-color: green;color:#fff" value="撤销">
+                          </neq>
+                    </td>
                 </tr>
             </volist>
         </table>
