@@ -103,9 +103,15 @@ class Index extends MobileBase {
         if($coupon){
             $is_coupon =2;
         }
+        $status = 1;
+        $order_id = Db::name('order')->where(['user_id' => $user_id,'pay_status' => 1])->value('order_id');
+        if($order_id){
+            $status = 2;
+        }
         $action = request()->action();
         $controller = request()->controller();
         $data = Db::name('home_class')->select();
+        $this->assign('status',$status);
         $this->assign('is_coupon',$is_coupon);
         $this->assign('action',$action);
         $this->assign('data',$data);
@@ -152,7 +158,7 @@ class Index extends MobileBase {
      */
     
     public function test_order(){
-        update_pay_status('201909171659504379');
+        update_pay_status('201909191553474602');
     }
     
     public function test(){

@@ -34,8 +34,36 @@
                     </div>
                 </div>
             </foreach>
+           		<if condition="$order_goods['is_resale'] eq 1">
+	            	<div class="shopprice p" style="margin-top:1rem;font-size:0.68rem;">
+	                   <a class="compj" onclick="is_resale({$order_goods['order_id']})" style="background-color:#028417;color:#fff">确认转售</a>
+	                </div>
+                </if>
+            
         </div>
     </div>
 </div>
 </body>
 </html>
+<script src="__JS__/layer.js"  type="text/javascript" ></script>
+<script>
+	function is_resale(order_id){
+		layer.msg('确认该操作吗？', {
+			  time: 0 //不自动关闭
+			  ,btn: ['确定', '取消']
+			  ,yes: function(index){
+				   	 layer.close(index);
+					$.post('/mobile/order/resale',{'order_id':order_id},function(data){
+						if(data.status == 1){
+							layer.msg('领取成功');
+							setTimeout(function(){
+								window.location.href = data.url;
+								
+							},'2000');
+						}
+						
+					},'json');
+			  }
+		});
+	}
+</script>

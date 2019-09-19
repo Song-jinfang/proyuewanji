@@ -78,13 +78,35 @@ class User extends MobileBase
         );
         $this->assign('order_status_coment', $order_status_coment);
     }
+    
+    public function get_resale(){
+        $order_id =  I('post.order_id');
+        if($order_id){
+            $goods_resale = M('config')->where("name='goods_resale'")->value('value');
+            $orderInfo = M('order')->field('order_amount,is_resale')->where('order_id = '.$order_id)->find();
+            if($orderInfo['is_resale'] == 2){
+                $this->ajaxreturn(['status'=>1,'msg'=>'已经领取过了','url'=>'/mobile/User/earnings']);
+            }
+            if($orderInfo['order_amount'] > 0){
+                $money = $orderInfo['order_amount'] * ($goods_resale/100);
+                accountLog($this->user_id,$money,0,'领取订单转售收益');
+                withdrawal_balance_finance($this->user_id,$money,'领取订单转售收益',$order_id,3);
+                $update = M('order')->where('order_id='.$order_id)->update(['is_resale'=>2]);
+                if($update){
+                    $this->ajaxreturn(['status'=>1,'msg'=>'领取成功','url'=>'/mobile/User/earnings']);
+                }
+            }
+        }
+    }
+    
     /*
      * 总收益
      */
     public function earnings(){
         $param = I('get.');
         $p = $param['p']?$param['p']:'1';
-        $orderList = M('order')->field("order_id,order_amount,order_point,order_sn,FROM_UNIXTIME(add_time,'%Y.%m.%d') add_time,seven_days,fourteen_days,fifteen_days,fifteen_status,twenty_eight_days,seven_status,fourteen_status")
+        $orderList = M('order')->field("order_id,order_amount,order_point,order_sn,FROM_UNIXTIME(add_time,'%Y.%m.%d') add_time,seven_days,
+                    fourteen_days,fifteen_days,fifteen_status,twenty_eight_days,seven_status,fourteen_status,is_resale,order_status")
         ->where('user_id = '.$this->user_id .' and pay_status = 1 and type = 1 and join_t = 1')->order('order_id','desc')->select();
         $time = time();
         $confBeans = M('config')->column('value','name');
