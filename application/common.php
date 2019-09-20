@@ -578,7 +578,7 @@ function accountLog($user_id, $user_money = 0,$pay_points = 0, $desc = '',$distr
     $update_data = array(
         'user_money'        => ['exp','user_money+'.$user_money],
         'pay_points'        => ['exp','pay_points+'.$pay_points],
-        'distribut_money'   => ['exp','distribut_money+'.$distribut_money],
+       /*  'distribut_money'   => ['exp','distribut_money+'.$distribut_money], */
     );
     if(($user_money+$pay_points+$distribut_money) == 0)return false;
     $update = Db::name('users')->where("user_id = $user_id")->save($update_data);
@@ -657,7 +657,7 @@ function withdrawal_balance_finance($user_id,$money,$desc = '',$order_id=0,$type
         'user_money'    => '-'.$orderBeansProfit,
         'add_time'   => time(),
         'order_id'=>$order_id,
-        'desc' =>'领取任务收益消耗能量豆',
+        'desc' =>'领取收益消耗悦玩豆',
         'type'=>1
     );
     M('adv_log')->add($adv_log);
@@ -1231,7 +1231,16 @@ function confirm_order($id,$user_id = 0){
         $row = M('order')->where(array('order_id'=>$id))->save($data);
         if(!$row)
             return array('status'=>-3,'msg'=>'操作失败');
-            
+           
+     /*    if($order['is_resale']){
+            $goods_resale = M('config')->where("name='goods_resale'")->value('value');
+            if($order['order_amount'] > 0){
+                $money = $order['order_amount'] * ($goods_resale/100);
+                dynamic_profit($user_id,$money,'转售商品成功获得'.$money.'个经验值',$id,4);
+                    //accountLog($this->user_id,$money,0,'商品转售获得订单金额'.$money);
+                   // $this->ajaxReturn(['status'=>1,'msg'=>'转售成功，已退还'.$money.'到余额','url'=>'/Mobile/Order/comment']);
+            }
+        }     */
             // 商品待评价提醒
             $order_goods = M('order_goods')->field('goods_id,goods_name,rec_id')->where(["order_id" => $id])->find();
             $goods = M('goods')->where(["goods_id" => $order_goods['goods_id']])->field('original_img')->find();

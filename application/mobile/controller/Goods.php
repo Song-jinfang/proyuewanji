@@ -600,7 +600,7 @@ class Goods extends MobileBase
     //每日新品
     public function newGoodsList()
     {
-        $goods_list = Db::name('goods')->order('last_update','desc')->limit(20)->select();
+        $goods_list = Db::name('goods')->where('is_on_sale = 1')->order('last_update','desc')->limit(20)->select();
         $this->assign('goods_list',$goods_list);
         return $this->fetch();
     }

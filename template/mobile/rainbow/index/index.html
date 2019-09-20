@@ -42,11 +42,14 @@
 		<div class="swiper-container swiper-containerB">
 	        <div class="swiper-wrapper">
 	            <div class="swiper-slide">
-	            	<volist name="data" id="vo">
-	            	<a href="{$vo.link}">
-	            		<img src="{$vo.pic_address}">
-	            		<span>{$vo.class_name}</span>
-	            	</a>
+	            	<volist name="data" id="vo" key="k">
+					   <if condition="($status == 2) AND ($k == 6)">
+					      <else/>
+					      <a href="{$vo.link}">
+					         <img src="{$vo.pic_address}">
+					         <span>{$vo.class_name}</span>
+					      </a>
+					   </if>
 					</volist>
 	            </div>
 <!-- 	            <div class="swiper-slide">

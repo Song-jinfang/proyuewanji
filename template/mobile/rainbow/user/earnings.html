@@ -6,6 +6,7 @@
 		<title></title>
 		<link rel="stylesheet" href="__CSS__/earnings.css" />
 		<script type="text/javascript" src="__JS__/jquery-3.2.1.min.js" ></script>
+				<script src="__JS__/layer.js"  type="text/javascript" ></script>
 	</head>
 	<body>
 	<div class="header">
@@ -97,10 +98,26 @@
 							</div>
 						</div>
 					</div>
+					<if condition="$v.is_resale gt 0">
+						<div class="scoreDiv">
+							<p class="scoreTitle">领取转售收益 <b style="color:#ff470e"></b><span style="color:#b8b9b8">商品转售后可以获得10%的收益</span></p>
+							<div class="dayBox1" style="margin-top:0.15rem">
+								<div class="div1" style="width:50%;">
+									<font></font>
+										<if condition="$v.is_resale eq 1 and $v.order_status eq 2">
+											<a onclick="get_resale('{$v.order_id}')" style="text-decoration:none"><span class="btn btnGreen">领取收益</span></a>
+										<elseif  condition="$v.is_resale eq 2" >
+											<a style="text-decoration:none"><span class="btn btnGray">已领取</span></a>
+										<elseif  condition="$v.is_resale eq 1" >
+											<a style="text-decoration:none"><span class="btn btnGray">确认收货后领取</span></a>
+										</if>
+								</div>
+							</div>
+						</div>
+					</if>
 				</div>
 			</div>
 		</volist>
-			<script src="__JS__/layer.js"  type="text/javascript" ></script>
 			<script>
 				function get_money_to_balance(order_id,day){
 					layer.msg('领取收益需消耗1%的积分', {
@@ -122,6 +139,27 @@
 						  }
 					});
 				}
+				//领取转售收益
+				function get_resale(order_id){
+					layer.msg('领取收益需消耗1%的悦玩豆', {
+						  time: 0 //不自动关闭
+						  ,btn: ['确定', '取消']
+						  ,yes: function(index){
+							    layer.close(index);
+								$.post('/mobile/user/get_resale',{'order_id':order_id},function(data){
+									if(data.status == 1){
+										layer.msg(data.msg);
+										setTimeout(function(){
+											window.location.href=data.url;
+										},2000)
+									}
+									
+								},'json');
+						  }
+					});
+					
+				}
+				
 				/**订单过期，领取等值的悦玩豆**/
 				function get_money_to_beans(order_id){
 					$.post('get_beans',{'order_id':order_id,'type':type},function(data){
@@ -160,7 +198,7 @@
 			</script>
 		</div>
 		<div class="text">
-			<p><b>释:商品返现规则：</b><br/>从下单日期开始，第七天可返商品消费价格的20% 第14天可返30%第15-28天可返50%+(15%-28%)</p>
+			<p><b>释:商品返现规则：</b><br/>从下单日期开始，第七天补贴商品消费价格的20% 第14天补贴30%第15-28天补贴50%+(15%-28%)</p>
 			<p>做任务送积分是送您当前订单金额的1%，积分可当现金抵用卷使用 规则：订单生成那天起 1—28天 当日做了任务才有当日积分 积分是累计到第28天24个小时以内才能提用</p>
 		</div>
 	</body>

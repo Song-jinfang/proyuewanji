@@ -53,7 +53,7 @@
             <div style="text-align: left; width: 150px;">{$list.invoice_title}</div>
         </td>
          <td align="left"  axis="col1" align="center">
-            <div style="text-align: left; width: 150px;"><if condition="$list['is_resale'] eq 1"><b style="color:red">转售</b><else/>不转售</if></div>
+            <div style="text-align: left; width: 150px;"><if condition="$list['is_resale'] eq 1 || $list['is_resale'] eq 2"><b style="color:red">转售</b><else/>不转售</if></div>
         </td>
 		<td style="width: 100%;">
             <div style="text-align: left; ">
