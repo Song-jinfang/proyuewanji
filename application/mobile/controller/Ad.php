@@ -834,6 +834,9 @@ class Ad extends MobileBase
                 ->where('user_id','in',$user_id_arr)
                 ->field('nickname,mobile,reg_time')
                 ->select();
+            foreach ($data as &$datum){
+                $datum['mobile'] = substr_replace($datum['mobile'], '****', 3, 4);
+            }
         }elseif ($p == 3){
             $user_arr = Db::name('users')->where("find_in_set($user_id,pid_list)")->column('pid_list');
             foreach ($user_arr as &$vo){
