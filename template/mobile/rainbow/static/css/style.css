@@ -1756,12 +1756,12 @@ input:-ms-input-placeholder {
 }
 .bankhearder {
 	background-image:url(../images/zjgl.jpg);
-	height:11.73333rem
+	height:5.73333rem
 }
 .bankhearder .hh {
 	color:white;
 	text-align:center;
-	padding-top:3.2rem
+	padding-top:1.2rem
 }
 .bankhearder .hh h2 {
 	font-size:.64rem;

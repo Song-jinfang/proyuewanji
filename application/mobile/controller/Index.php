@@ -208,7 +208,7 @@ class Index extends MobileBase {
         $id = $param['id'];
         $order_id = $param['order_id'];
         if($id){
-            $taskInfo = M('task')->field("id,desc,content,thumb_img,price,time_len")->where('id='.$id)->find();
+            $taskInfo = M('task')->field("id,desc,content,thumb_img,price,time_len,description")->where('id='.$id)->find();
             if($taskInfo['thumb_img']){
                 $taskInfo['thumb_img'] = explode(',',$taskInfo['thumb_img']);
             }

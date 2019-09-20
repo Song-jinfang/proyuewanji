@@ -1,32 +1,9 @@
 <include file="public/header" title="资金管理" body="g4"/>
-<div class="myhearder bankhearder">
-    <div class="hh">
+<include file="public/header_nav" title="我的余额"  href="{:U('User/index')}"/>
+<div class="myhearder bankhearder" style="height:5rem">
+    <div class="hh" style="padding-top:1.2rem">
         <h2>可用余额</h2>
         <h1>{$user['user_money']}</h1>
-    </div>
-    <div class="scgz">
-        <ul>
-            <li>
-                <a href="{:U('Mobile/User/recharge')}">
-                    <img src="__STATIC__/images/cz.png"/>
-                    <p>账户充值</p>
-                </a>
-            </li>
-            <li>
-                <a href="{:U('Mobile/User/withdrawals')}">
-                    <img src="__STATIC__/images/tx.png"/>
-                    <p>申请提现</p>
-                </a>
-            </li>
-            <if condition="$tpshop_config['basic_rechargevip_on_off'] eq 1">
-                <li>
-                    <a href="{:U('Mobile/User/rechargevip')}">
-                        <img src="__STATIC__/images/tx.png"/>
-                        <p> VIP充值</p>
-                    </a>
-                </li>
-            </if>
-        </ul>
     </div>
 </div>
 <div class="floor my p">
@@ -84,10 +61,10 @@
             </div>
             <div class="myorder p">
                 <div class="content30">
-                    <a href="{:U('Mobile/User/recharge_list')}">
+                    <a href="{:U('/Mobile/User/withdrawals')}">
                         <div class="order">
                             <div class="fl">
-                                <span>充值记录</span>
+                                <span>立即提现</span>
                             </div>
                             <div class="fr">
                                 <i class="Mright"></i>
