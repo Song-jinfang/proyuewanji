@@ -55,7 +55,7 @@
     <!--排序按钮-e-->
 
     <!--商品详情s-->
-    <div id="goods_list">
+    <div id="goods_list" class="addimgchan">
         <empty name="goods_list">
             <p class="goods_title" id="goods_title" style="line-height: 2rem;text-align: center;margin-top: 0.64rem; font-size:0.64rem">抱歉暂时没有相关结果,换个筛选条件试试吧！</p>
         <else />
@@ -684,12 +684,12 @@ $(function(){
             mright.hasClass('Mright') ? input.attr('checked',true) : input.attr('checked',false);
         })
 
-        //切换商品排列样式
+    /*     //切换商品排列样式
         $('.listorimg').click(function(){
             $(this).toggleClass('orimg');
             $('#goods_list').toggleClass('addimgchan');
             /*$('.orderlistshpop').toggleClass('addimgchan');*/
-        })
+        }) */
     })
 
     $(document).on("click",".add_cart",function(e){

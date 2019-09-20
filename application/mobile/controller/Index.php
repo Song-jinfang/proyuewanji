@@ -60,7 +60,7 @@ class Index extends MobileBase {
         $this->assign('thems',$thems);
       //  $this->assign('hot_goods',$hot_goods);
         /**商品精选**/
-        $new_goods = M('goods')->field('goods_id,original_img,shop_price,market_price,goods_name,sales_sum')->where("is_new=1 and is_on_sale=1")->order('sort DESC')->limit(10)->cache(true,TPSHOP_CACHE_TIME)->select();//
+        $new_goods = M('goods')->field('goods_id,original_img,shop_price,market_price,goods_name,sales_sum')->where("is_new=1 and is_on_sale=1")->order('sort DESC')->limit(40)->cache(true,TPSHOP_CACHE_TIME)->select();//
         
         $this->assign('new_goods',$new_goods);
         $goodsCategory = M('goods_category')->field('id,adv_id')->where('is_hot=1')->select();

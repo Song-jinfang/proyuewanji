@@ -261,28 +261,16 @@ class User extends MobileBase
         $order_id = I('post.order_id');
         $day_mark = I('post.day');
         $start_time = strtotime(date('Y-m-d'));
-        $orderInfo = M('order')->field('order_amount,can_receive')->where('order_id='.$order_id)
+        $orderInfo = M('order')->field('order_amount,can_receive,order_status')->where('order_id='.$order_id)
         ->find();
-         if($day_mark == 'fifteen'){//如果为15-28天的话查询当天有没有订单生成
-             $end_time = $orderInfo['can_receive']+strtotime('+1 day');//下单最晚的时间不能超过该时间点，超过则订单失效
-             if(time() > $end_time){
-                 $this->ajaxReturn(
-                     array(
-                         'status'=>1,
-                         'msg'=>'您在规定的时间里面没有及时下单，此收益和广告收益已失效',
-                         'url'=>'/Mobile/User/earnings'
-                     ));
-                 M('order')->where('order_id = '.$order_id)->update(['fifteen_status'=>3]);
-             }
-             $order =  M('order')->field('order_amount')->where('user_id = '.$this->user_id .' and add_time >'.$orderInfo['can_receive'].' and add_time<'.$end_time.' pay_status = 1')->find();
-            if($orderInfo['order_amount'] >$order['order_amount']){
-                $this->ajaxReturn(
-                    array(
-                        'status'=>-1,
-                        'msg'=>'在当日24点之前购买大于等于此订单金额才能提取',
-                        'url'=>'/Mobile/User/earnings'
-                    ));
-            }
+        if($orderInfo['order_status'] < 2){
+            $this->ajaxReturn(
+                array(
+                    'status'=>1,
+                    'msg'=>'确认收货后才能领取',
+                    'url'=>'/Mobile/Order/order_detail/id/'.$order_id
+                ));
+            
         }
         
         $count =  M('withdrawal_balance')->where('order_id='.$order_id.' and add_time >'.$start_time)->count();
@@ -294,6 +282,27 @@ class User extends MobileBase
                     'url'=>'/Mobile/User/earnings'
                     
                 ));
+        }
+        if($day_mark == 'fifteen'){//如果为15-28天的话查询当天有没有订单生成
+            $end_time = $orderInfo['can_receive']+strtotime('+1 day');//下单最晚的时间不能超过该时间点，超过则订单失效
+            if(time() > $end_time){
+                $this->ajaxReturn(
+                    array(
+                        'status'=>1,
+                        'msg'=>'您在规定的时间里面没有及时下单，此收益和广告收益已失效',
+                        'url'=>'/Mobile/User/earnings'
+                    ));
+                M('order')->where('order_id = '.$order_id)->update(['fifteen_status'=>3]);
+            }
+            $order =  M('order')->field('order_amount')->where('user_id = '.$this->user_id .' and add_time >'.$orderInfo['can_receive'].' and add_time<'.$end_time.' pay_status = 1')->find();
+            if($orderInfo['order_amount'] >$order['order_amount']){
+                $this->ajaxReturn(
+                    array(
+                        'status'=>-1,
+                        'msg'=>'在当日24点之前购买大于等于此订单金额才能提取',
+                        'url'=>'/Mobile/User/earnings'
+                    ));
+            }
         }
         $profit_status = $day_mark.'_status';
         $day_mark = $day_mark.'_profit';
@@ -315,7 +324,7 @@ class User extends MobileBase
                 'msg'=>'已领取'.$orderProfit.'元',
                 'url'=>'/Mobile/User/earnings'
             )
-        );
+            );
     }
     
     //订单过期领取悦玩豆
