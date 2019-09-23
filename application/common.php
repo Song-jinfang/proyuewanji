@@ -1844,8 +1844,8 @@ function orderExresperMent($order_info = array(),$des='',$order_id=''){
 //快递100--实时查询
 function synquery($com,$num)
 {
-    $key = 'ACJaKTSA3111';						//客户授权key
-    $customer = '4F0B8AA57CDA9F72D6E58198F1EDC0F0';					//查询公司编号
+    $key = 'rLMfyfsB6468';						//客户授权key
+    $customer = '4E8766268F989BF30F305A1CBB4EC1C1';					//查询公司编号
     $param = array (
         'com' => $com,			//快递公司编码
         'num' => $num,	//快递单号

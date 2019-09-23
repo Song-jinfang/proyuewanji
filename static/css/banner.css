@@ -79,7 +79,7 @@
 	.link{
 		width: 1.04rem;
 		height: 0.43rem;
-		background: #007f15;
+		/* background: #007f15; */
 		display: flex;
 		display: -webkit-flex;
 		justify-content: center;

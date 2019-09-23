@@ -37,7 +37,7 @@
 	var s=0;
 	var task_id = $("#task_id").val();
 	var order_id = $("#order_id").val();
-		$.post('/mobile/index/is_show',{'task_id':task_id},function(data){
+		$.post('/mobile/index/is_show',{'task_id':task_id,'order_id':order_id},function(data){
 			if(data.status == 1){
 				s = 1;//给全局变量赋值
 				var speed_time = $("#time_len").val() * 1000;

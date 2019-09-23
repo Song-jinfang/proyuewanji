@@ -19,7 +19,7 @@
 							<p class="total">总条数：{$v.total_num}条</p>
 							<p class="surplus">剩余：<font>{$v.num}条</font></p>
 							<p class="time">发布时间:{$v.add_time}</p>
-							<a href="/Mobile/index/adv_details/id/{$v.id}/order_id/{$order_id}" class="link">浏览</a>
+							<a href="/Mobile/index/adv_details/id/{$v.id}/order_id/{$order_id}" class="link" <if condition="$v.is_browse gt 0">style="background: #ccc"<else/>style="background: #007f15"</if>>浏览</a>
 						</li>
 				</volist>
 			</ul>

@@ -193,8 +193,15 @@ class Index extends MobileBase {
         $task_list = M('task')->alias('a')->field("a.id,a.desc,a.price,FROM_UNIXTIME(a.add_time,'%Y-%m-%d') add_time,a.total_num,a.num,b.head_pic")
                     ->join('users b','a.uid = b.user_id','left')->where('a.status = 1')->select();
         if(!empty($task_list)){
+            $time = strtotime(date('Y-m-d'));
+            $where = ' 1 = 1';
             foreach($task_list as $k=>$v){
+                if($order_id){
+                    $where = ' (order_id='.$order_id .' or task_id = '.$v['id'].')';
+                }
+                $is_browse = M('user_task')->where('add_time >'.$time.' and task_id = '.$v['id'])->where($where)->count();
                 $task_list[$k]['num'] = $v['total_num'] - $v['num'];
+                $task_list[$k]['is_browse'] = $is_browse;//大于0说明已经浏览过了，
             }
         }
         $this->assign('task_list',$task_list);
@@ -223,8 +230,14 @@ class Index extends MobileBase {
     
     public function is_show(){
         $task_id = I('post.task_id');
+        $order_id = I('post.order_id');
         $time = strtotime(date('Y-m-d'));
-        $task_count = M('user_task')->where('add_time > '.$time.' and user_id='.$this->user['user_id'].' and  task_id= '.$task_id)->count();
+        $where = ' 1 = 1';
+        if($order_id){
+            $where = ' (order_id='.$order_id .' or task_id = '.$task_id.')';
+        }
+        $task_count = M('user_task')->where('add_time > '.$time.' and user_id='.$this->user['user_id'])
+                       ->where($where)->count();
         if($task_count > 0){
             $this->ajaxReturn(['status' => -1, 'msg' => '已经浏览过了']);
         }else{
