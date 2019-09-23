@@ -578,7 +578,7 @@ function accountLog($user_id, $user_money = 0,$pay_points = 0, $desc = '',$distr
     $update_data = array(
         'user_money'        => ['exp','user_money+'.$user_money],
         'pay_points'        => ['exp','pay_points+'.$pay_points],
-       /*  'distribut_money'   => ['exp','distribut_money+'.$distribut_money], */
+        'distribut_money'   => ['exp','distribut_money+'.$distribut_money],
     );
     if(($user_money+$pay_points+$distribut_money) == 0)return false;
     $update = Db::name('users')->where("user_id = $user_id")->save($update_data);
@@ -657,7 +657,7 @@ function withdrawal_balance_finance($user_id,$money,$desc = '',$order_id=0,$type
         'user_money'    => '-'.$orderBeansProfit,
         'add_time'   => time(),
         'order_id'=>$order_id,
-        'desc' =>'领取收益消耗悦玩豆',
+        'desc' =>'领取任务收益消耗能量豆',
         'type'=>1
     );
     M('adv_log')->add($adv_log);
@@ -1231,16 +1231,7 @@ function confirm_order($id,$user_id = 0){
         $row = M('order')->where(array('order_id'=>$id))->save($data);
         if(!$row)
             return array('status'=>-3,'msg'=>'操作失败');
-           
-     /*    if($order['is_resale']){
-            $goods_resale = M('config')->where("name='goods_resale'")->value('value');
-            if($order['order_amount'] > 0){
-                $money = $order['order_amount'] * ($goods_resale/100);
-                dynamic_profit($user_id,$money,'转售商品成功获得'.$money.'个经验值',$id,4);
-                    //accountLog($this->user_id,$money,0,'商品转售获得订单金额'.$money);
-                   // $this->ajaxReturn(['status'=>1,'msg'=>'转售成功，已退还'.$money.'到余额','url'=>'/Mobile/Order/comment']);
-            }
-        }     */
+            
             // 商品待评价提醒
             $order_goods = M('order_goods')->field('goods_id,goods_name,rec_id')->where(["order_id" => $id])->find();
             $goods = M('goods')->where(["goods_id" => $order_goods['goods_id']])->field('original_img')->find();
@@ -1848,4 +1839,64 @@ function orderExresperMent($order_info = array(),$des='',$order_id=''){
                         return $result;
                     }
                     
+}
+
+//快递100--实时查询
+function synquery($com,$num)
+{
+    $key = 'ACJaKTSA3111';						//客户授权key
+    $customer = '4F0B8AA57CDA9F72D6E58198F1EDC0F0';					//查询公司编号
+    $param = array (
+        'com' => $com,			//快递公司编码
+        'num' => $num,	//快递单号
+        'phone' => '',				//手机号
+        'from' => '',				//出发地城市
+        'to' => '',					//目的地城市
+        'resultv2' => '1'			//开启行政区域解析
+    );
+    //请求参数
+    $post_data = array();
+    $post_data["customer"] = $customer;
+    $post_data["param"] = json_encode($param);
+    $sign = md5($post_data["param"].$key.$post_data["customer"]);
+    $post_data["sign"] = strtoupper($sign);
+
+    $url = 'http://poll.kuaidi100.com/poll/query.do';	//实时查询请求地址
+
+    $params = "";
+    foreach ($post_data as $k=>$v) {
+        $params .= "$k=".urlencode($v)."&";		//默认UTF-8编码格式
+    }
+    $post_data = substr($params, 0, -1);
+    //发送post请求
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    $result = curl_exec($ch);
+    $data = str_replace("\"", '"', $result );
+    return json_decode($data);
+}
+
+
+/**
+ * 对象 转 数组
+ *
+ * @param object $obj 对象
+ * @return array
+ */
+function object_to_array($obj) {
+    $obj = (array)$obj;
+    foreach ($obj as $k => $v) {
+        if (gettype($v) == 'resource') {
+            return;
+        }
+        if (gettype($v) == 'object' || gettype($v) == 'array') {
+            $obj[$k] = (array)object_to_array($v);
+        }
+    }
+
+    return $obj;
 }

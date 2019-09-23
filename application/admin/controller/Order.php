@@ -1567,4 +1567,24 @@ exit("请联系TPshop官网客服购买高级版支持此功能");
         exit();
     }
 
+    public function save_waybill_number()
+    {
+        $rec_id = request()->post('rec_id');
+        $company = request()->post('company');
+        $waybill_number = request()->post('waybill_number');
+        $res = Db::name('order_goods')->where(['rec_id' => $rec_id])->update(['company' => $company,'waybill_number' => $waybill_number]);
+        if($res===false){
+            return json([
+                'code'  => -1,
+                'msg'   => '网络异常，请稍后再试',
+                'data'  => []
+            ]);
+        }else{
+            return json([
+                'code'  =>  1,
+                'msg'   =>  '保存成功',
+                'data'  =>  []
+            ]);
+        }
+    }
 }

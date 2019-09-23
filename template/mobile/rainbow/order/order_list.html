@@ -81,6 +81,9 @@
                                                 <a href="{:U('Mobile/Order/return_goods',['rec_id'=>$goods['rec_id']])}">申请售后</a>
                                             </if>
                                         </notempty>
+                                        <if condition="$goods.waybill_number neq ''">
+                                            <a class="shop-rebuy" href="{:U('Mobile/Order/logistics',array('rec_id'=>$goods['rec_id']))}">查看物流</a>
+                                        </if>
                                     </div>
                                 </div>
                                 </a>

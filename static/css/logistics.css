@@ -1,0 +1,144 @@
+	html {
+		width: 100%;
+		font-size: calc(100vw/7.5);
+		font-size: -webkit-calc(100vw/7.5);
+		-webkit-text-size-adjust: 100%;
+	}
+	body{
+		width:100%;
+		background: #fff;
+	}
+	*{
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+		-webkit-tap-highlight-color: transparent;
+	}
+	ul,li{
+		list-style: none;
+	}
+	img{
+		display: block;
+	}
+    .header{
+		width: 100%;
+		height: 0.95rem;
+		line-height: 0.95rem;
+		text-align: center;
+		font-size: 0.3rem;
+		position: relative;
+		background: -webkit-linear-gradient(left bottom, #fdab78 , #fc635c); /* Safari 5.1 - 6.0 */
+	
+		background: linear-gradient(left bottom, #fdab78 , #fc635c); /* 标准的语法 */
+		color: #fff;
+	}
+	.back{
+		width: 0.2rem;
+		height: 0.32rem;
+		position: absolute;
+		left: 0.2rem;
+		top: 50%;
+		margin-top: -0.16rem;
+	}
+	.infor{
+		width: 100%;
+		height: 2rem;
+		background: #fff;
+		position: relative;
+		display: flex;
+		display: -webkit-flex;
+		align-content: center;
+		padding-left: 2rem;
+		flex-wrap: wrap;
+		border-bottom: 1px solid #e7e7e7;
+	}
+	.img{
+		width: 1.4rem;
+		height: 1.4rem;
+		position: absolute;
+		border: 1px solid #eeeeee;
+		top: 50%;
+		margin-top: -0.7rem;
+		left: 0.3rem;
+	}
+	.img img{
+		width: 100%;
+		height: 100%;
+	}
+	.state{
+		width: 100%;
+		font-size: 0.32rem;
+		line-height: 0.34rem;
+		color: #f36e66;
+		font-weight: bold;
+	}
+	.numbers,.phone{
+		width:100%;
+		font-size:0.26rem;
+		line-height: 0.28rem;
+		color: #aaaaaa;
+		margin-top: 0.1rem;
+	}
+	.title{
+		width: 100%;
+		height: 0.88rem;
+		display: flex;
+		display: -webkit-flex;
+		align-items: center;
+		border-bottom: 1px solid #e7e7e7;
+		background: #fff;
+		font-size: 0.3rem;
+		color: #888;
+		padding-left: 0.3rem;
+	}
+	.flow{
+		width: 100%;
+		height: auto;	
+		background: #fff;
+		padding: 0.5rem  0.56rem 0.5rem 0.56rem;
+	}
+	.progress{
+		width:100%;
+		border-left: 1px solid #dddddd;
+	}
+	.progress li{
+		width: 100%;
+		height: auto;position: relative;
+		padding-left: 0.5rem;
+		margin-top: 0.8rem;
+/*		border: 1px solid red;*/
+	}
+	.progress li:nth-child(1){
+		margin-top: 0;
+	}
+	.progress li:before{
+		content: "";
+		width: 0.32rem;
+		height: 0.32rem;
+		background: #dddddd;
+		border-radius: 50%;
+		position: absolute;
+		left:-0.16rem;
+		top: 0;
+	}
+	.progress .curr .stateText{
+	    color: #fc695e;
+	}
+	.progress .curr:before{
+		background: url(/stativ/img/r.png) no-repeat;
+		background-size: 100% 100%;
+		
+	}
+	.stateText{
+		width: 100%;
+		font-size: 0.32rem;
+		color: #888888;
+		line-height: 0.34rem;
+	}
+	
+	.time{
+		font-size: 0.26rem;
+		color: #bbbaba;
+		line-height: 0.28rem;
+		margin-top: 0.1rem;
+	}

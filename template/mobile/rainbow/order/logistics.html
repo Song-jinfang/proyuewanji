@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <title>物流</title>
+    <link rel="stylesheet" href="__CSS__/logistics.css" />
+</head>
+<body>
+<div class="header">
+    <img src="__IMG__/back.png" class="back">浏览广告
+</div>
+<section class="infor">
+    <div class="img"></div>
+    <p class="state">{$data['data'][0]['status']}</p>
+    <p class="numbers">{$data.company}：{$data.nu}</p>
+    <p class="phone">客服电话：95500</p>
+</section>
+<div style="width: 100%;height: 0.26rem;background: #efeff4;"></div>
+<section class="title">物流跟踪</section>
+<section class="flow">
+    <ul class="progress">
+
+        <volist name="data.data" id="vo" key="k">
+            <li <eq name="k" value="1">class="curr"</eq> >
+                <p class="stateText">{$vo.context}</p>
+                <p class="time">{$vo.ftime}</p>
+            </li>
+        </volist>
+<!--        <li>-->
+<!--            <p class="stateText">派送中,罗大汪正在派件</p>-->
+<!--            <p class="time">2018-01-19  12:20:30</p>-->
+<!--        </li>-->
+<!--        <li>-->
+<!--            <p class="stateText">到武汉武昌区,天河第九仓库</p>-->
+<!--            <p class="time">2018-01-19  12:20:30</p>-->
+<!--        </li>-->
+<!--        <li>-->
+<!--            <p class="stateText">湖北武汉转运中心,正发往武昌区</p>-->
+<!--            <p class="time">2018-01-19  12:20:30</p>-->
+<!--        </li>-->
+<!--        <li>-->
+<!--            <p class="stateText">天津市滨海新区第38号仓库天津市滨海新区第38号仓库天津市滨海新区第38号仓库</p>-->
+<!--            <p class="time">2018-01-19  12:20:30</p>-->
+<!--        </li>-->
+<!--        <li>-->
+<!--            <p class="stateText">已发货</p>-->
+<!--            <p class="time">2018-01-19  12:20:30</p>-->
+<!--        </li>-->
+    </ul>
+</section>
+</body>
+</html>

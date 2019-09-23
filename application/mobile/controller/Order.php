@@ -261,9 +261,6 @@ class Order extends MobileBase
         } else {
             $model = new UsersLogic();
             $order_goods = $model->get_order_goods($id);
-            $orderInfo = M('order')->field('is_resale')->where('order_id',$id)->find();
-            $order_goods['is_resale'] = $orderInfo['is_resale'];
-            $order_goods['order_id'] = $id;
             $this->assign('order_goods', $order_goods);
             return $this->fetch();
             exit;
@@ -548,10 +545,9 @@ class Order extends MobileBase
             $orderInfo = Db::name('order')->field('order_amount')->where("order_id", $order_id)->find();
             if($orderInfo['order_amount'] > 0){
                 $money = $orderInfo['order_amount'] * ($goods_resale/100);
-               $update =  M('order')->where('order_id='.$order_id)->update(['is_resale'=>2]);
+               $update =  M('order')->where('order_id='.$order_id)->update(['is_resale'=>1]);
                if($update){
                    accountLog($this->user_id,$money,0,'商品转售获得订单金额'.$money);
-                   withdrawal_balance_finance($this->user_id,$money,'领取订单转售收益',$order_id,3);
                    $this->ajaxReturn(['status'=>1,'msg'=>'转售成功，已退还'.$money.'到余额','url'=>'/Mobile/Order/comment']);
                }
             }
@@ -647,5 +643,20 @@ class Order extends MobileBase
             $result = ['status' => 1, 'msg' => '点赞成功~', 'result' => ''];
         }
         exit(json_encode($result));
+    }
+
+    //物流信息
+    public function logistics()
+    {
+        $rec_id = I('get.rec_id');
+        $data = Db::name('order_goods')->where(['rec_id' => $rec_id])->find();
+        $company = $data['company'];
+        $waybill_number = $data['waybill_number'];
+        $com = Db::name('logistics_code')->where(['logistics_name' => $company])->value('logistics_code');
+        $data = synquery($com,$waybill_number);
+        $data = object_to_array($data);
+        $data['company'] = $company;
+        $this->assign('data',$data);
+        return $this->fetch();
     }
 }

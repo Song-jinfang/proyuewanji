@@ -176,15 +176,18 @@ a.green:hover { color: #FFF; background-color: #1BBC9D; border-color: #16A086; }
                 <th>购买数量</th>
                 <th>商品单价</th>
                 <th>选择发货</th>
+                <th>快递公司</th>
+                <th>配送单号</th>
+                <th>操作</th>
               </tr>
             </thead>
             <tbody>
             <volist name="orderGoods" id="good">
            	<tr>
                 <td class="w30"><div class="goods-thumb"><a href="{:U('Goods/addEditGoods',array('id'=>$good[goods_id]))}" target="_blank"><img alt="" src="{$good['goods_id']|goods_thum_images=200,200}" /> </a></div></td>
-                <td style="text-align: left;"><a href="{:U('Goods/addEditGoods',array('id'=>$good[goods_id]))}" target="_blank">{$good.goods_name}</a><br/></td>
+                <td style="text-align: left;" width="400px"><a href="{:U('Goods/addEditGoods',array('id'=>$good[goods_id]))}" target="_blank">{$good.goods_name}</a><br/></td>
                 <td class="w80">{$good.spec_key_name}</td>
-                <td class="w60">{$good.goods_num}</td>
+                <td class="w60" width="100px">{$good.goods_num}</td>
                 <td class="w100">{$good.goods_price}</td>
                 <td class="w60">
                 	<if condition="$good['is_send'] eq 1">
@@ -192,6 +195,16 @@ a.green:hover { color: #FFF; background-color: #1BBC9D; border-color: #16A086; }
                    <else />
                         	<input type="checkbox" name="goods[]" value="{$good.rec_id}" checked="checked">
                     </if>
+                </td>
+                <td width="50px">
+                    <input type="text" class="input-txt" id="company-{$good.rec_id}" name="company" value="{$good.company}" placeholder="请输入快递公司名称">
+                </td>
+                <td width="50px">
+                    <input type="text" class="input-txt" id="waybill_number-{$good.rec_id}" name="waybill_number" value="{$good.waybill_number}" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+                </td>
+                <td class="w80">
+<!--                    <button id="save" onclick="save_waybill_number({$goods.rec_id})">保存</button>-->
+                    <input type="button" onclick="save_waybill_number({$good.rec_id})" value="保存">
                 </td>
               </tr>
               </volist>
@@ -319,6 +332,24 @@ function change_send(){
 		$('.invoice').hide();
 	}
 }
+
+function save_waybill_number(rec_id)
+{
+    var company = $("#company-" + rec_id).val();
+    var waybill_number = $("#waybill_number-" + rec_id).val();
+    $.ajax({
+        url:'/admin/order/save_waybill_number',
+        type:'post',
+        data:{'company':company,'waybill_number':waybill_number,'rec_id':rec_id},
+        success:function(e){
+            layer.msg(e.msg);
+        },
+        error:function(){
+            layer.msg('网络异常，请稍后再试');
+        }
+    });
+}
+
 </script>
 </body>
 </html>
