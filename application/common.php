@@ -1006,10 +1006,11 @@ function update_pay_status($order_sn,$ext=array())
                                     $pidCount = M('users')->where("first_leader ='$v'")->column('user_id');
                                     if(!empty($pidCount)){
                                         foreach($pidCount as $k1=>$v1){
-                                            $p = M('order')->where('user_id = '.$v1.' and pay_status = 1 and type = 1')->count();
-                                            if($p>0){
-                                                $s[] = $v1;
-                                            }
+                                            $order_id = $order['order_id'];
+                                                $p = M('order')->where("user_id = ".$v1." and pay_status = 1 and type = 1 and order_id not in($order_id)")->find();
+                                                if($p>0){
+                                                    $s[] = $v1;
+                                                }
                                         }
                                     }
                                     $userBurn = M('users')->where("user_id = $v")->value('burn');  //$userBurn为1要进行烧伤   2针对部分用户不进行烧伤
@@ -1196,7 +1197,10 @@ function dynamic_profit($user_id,$money,$desc,$order_id = 0,$type){
      );
      $update = Db::name('users')->where("user_id = $user_id")->save($update_data); */
     $update = M('users')->where("user_id = $user_id")->setInc('dynamic_profit',$money);
-    M('adv_log')->add($account_log);
+        M('adv_log')->add($account_log);
+
+   
+    
 }
 
 /**

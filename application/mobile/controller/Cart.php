@@ -230,8 +230,8 @@ class Cart extends MobileBase {
             $user = M('users')->field('happy_beans')->where('user_id = '.$this->user_id)->find();
             $profit_cons_beans = M('config')->where("name='profit_cons_beans'")->value('value');//购买商品消耗1%悦豌豆 
             if ($_REQUEST['act'] == 'submit_order') {
-                $goods = M('goods')->field('shop_price')->where('goods_id = '.$goods_id)->find();
-                $rate = ceil(($profit_cons_beans/100) * $goods['shop_price']);
+                $orderRs = $pay->toArray();
+                $rate = ceil(($profit_cons_beans/100) * $orderRs['order_amount']);
                 if($rate > $user['happy_beans']){
                     $this->ajaxReturn(['status' => -1, 'msg' => '购买此订单需消耗'.$rate.'个悦玩豆']);
                 }
