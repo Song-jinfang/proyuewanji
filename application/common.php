@@ -578,7 +578,7 @@ function accountLog($user_id, $user_money = 0,$pay_points = 0, $desc = '',$distr
     $update_data = array(
         'user_money'        => ['exp','user_money+'.$user_money],
         'pay_points'        => ['exp','pay_points+'.$pay_points],
-        'distribut_money'   => ['exp','distribut_money+'.$distribut_money],
+      /*   'distribut_money'   => ['exp','distribut_money+'.$distribut_money], */
     );
     if(($user_money+$pay_points+$distribut_money) == 0)return false;
     $update = Db::name('users')->where("user_id = $user_id")->save($update_data);

@@ -198,8 +198,10 @@ class Index extends MobileBase {
             foreach($task_list as $k=>$v){
                 if($order_id){
                     $where = ' (order_id='.$order_id .' or task_id = '.$v['id'].')';
+                }else{
+                    $where = ' task_id = '.$v['id'];
                 }
-                $is_browse = M('user_task')->where('add_time >'.$time.' and task_id = '.$v['id'])->where($where)->count();
+                $is_browse = M('user_task')->where('add_time >'.$time.' and user_id='.$this->user['user_id'])->where($where)->count();
                 $task_list[$k]['num'] = $v['total_num'] - $v['num'];
                 $task_list[$k]['is_browse'] = $is_browse;//大于0说明已经浏览过了，
             }
@@ -235,6 +237,8 @@ class Index extends MobileBase {
         $where = ' 1 = 1';
         if($order_id){
             $where = ' (order_id='.$order_id .' or task_id = '.$task_id.')';
+        }else{
+            $where = ' task_id = '.$task_id;
         }
         $task_count = M('user_task')->where('add_time > '.$time.' and user_id='.$this->user['user_id'])
                        ->where($where)->count();
@@ -262,7 +266,7 @@ class Index extends MobileBase {
               $orderAdvProfit = $orderInfo['order_amount'] * ($orderConf/100);
               adv_order($this->user['user_id'],$orderAdvProfit,'完成浏览广告获得经验值',$order_id,2);
               $price = $orderAdvProfit;
-                M('task')->where('id = '.$task_id)->setInc('num');
+              M('task')->where('id = '.$task_id)->setInc('num');
               $data['user_id'] = $this->user['user_id'];
               $data['task_id'] = $task_id;
               $data['status'] = 1;
