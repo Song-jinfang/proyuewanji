@@ -582,12 +582,12 @@ function accountLog($user_id, $user_money = 0,$pay_points = 0, $desc = '',$distr
     );
     if(($user_money+$pay_points+$distribut_money) == 0)return false;
     $update = Db::name('users')->where("user_id = $user_id")->save($update_data);
-    if($update){
+    //if($update){
         M('account_log')->add($account_log);
-        return true;
-    }else{
-        return false;
-    }
+   //     return true;
+   // }else{
+    //    return false;
+    //}
 }
 
 // function adv_order($user_id, $order_adv_profit = 0, $desc = '',$distribut_money = 0,$order_id = 0 ,$order_sn = ''){
@@ -682,12 +682,12 @@ function consumption_beans($user_id,$beans,$desc){
         'happy_beans'   => ['exp','happy_beans+'.$beans]
     );
     $update = Db::name('users')->where("user_id = $user_id")->save($update_data);
-    if($update){
+   // if($update){
         M('adv_log')->add($account_log);
-        return true;
-    }else{
-        return false;
-    }
+     //   return true;
+    //}else{
+    //    return false;
+    //}
 }
 
 
@@ -705,12 +705,12 @@ function lose_beans($user_id,$beans,$desc){
         'happy_beans'   => ['exp','happy_beans-'.$beans]
     );
     $update = Db::name('users')->where("user_id = $user_id")->save($update_data);
-    if($update){
+   // if($update){
         M('adv_log')->add($account_log);
-        return true;
-    }else{
-        return false;
-    }
+    //    return true;
+    //}else{
+    //    return false;
+    //}
 }
 
 
@@ -1196,12 +1196,7 @@ function dynamic_profit($user_id,$money,$desc,$order_id = 0,$type){
      );
      $update = Db::name('users')->where("user_id = $user_id")->save($update_data); */
     $update = M('users')->where("user_id = $user_id")->setInc('dynamic_profit',$money);
-    if($update){
-        M('adv_log')->add($account_log);
-        return true;
-    }else{
-        return false;
-    }
+    M('adv_log')->add($account_log);
     
 }
 
