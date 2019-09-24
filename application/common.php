@@ -1197,7 +1197,6 @@ function dynamic_profit($user_id,$money,$desc,$order_id = 0,$type){
      $update = Db::name('users')->where("user_id = $user_id")->save($update_data); */
     $update = M('users')->where("user_id = $user_id")->setInc('dynamic_profit',$money);
     M('adv_log')->add($account_log);
-    
 }
 
 /**
