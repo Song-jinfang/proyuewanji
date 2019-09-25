@@ -676,7 +676,7 @@ class Ad extends MobileBase
         }
         $userInfo = session('user');
         $user_id = $userInfo['user_id'];
-        $sell_id = Db::name('sell')->where(['user_id' => $user_id])->value('sell_id');
+        $sell_id = Db::name('sell')->where(['user_id' => $user_id])->where('surplus_num','neq',0)->value('sell_id');
         if($sell_id){
             return json([
                 'code'  =>  -1,
