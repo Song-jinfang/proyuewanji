@@ -158,7 +158,7 @@ class Index extends MobileBase {
      */
     
     public function test_order(){
-        update_pay_status('201909241001397140');
+        update_pay_status('201909250926033233');
     }
     
     public function test(){
@@ -282,7 +282,7 @@ class Index extends MobileBase {
               //0撸和或者会员浏览广告
               $orderCount = M('order')->where('user_id='.$this->user['user_id'].' and pay_status = 1')->count();
               M('task')->where('id = '.$task_id)->setInc('num');
-              if(!$orderCount){
+              if(!$orderCount && $task_count < 2){
                   accountLog($this->user['user_id'],0,$taskinfo['price'],'浏览广告获得积分');
                   $price = $taskinfo['price'];
                   $data['user_id'] = $this->user['user_id'];
