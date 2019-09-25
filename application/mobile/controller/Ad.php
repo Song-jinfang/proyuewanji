@@ -924,4 +924,36 @@ class Ad extends MobileBase
             ]);
         }
     }
+
+    //实名认证
+    public function certification()
+    {
+        if(request()->isGet()){
+            return $this->fetch();
+        }else{
+            $data = request()->file('images') ?: [];
+            $res = [];
+            foreach ($data as $file){
+                $info = $file->move(ROOT_PATH . 'public' . DS . 'ad');
+                $res[] = '/public/ad/' . $info->getSaveName();
+            }
+            $file_path = implode(',',$res);
+            $userInfo = session('user');
+            $uid = $userInfo['user_id'];
+            $res = Db::name('users')->where(['user_id' => $uid])->update(['id_photo' => $file_path]);
+            if($res === false){
+                return json([
+                    'code'  =>  -1,
+                    'msg'   =>  '网络异常，请稍后再试',
+                    'data'  =>  [],
+                ]);
+            }else{
+                return json([
+                    'code'  =>  1,
+                    'msg'   =>  '上传成功',
+                    'data'  =>  [],
+                ]);
+            }
+        }
+    }
 }

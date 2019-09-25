@@ -129,6 +129,15 @@ class Order extends Base {
         $Page  = new AjaxPage($count,20);
         $show = $Page->show();
         $orderList = Db::name('order')->where($condition)->where(['type' => 1])->limit($Page->firstRow,$Page->listRows)->order($sort_order)->select();
+        foreach ($orderList as &$v){
+            $id_photo = Db::name('users')->where(['user_id' => $v['user_id']])->value('id_photo');
+            if($id_photo){
+                $id_photo_arr = explode(',',$id_photo);
+                $v['id_photo1'] = $id_photo_arr[0];
+                $v['id_photo2'] = $id_photo_arr[1];
+                $v['id_photo']  = 1;
+            }
+        }
         $this->assign('orderList',$orderList);
         $this->assign('page',$show);// 赋值分页输出
         $this->assign('pager',$Page);
