@@ -64,6 +64,10 @@
                 <!--<if condition="($list['order_status'] eq 3  and $list['pay_status'] eq 1)">
                     <a class="btn green" href="{:U('Admin/order/detail',array('order_id'=>$list['order_id']))}"><i class="fa fa-list-alt"></i>查看</a>
                 </if>-->
+                <eq name="list.id_photo" value="1">
+                    <a class="btn green" href="{$list['id_photo1']}" download="w3logo"><i class="fa fa-list-alt"></i>下载1</a>
+                    <a class="btn green" href="{$list['id_photo1']}" download="w3logo"><i class="fa fa-list-alt"></i>下载2</a>
+                </eq>
             </div>
         </td>
       </tr>
