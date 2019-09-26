@@ -851,13 +851,13 @@ class Ad extends MobileBase
             $data = Db::name('order')->alias('a')
                     ->join('ywj_users b','a.user_id = b.user_id')
                     ->where('a.user_id','in',$user_id_arr)
-                    ->where(['a.type' => 1])
+                    ->where(['a.type' => 1,'a.pay_status' => 1])
                     ->field('b.nickname,a.add_time,a.order_amount,a.shipping_status')
                     ->select();
             $count = Db::name('order')->alias('a')
                      ->join('ywj_users b','a.user_id = b.user_id')
                      ->where('a.user_id','in',$user_id_arr)
-                     ->where(['a.type' => 1])
+                     ->where(['a.type' => 1,'a.pay_status' => 1])
                      ->sum('a.order_amount');
             $this->assign('count',$count);
         }else{

@@ -21,11 +21,19 @@
 		    <p class="title">文案</p>
 		    <div class="text">{$task_info.description}</div>
 		     <p class="title">图文详情</p>
-		    <div class="text">
-		    <volist name="$task_info.thumb_img" id="v">
-		    	<img src="{$v}" style="margin-top:0.2rem">
-		    </volist>
-		    </div>
+		     <if condition="$task_info.type eq 2">
+				    <div class="text">
+					    <volist name="$task_info.thumb_img" id="v">
+					    	<img src="{$v}" style="margin-top:0.2rem">
+					    </volist>
+				    </div>
+			    <else/>
+				    <div class="text">
+					    <video  controls autoplay="autoplay" style="width:100%">
+							<source style="width:100%" src="http://{$task_info.serverName}{$task_info.thumb_img.0}" type="video/mp4">
+						</video>
+				    </div>
+			 </if>
 		</div>
 	</div>
 	<div class="cricleDiv">

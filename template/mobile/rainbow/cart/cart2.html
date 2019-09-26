@@ -71,7 +71,7 @@
         </div>
         <!--商品信息-e-->
         <!--配送方式 上门自提s-->
-        <div class="z-select-wrap shipping_div">
+<!--         <div class="z-select-wrap shipping_div">
             <div class="z-select-title">
                 <div class="maleri30">
                     选择配送方式
@@ -107,7 +107,7 @@
                     选择自提上门点并支付订单>收到提货短信>到自提点提货
                 </div>
                 <div class="dispatching-Package">
-                    <!--自提时间-->
+                    自提时间
                     <div class="invoice list7">
                         <div class="myorder p">
                             <div class="content30">
@@ -130,14 +130,14 @@
                         </div>
                     </div>
 
-                    <!--调用时间插件-->
+                    调用时间插件
                     <script>
                         $.date('#date_time_picker_mask');
                         $(document).on('click', '#date_time_day', function () {
                             $('#date_time_picker_mask').trigger('click');
                         });
                     </script>
-                    <!--自提地点-->
+                    自提地点
                     <div class="invoice list7" id="replace_shop">
                         <div class="myorder p">
                             <div class="content30">
@@ -157,7 +157,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <!--配送方式 上门自提e-->
         <!--支持配送,发票信息-s-->
         <div class="information_dr">
@@ -178,7 +178,7 @@
                     </div>
                 </div> -->
                 <!--使用余额-s-->
-                <div class="invoice list7">
+               <!--  <div class="invoice list7">
                     <div class="myorder p">
                         <div class="content30">
                             <a class="remain" href="javascript:void(0);">
@@ -202,7 +202,7 @@
                             </a>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <!--使用余额-e-->
                 <div class="invoice list7">
                     <div class="myorder p">
@@ -229,57 +229,91 @@
                         </div>
                     </div>
                 </div>
-                  <div class="invoice list7">
-                    <div class="myorder p">
+                <style>
+						.resale{
+								  content: "\a0"; /*不换行空格*/
+							    display: inline-block;
+							    vertical-align: middle;
+							    font-size: 25px;
+							    width: 1em;
+							    height: 1em;
+							    margin-right: .4em;
+							    border-radius: 50%;
+							    border: 1px solid #01cd78;
+							    text-indent: .15em;
+							    line-height: 1; 
+							}
+                 
+                </style>
+                <script src="__JS__/layer.js"  type="text/javascript" ></script>
+			  <div class="invoice list7" >
+                    <div class="myorder p" style="padding-bottom:0.5rem">
                         <div class="content30">
-                            <a class="remain" href="javascript:void(0);">
-                                <div class="order">
-                                    <div class="fl">
-                                        <span>是否转售</span>
-                                    </div>
-                                    <div class="fr z-toggle-btn">
-                                        <label class="z-toggle z-toggle-royal">
-                                            <input type="checkbox" value="0"/>
-                                            <div class="z-tarck">
-                                                <div class="z-handle">
-                                                </div>
-                                            </div>
-                                        </label>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <script>
-                	$(".z-tarck").click(function(){
-                		if($("#resale").val() == 0){
-                			$("#resale").val('1');
-                		}else{
-                			$("#resale").val('0');
-                		}
-                	});
-                </script>
-			  <div class="invoice list7">
-                    <div class="myorder p">
-                        <div class="content30">
-                            <a class="remain" href="javascript:void(0);">
                                 <div class="order">
                                     <div class="fl">
                                         <span>悦玩豆个数</span>
-                                        <p style="color:#232326">余额：{$user['happy_beans']}<i>个</i></p>
+                                        <p style="color:#232326">余额：{$user['happy_beans']}个</p>
                                     </div>
-                                    
+                                    <a href="/mobile/ad/buy">
+                                     <div class="fl" style="margin-left:1rem">
+                                       <div style="font-size:0.5rem;padding-left:0.3rem;padding-right:0.3rem;line-height:1.5rem;margin-top:0.8rem;background-color:#080404;color:#fff;text-align:center;border-radius:5px" >购买悦玩豆</div>
+                                    </div>
+                                    </a>
                                 </div>
-                                <a href='/mobile/ad/home.html'> <div style="font-size:0.5rem " >购买此订单需消耗1%的悦玩豆 &nbsp<span style="color:red">购买悦玩豆</span></div></a>	
-                            </a>
                         </div>
                     </div>
                 </div>
 
-
-			
-
+<div class="invoice list7">
+                    <div class="myorder p">
+                        <div class="content30">
+                            <a class="remain" href="javascript:void(0);">
+                                <div class="order">
+                                    <div class="fl" style="margin-right:1.6rem">
+                                        <span>是否转售</span>
+                                    </div>
+                                    <div>
+                                        <input type="radio" name="resale_set" value="0" id="resale_0" class="resale" checked="checked">不转售
+                                        <input type="radio" name="resale_set" value="1" id="resale_1" class="resale">转售
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+			       <script>
+                	$(".resale").click(function(){
+                		var boxValue = $(this).val();
+                	
+                		if(boxValue == 1){
+                			 layer.confirm('转售后平台将不予发货，确认收货后会补贴10%到您的账户上', {
+                   	            btn : [ '我知道了'],
+                			 	area: '7rem'
+                   	            
+                   	         }, function(index) {
+                   	        	$("#resale").val('1');
+                   	        	layer.msg({icon: 1});
+                   	         },function(index){
+                   	        	$("#resale").val('0');
+                   	         });
+                			
+                			
+                			
+                		}else{
+                			$("#resale").val('0');
+                		}
+                			
+                			
+                	/* 	}else{//不转售
+                			
+                			alert(22);	
+                			
+                		} */
+                		
+                	
+                		
+                	});
+                </script>
              <!--   
                 <div id="balance-li" class="invoice list7">
 
@@ -1217,16 +1251,16 @@
 					$("#happy_beans").html(data.result.happy_beans);
                 	$('.submit_price a').removeClass("disable");
                 	if(data.result.user_happy_beans < data.result.happy_beans){
-                		/* layer.msg('领取收益需消耗'+data.result.happy_beans+'个悦玩豆', {
+                		 layer.msg('领取收益需消耗'+data.result.happy_beans+'个悦玩豆', {
   						  time: 0 //不自动关闭
   						  ,btn: ['去购买', '暂不购买']
   						  ,yes: function(index){
   						    layer.close(index);
   							window.location.href='/mobile/ad/home';
   						  }
-  						});      */     
+  						});          
   						
-                	    layer.open({icon: 2, content: '领取收益需消耗'+data.result.happy_beans+'个悦玩豆', time: 1});
+                	    //layer.open({icon: 2, content: '领取收益需消耗'+data.result.happy_beans+'个悦玩豆', time: 1});
   						
                 	}
                     refresh_price(data);
@@ -1287,10 +1321,17 @@
             dataType: "json",
             success: function (data) {
                 layer.closeAll();
-              /*   if(data.status == -1){
-                	layer.open({icon: 2, content: '领取收益需消耗'+data.result.happy_beans+'个悦玩豆', time: 1});
-                } */
-                if (data.status != 1) {
+                if(data.status == -1){
+               	 	 layer.msg(data.msg, {
+ 						  time: 0 //不自动关闭
+ 						  ,btn: ['去购买', '暂不购买']
+ 						  ,yes: function(index){
+ 						    layer.close(index);
+ 							window.location.href='/mobile/ad/home';
+ 						  }
+ 					 });       
+               	 	 ajax_return_status = 1;// 上一次ajax 已经返回, 可以进行下一次 ajax请求
+                }else if (data.status != 1) {
                     showErrorMsg(data.msg);  //执行有误
                     // 登录超时
                     if (data.status == -100){
