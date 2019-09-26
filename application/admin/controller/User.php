@@ -753,6 +753,8 @@ class User extends Base
             $strTable .= '<td style="text-align:center;font-size:12px;" width="*">账户号码</td>';
             $strTable .= '<td style="text-align:center;font-size:12px;" width="*">账户开户名</td>';
             $strTable .= '<td style="text-align:center;font-size:12px;" width="*">申请金额</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">扣除手续费</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">实际到账金额</td>';
             $strTable .= '<td style="text-align:center;font-size:12px;" width="*">状态</td>';
             $strTable .= '<td style="text-align:center;font-size:12px;" width="*">' . $export_time_name . '</td>';
             $strTable .= '<td style="text-align:center;font-size:12px;" width="*">备注</td>';
@@ -765,6 +767,8 @@ class User extends Base
                     $strTable .= '<td style="text-align:left;font-size:12px;">' . $val['bank_card'] . '</td>';
                     $strTable .= '<td style="vnd.ms-excel.numberformat:@">' . $val['realname'] . '</td>';
                     $strTable .= '<td style="text-align:left;font-size:12px;">' . $val['money'] . '</td>';
+                    $strTable .= '<td style="text-align:left;font-size:12px;">' . $val['taxfee'] . '</td>';
+                    $strTable .= '<td style="text-align:left;font-size:12px;">' . ($val['money'] - $val['taxfee']) . '</td>';
                     $strTable .= '<td style="text-align:left;font-size:12px;">' . $export_status . '</td>';
                     $strTable .= '<td style="text-align:left;font-size:12px;">' . date('Y-m-d H:i:s', $val[$time_name]) . '</td>';
                     $strTable .= '<td style="text-align:left;font-size:12px;">' . $val['remark'] . '</td>';
