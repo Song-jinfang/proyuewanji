@@ -17,6 +17,11 @@
         <img src="__IMG__/logo-1.png">
         注：国外直采产品通关申报必须提供个人身份证正反面照片
     </div>
+    <font size="2px">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名:</font>
+    <input type="text" name="nickname" id="nickname" value="" placeholder="请填写姓名"><br>
+<!--    <font size="2px">身份证号:</font>-->
+<!--    <input type="text" name="id_card" id="id_card" value="" placeholder="请填写身份证号"><br>-->
+    <font size="2px">身份证正反面:</font>
     <div class="uploading">
         <div class="upload_img_wrap">
             <div id="imgBox"></div>
@@ -82,7 +87,7 @@
 
                 imgNum++;
                 if(imgNum<3){
-                    $(".upload_img").eq(2).show();
+                    // $(".upload_img").eq(2).show();
                 }
                 $(".upload_img_length").html(imgNum);
             })
@@ -173,10 +178,12 @@
         $(".pop").hide()
     })
     $(".payBtn").click(function(){
+        var name    = $("#nickname").val();
         var images1 = document.getElementById("file1").files;
         var images2 = document.getElementById("file2").files;
         var images3 = document.getElementById("file3").files;
         var formData = new FormData();
+        formData.append('name',name);
         formData.append('images[]',images1[0]);
         formData.append('images[]',images2[0]);
         formData.append('images[]',images3[0]);

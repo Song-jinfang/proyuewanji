@@ -932,6 +932,7 @@ class Ad extends MobileBase
             return $this->fetch();
         }else{
             $data = request()->file('images') ?: [];
+            $name = request()->post('name');
             $res = [];
             foreach ($data as $file){
                 $info = $file->move(ROOT_PATH . 'public' . DS . 'ad');
@@ -940,7 +941,7 @@ class Ad extends MobileBase
             $file_path = implode(',',$res);
             $userInfo = session('user');
             $uid = $userInfo['user_id'];
-            $res = Db::name('users')->where(['user_id' => $uid])->update(['id_photo' => $file_path]);
+            $res = Db::name('users')->where(['user_id' => $uid])->update(['id_photo' => $file_path,'name' => $name]);
             if($res === false){
                 return json([
                     'code'  =>  -1,
