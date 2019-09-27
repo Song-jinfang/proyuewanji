@@ -1218,6 +1218,8 @@ exit("请联系TPshop官网客服购买高级版支持此功能");
                     $goods_num = $goods_num + $goods['goods_num'];
 	    			$strGoods .= "商品编号：".$goods['goods_sn']." 商品名称：".$goods['goods_name'];
 	    			if ($goods['spec_key_name'] != '') $strGoods .= " 规格：".$goods['spec_key_name'];
+	    			$strGoods .= " 数量：" . $goods['goods_num'];
+	    			$strGoods .= "成本价：" . $goods['cost_price'];
 	    			$strGoods .= "<br />";
 	    		}
 	    		unset($orderGoods);
