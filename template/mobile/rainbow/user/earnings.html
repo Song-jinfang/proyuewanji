@@ -64,15 +64,15 @@
 								<font>订单金额50%</font>
 							</div>
 							<div class="div1" style="width:35%;">
-							<if condition="$v.fifteen_status eq 2"><!--在15-28天内可以领取-->
-								<a  style="text-decoration:none"><span class="btn btnGreen" onclick="get_money_to_balance('{$v.order_id}','fifteen')">领取</span></a>
-							<elseif condition="$v.fifteen_status eq 3"><!--过了28天，领取失效 -->
-								<a  style="text-decoration:none"><span class="btn btnGreen" onclick="get_money_to_beans('{$v.order_id}')">领取悦玩豆</span></a>
-							<elseif condition="$v.fifteen_status eq 1"><!--已经领取到余额/悦玩豆-->
-								<a style="text-decoration:none"><span class="btn btnGray">已领取</span></a>
-							<else/>
-								<a style="text-decoration:none"><span class="btn btnGray">暂时不能领取</span></a>
-							</if>
+								<if condition="$v.fifteen_status eq 2"><!--在15-28天内可以领取-->
+									<a  style="text-decoration:none"><span class="btn btnGreen" onclick="get_money_to_balance('{$v.order_id}','fifteen')">领取</span></a>
+								<elseif condition="$v.fifteen_status eq 3"><!--过了28天，领取失效 -->
+									<a  style="text-decoration:none"><span class="btn btnGreen" onclick="get_money_to_beans('{$v.order_id}')">领取悦玩豆</span></a>
+								<elseif condition="$v.fifteen_status eq 1"><!--已经领取到余额/悦玩豆-->
+									<a style="text-decoration:none"><span class="btn btnGray">已领取</span></a>
+								<else/>
+									<a style="text-decoration:none"><span class="btn btnGray">暂时不能领取</span></a>
+								</if>
 							</div>
 						</div>
 					</div>

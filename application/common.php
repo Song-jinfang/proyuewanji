@@ -619,7 +619,8 @@ function adv_order($user_id, $order_adv_profit = 0, $desc = '',$order_id = 0 ,$t
         'user_money'    => $order_adv_profit,
         'add_time'   => time(),
         'desc'   => $desc,
-        'type'=>$type
+        'type'=>$type,
+        'order_id'=>$order_id
     );
     /*更新每日订单任务信息 */
     $update_data = array(
@@ -998,7 +999,7 @@ function update_pay_status($order_sn,$ext=array())
                         unset($pidArr[0]);
                         $conf = M('config')->where('id >=172 and id <=177')->column('value','name');
                         $vip_level_conf = M('config')->where('id >=192 and id <=197')->column('value','name');
-                        $arr = array();
+                        $arr = array('170,171,1038');
                         if(!empty($pidArr)){
                             foreach($pidArr as $k=>$v){
                                 if($v){
@@ -1027,14 +1028,14 @@ function update_pay_status($order_sn,$ext=array())
                                     if($k == 1 || $k == 2){
                                         if((count($s) >=20 && $team_num >=300) || in_array($v,$arr)){
                                             $rela = ($vip_level_conf['vip_level_'.$k]/100) * $order_amount;
-                                        }else if(count($s) >= 1 && count($s) <=5){
+                                        }else if(count($s) >= 1){
                                             $rela = ($conf['level_'.$k]/100) * $order_amount;
                                         }
                                     }
                                     if($k == 3 || $k == 4){
                                         if((count($s) >=20 && $team_num >=300) || in_array($v,$arr)){
                                             $rela = ($vip_level_conf['vip_level_'.$k]/100) * $order_amount; //返额10 8 5 3 1 0.5
-                                        }else if(count($s) >= 6 && count($s) <=19){
+                                        }else if(count($s) >= 6){
                                              $rela = ($conf['level_'.$k]/100) * $order_amount;//返额10 5 3 1 
                                          }
                                     }

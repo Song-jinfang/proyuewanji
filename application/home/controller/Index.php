@@ -21,6 +21,123 @@ use think\Image;
 use think\Db;
 class Index extends Base {
     
+    
+    public function team(){
+        $user_id =  input('get.user_id');
+        $rs = $this->team_num1($user_id);
+        dump($rs);
+        
+    }
+    
+    /***获取团队总人数***/
+    function team_num1 ($user_id){
+        $user_arr = Db::name('users')->where("find_in_set($user_id,pid_list)")->column('pid_list');
+        foreach ($user_arr as &$vo){
+            $vo = explode(',',$vo);
+        }
+        $user_id_arr = [];
+        foreach ($user_arr as $v){
+            $index_id = array_search($user_id,$v);
+            $user_id_arr[] = array_slice($v,$index_id + 1);
+        }
+        $user_id_where = [];
+        foreach ($user_id_arr as $i){
+            foreach ($i as $item){
+                $user_id_where[] = $item;
+            }
+        }
+        $user_id_where = array_unique($user_id_where);
+        dump($user_id_where);
+        //得到所有的下级，查询是否是有效用户
+        $s = array();
+        if(!empty($user_id_where)){
+            foreach($user_id_where as $k=>$v){
+                $p = M('order')->where('user_id = '.$v.' and pay_status = 1 and type = 1')->count();
+                if($p>0){
+                    $s[] = $v;
+                }
+            }
+        }
+        return $s;
+    }
+    
+    
+    
+    //根据订单查询用户所有的上级应该得到的分享收益
+    public function auto(){
+        $order_id =  input('get.order_id');
+        $order = M('order')->field('user_id,order_amount,pay_time')->where('order_id ='.$order_id)->find();
+        if($order['order_amount'] > 0){
+            //$parentArr = explode(',',$order[''])
+            $userlist = M('users')->field('pid_list')->where('user_id = '.$order['user_id'])->find();
+            if($userlist){
+                $pidArr = array_reverse(explode(',',$userlist['pid_list']));
+                unset($pidArr[0]);
+                dump($pidArr);
+                $conf = M('config')->where('id >=172 and id <=177')->column('value','name');
+                $vip_level_conf = M('config')->where('id >=192 and id <=197')->column('value','name');
+                $arr = array();
+                foreach($pidArr as $k=>$v){
+                    if($v){
+                        $s = array();
+                        $pidCount = M('users')->where("first_leader ='$v'")->column('user_id');
+                        if(!empty($pidCount)){
+                            /****计算团队总的有效会员个数****/
+                            foreach($pidCount as $k1=>$v1){
+                                $order_id = $order['order_id'];
+                                $p = M('order')->where("user_id = ".$v1." and pay_status = 1 and type = 1 and pay_time <=".$order['pay_time'])->find();
+                                if($p>0){
+                                    $s[] = $v1;//计算有多少个下级
+                                }
+                            }
+                            /****计算团队总的有效会员个数****/
+                            $userBurn = M('users')->where("user_id = $v")->value('burn');
+                            $team_num = team_num($v);//团队总人数
+                            $order_amount = $order['order_amount'];
+                            if($userBurn == 1){
+                                //查询上级最后一个订单的金额，进行烧伤处理
+                                $order_amount = getUserBurn($v,$order['order_amount']);
+                            }
+                            $rela = 0;
+                            if($k == 1 || $k == 2){
+                                if((count($s) >=20 && $team_num >=300) || in_array($v,$arr)){
+                                    $rela = ($vip_level_conf['vip_level_'.$k]/100) * $order_amount;
+                                }else if(count($s) >= 1){
+                                    $rela = ($conf['level_'.$k]/100) * $order_amount;
+                                }
+                                
+                                echo 111;
+                            }
+                            if($k == 3 || $k == 4){
+                                if((count($s) >=20 && $team_num >=300) || in_array($v,$arr)){
+                                    $rela = ($vip_level_conf['vip_level_'.$k]/100) * $order_amount; //返额10 8 5 3 1 0.5
+                                }else if(count($s) >= 6){
+                                    $rela = ($conf['level_'.$k]/100) * $order_amount;//返额10 5 3 1
+                                }
+                            }
+                            if($k == 5 || $k == 6){//直推用户大于等于20，团队人数小于等于300
+                                if((count($s) >=20 && $team_num >=300) || in_array($v,$arr)){
+                                    $rela = ($vip_level_conf['vip_level_'.$k]/100) * $order_amount;
+                                }
+                            }
+                            dump($rela);
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+                
+            }
+            
+            
+        }
+        
+    }
+    
+    
+    
     public function index(){      
 
         // 如果是手机跳转到 手机模块
