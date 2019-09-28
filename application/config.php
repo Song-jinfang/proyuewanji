@@ -268,10 +268,10 @@ return [
     'SHIPPING_STATUS' => array(
         0 => '未发货',
         1 => '已发货',
-        2 => '部分发货'
+        2 => '<b style="color: red">部分发货</b>'
     ),
     'PAY_STATUS' => array(
-        0 => '未支付',
+        0 => '<b style="color: red">未支付</b>',
         1 => '已支付',
         2 => '部分支付',
         3 => '已退款',

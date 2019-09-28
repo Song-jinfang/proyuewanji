@@ -96,7 +96,7 @@ a.green:hover { color: #FFF; background-color: #1BBC9D; border-color: #16A086; }
     </div>
  <form id="delivery-form" action="{:U('Admin/order/deliveryHandle')}" method="post">
      <input type="hidden" id="shipping" name="shipping" value="{$order.shipping_status}">
-     <input type="hidden" id="shipping_name" name="shipping_name" value="<if condition='$order.shipping_status eq 1'>{$order.shipping_name}<else/>{$shipping_list['0']['shipping_name']}</if>">
+<!--     <input type="hidden" id="shipping_name" name="shipping_name" value="<if condition='$order.shipping_status eq 1'>{$order.shipping_name}<else/>{$shipping_list['0']['shipping_name']}</if>">-->
     <div class="ncap-order-details">
       <div class="tabs-panels">
         <div class="misc-info">
@@ -282,14 +282,14 @@ function dosubmit(obj){
 	$(this).prop('disabled',true);
     var shipping = $('input[name="shipping"]').val();
     var send_type = $('#send_type').val()
-    if ($('#invoice_no').val() == '' && send_type== 0) {
-        layer.alert('请输入配送单号', {icon: 2});
-        return;
-    }
-    if ($('#shipping_code').val() == '' && send_type!= 3) {
-        layer.alert('请选择物流', {icon: 2});
-        return;
-    }
+    // if ($('#invoice_no').val() == '' && send_type== 0) {
+    //     layer.alert('请输入配送单号', {icon: 2});
+    //     return;
+    // }
+    // if ($('#shipping_code').val() == '' && send_type!= 3) {
+    //     layer.alert('请选择物流', {icon: 2});
+    //     return;
+    // }
     if(shipping != 1) {
         var a = [];
         $('input[name*=goods]').each(function (i, o) {
