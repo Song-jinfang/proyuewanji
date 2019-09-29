@@ -278,21 +278,33 @@
         spaceBetween: 10,
     });
 	var is_coupon;
-	$(document).ready(function(){
-		is_coupon = $("#is_coupon").val();
-		if(is_coupon == 1){
-            layer.open({
-                type: 1,
-                title: false,
-                closeBtn: 0,
-                shadeClose: true,
-                skin: 'yourclass',
-                content: "<div class='img_div' onclick='s()'><img src='__IMG__/activity.png'/></div>",
-            });
-		}
-		$(".yourclass").css('top','200px');
-		$(".yourclass").css('left','0px');
-	});
+	// $(document).ready(function(){
+	// 	is_coupon = $("#is_coupon").val();
+	// 	if(is_coupon == 1){
+    //         layer.open({
+    //             type: 1,
+    //             title: false,
+    //             closeBtn: 0,
+    //             shadeClose: true,
+    //             skin: 'yourclass',
+    //             content: "<div class='img_div' onclick='s()'><img src='__IMG__/activity.png'/></div>",
+    //         });
+	// 	}
+	// 	$(".yourclass").css('top','200px');
+	// 	$(".yourclass").css('left','0px');
+	// });
+    $(document).ready(function(){
+        layer.open({
+            type: 1,
+            title: false,
+            closeBtn: 0,
+            shadeClose: true,
+            skin: 'yourclass',
+            content: "<div class='img_div' onclick='ss()'><img src='__IMG__/d202a52ae6539116b0a25718d3f9b75.png'/></div>",
+        });
+        $(".yourclass").css('top','60px');
+        $(".yourclass").css('left','0.5rem');
+    });
     function s(){
 		$.ajax({
 			url:'/mobile/index/first_order_coupon',
@@ -305,6 +317,23 @@
 				layer.msg('网络异常，请稍后再试');
 			}
 		}); 
+	}
+    function ss(e)
+	{
+		layer.closeAll();
+        is_coupon = $("#is_coupon").val();
+        if(is_coupon == 1){
+            layer.open({
+                type: 1,
+                title: false,
+                closeBtn: 0,
+                shadeClose: true,
+                skin: 'yourclass',
+                content: "<div class='img_div' onclick='s()'><img src='__IMG__/activity.png'/></div>",
+            });
+        }
+		$(".yourclass").css('top','200px');
+		$(".yourclass").css('left','0px');
 	}
 /* 	//上拉加载分页更多
 	$(window).scroll(function(){
