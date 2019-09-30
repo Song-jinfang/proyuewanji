@@ -1008,7 +1008,7 @@ function update_pay_status($order_sn,$ext=array())
                                     if(!empty($pidCount)){
                                         foreach($pidCount as $k1=>$v1){
                                             $order_id = $order['order_id'];
-                                                $p = M('order')->where("user_id = ".$v1." and pay_status = 1 and type = 1 and order_id not in($order_id)")->find();
+                                                $p = M('order')->where("user_id = ".$v1." and pay_status = 1 and type = 1")->find();
                                                 if($p>0){
                                                     $s[] = $v1;
                                                 }

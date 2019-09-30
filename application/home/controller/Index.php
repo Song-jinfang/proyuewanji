@@ -20,13 +20,41 @@ use think\Verify;
 use think\Image;
 use think\Db;
 class Index extends Base {
+    /*
+     * 修改订单15-28天收益状态 ,筛选符合条件的
+     */
+    public function is_withdraw(){
+        $time = time();
+        $fiften_prafit_rateConf = M('config')->where("name='fiften_prafit_rate'")->value('value');//返现订单数量百分比
+        $fifteen_profitConf =  M('config')->where("name='fifteen_profit'")->value('value');//15-28天收益百分比
+        $orderCount = M('order')->where('fifteen_days <'.$time.' and fifteen_status = 0  and  pay_status =1 and type=1') ->order('pay_time','asc')->limit($canCount)->count();
+        if($orderCount){
+            $canCount = ceil(($fiften_prafit_rateConf/100) * $orderCount);
+            $canWithdraw = M('order')->field('user_id,order_amount,user_money,order_id')->where('fifteen_days <'.$time.' and fifteen_status = 0  and  pay_status =1 and type=1')
+            ->order('pay_time','asc')->limit($canCount)->select();
+            $can_receive =  time();//可领取时间向后延长一天
+            if(!empty($canWithdraw)){
+                foreach($canWithdraw as $k=>$v){
+                    $data['user_id'] = $v['user_id'];
+                    $data['money'] = ($v['user_money'] + $v['order_amount']) * ($fifteen_profitConf/100);
+                    $data['order_id'] = $v['order_id'];
+                    $data['add_time'] = time();
+                    $data['time_date'] = date('Y-m-d H:i');
+                    if(M('fiften_profit')->insert($data)){
+                        M('order')->where('order_id',$v['order_id'])->update(['fifteen_status'=>2,'can_receive'=>$can_receive]);
+                    }
+                }
+            }
+        } 
+    }
+    
+    
     
     
     public function team(){
         $user_id =  input('get.user_id');
         $rs = $this->team_num1($user_id);
         dump($rs);
-        
     }
     
     /***获取团队总人数***/
@@ -98,6 +126,7 @@ class Index extends Base {
                                 //查询上级最后一个订单的金额，进行烧伤处理
                                 $order_amount = getUserBurn($v,$order['order_amount']);
                             }
+                            dump($s);
                             $rela = 0;
                             if($k == 1 || $k == 2){
                                 if((count($s) >=20 && $team_num >=300) || in_array($v,$arr)){
@@ -105,8 +134,6 @@ class Index extends Base {
                                 }else if(count($s) >= 1){
                                     $rela = ($conf['level_'.$k]/100) * $order_amount;
                                 }
-                                
-                                echo 111;
                             }
                             if($k == 3 || $k == 4){
                                 if((count($s) >=20 && $team_num >=300) || in_array($v,$arr)){

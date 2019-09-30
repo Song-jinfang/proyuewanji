@@ -106,7 +106,7 @@ class User extends MobileBase
         $param = I('get.');
         $p = $param['p']?$param['p']:'1';
         $orderList = M('order')->field("order_id,order_amount,order_point,order_sn,FROM_UNIXTIME(add_time,'%Y.%m.%d') add_time,seven_days,
-                    fourteen_days,fifteen_days,fifteen_status,twenty_eight_days,seven_status,fourteen_status,is_resale,order_status")
+                    fourteen_days,fifteen_days,fifteen_status,twenty_eight_days,seven_status,fourteen_status,is_resale,order_status,order_point_status")
         ->where('user_id = '.$this->user_id .' and pay_status = 1 and type = 1 and join_t = 1')->order('order_id','desc')->select();
         $time = time();
         $confBeans = M('config')->column('value','name');
@@ -284,25 +284,31 @@ class User extends MobileBase
                 ));
         }
         if($day_mark == 'fifteen'){//如果为15-28天的话查询当天有没有订单生成
-            $end_time = $orderInfo['can_receive']+strtotime('+1 day');//下单最晚的时间不能超过该时间点，超过则订单失效
-            if(time() > $end_time){
-                $this->ajaxReturn(
-                    array(
-                        'status'=>1,
-                        'msg'=>'您在规定的时间里面没有及时下单，此收益和广告收益已失效',
-                        'url'=>'/Mobile/User/earnings'
-                    ));
-                M('order')->where('order_id = '.$order_id)->update(['fifteen_status'=>3]);
-            }
-            $order =  M('order')->field('order_amount')->where('user_id = '.$this->user_id .' and add_time >'.$orderInfo['can_receive'].' and add_time<'.$end_time.' pay_status = 1')->find();
+            $end_time = $orderInfo['can_receive']+86400;//下单最晚的时间不能超过该时间点，超过则订单失效
+            $order =  M('order')->field('order_id,order_amount')->where('user_id = '.$this->user_id .' and pay_time >'.$orderInfo['can_receive'].' and pay_time<'.$end_time.'  and  pay_status = 1 and type = 1')
+                       ->order('pay_time','asc')->limit(1)->find();
+                       dump($order);
+           if(time() > $end_time){
+               if(M('order')->where('order_id = '.$order_id)->update(['fifteen_status'=>3])){
+                   $this->ajaxReturn(
+                       array(
+                           'status'=>1,
+                           'msg'=>'您在规定的时间里面没有及时下单，该订单收益和广告收益已失效',
+                           'url'=>'/Mobile/User/earnings'
+                       ));
+               }
+           }
             if($orderInfo['order_amount'] >$order['order_amount']){
+                $end_time = date('m-d H:i:s',$end_time);
                 $this->ajaxReturn(
                     array(
                         'status'=>-1,
-                        'msg'=>'在当日24点之前购买大于等于此订单金额才能提取',
+                        'msg'=>'在'.$end_time.'之前购买大于等于此订单金额才能提取',
                         'url'=>'/Mobile/User/earnings'
                     ));
             }
+            
+            
         }
         $profit_status = $day_mark.'_status';
         $day_mark = $day_mark.'_profit';
@@ -317,14 +323,21 @@ class User extends MobileBase
         withdrawal_balance_finance($this->user_id,$orderProfit,'领取订单收益',$order_id);
         accountLog($this->user_id,$orderProfit,0,'领取订单收益',$order_id);//加余额
         $data[$profit_status] = 1;
+        if($day_mark == 'fifteen_profit'){
+            $fiften_profit['status'] = 1;
+            $fiften_profit['matching_order_id'] = $order['order_id'];
+            M('fiften_profit')->where('user_id = '.$this->user_id.' and order_id = '.$order_id)->update($fiften_profit);
+            $data['matching_order_id'] = $order['order_id'];
+        }
         M('order')->where('order_id = '.$order_id)->update($data);
+        M('fiften_profit')->where('user_id='.$this->user_id.' and order_id='.$order_id)->update(['status'=>1]);
         $this->ajaxReturn(
             array(
                 'status'=>1,
                 'msg'=>'已领取'.$orderProfit.'元',
                 'url'=>'/Mobile/User/earnings'
             )
-            );
+         );
     }
     
     //订单过期领取悦玩豆
@@ -357,18 +370,23 @@ class User extends MobileBase
                    
                 ));
         }
-        $order_point = M('order')->where('order_id='.$order_id)
-        ->value('order_point');
-        if($order_point){
-            accountLog($this->user_id,$order_point,0,'领取订单广告收益',$order_id);
-            withdrawal_balance_finance($this->user_id,$order_point,'领取订单广告收益',$order_id,2);
+        $order = M('order')->field('order_point,order_point_status')->where('order_id='.$order_id)
+        ->find();
+        Db::startTrans();
+        try{
+            M('order')->where('order_id='.$order_id)->update(['order_point_status'=>1]);
+            accountLog($this->user_id,$order['order_point'],0,'领取订单广告收益',$order_id);
+            withdrawal_balance_finance($this->user_id,$order['order_point'],'领取订单广告收益',$order_id,2);
+            Db::commit();
+        }catch (Exception $exception){
+            Db::rollback();
         }
         $this->ajaxReturn(
             array(
                 'status'=>1,
-                'msg'=>'领取成功'.$order_point.'元',
+                'msg'=>'领取成功'.$order['order_point'].'元',
                 'url'=>'/Mobile/User/earnings')
-            );
+         );
     }
     /*
      * 获取分享总收益到余额
@@ -2131,4 +2149,27 @@ class User extends MobileBase
         $file && unlink($file);
         exit;
     }
+    /*
+     * 获取提现备注
+     * */
+    public function withdrawals_remark()
+    {
+        $id = request()->post('id');
+        $remark = Db::name('withdrawals')->where(['id' => $id])->value('remark');
+        if($remark){
+            return json([
+                'code'  =>  1,
+                'msg'   =>  $remark,
+                'data'  =>  [],
+            ]);
+        }else{
+            return json([
+                'code'  =>  -1,
+                'msg'   =>  '网络异常，请稍后再试',
+                'data'  =>  [],
+            ]);
+        }
+    }
+    
+    
 }

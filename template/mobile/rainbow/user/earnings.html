@@ -81,15 +81,19 @@
 						<div class="dayBox1" style="margin-top:0.15rem">
 							<div class="div1" style="width:50%;">
 								<font></font>
-								<if condition="$v.adv_task eq 1">
+								<if condition="$v.adv_task eq 1  && $v.order_point_status eq 0">
 									<a href="/mobile/index/adv_list/order_id/{$v.order_id}" style="text-decoration:none"><span class="btn btnGreen">去做任务</span></a>
 								<else/>
 									<a style="text-decoration:none"><span class="btn btnGray">去做任务</span></a>
 								</if>
 							</div>
 							<div class="div1" style="width:50%;">
-								<if condition="$v.fifteen_status eq 1 || $v.fifteen_status eq 2">
-									<span class="btn btnGreen" onclick="get_advEarnings_to_balance('{$v.order_id}')">领取到余额</span>
+								<if condition="$v.fifteen_status eq 1">
+									<if condition="$v.order_point_status eq 1">
+										<span class="btn btnGray" >已领取</span>
+									<else/>
+										<span class="btn btnGreen" onclick="get_advEarnings_to_balance('{$v.order_id}')">领取到余额</span>
+									</if>
 								<elseif condition="$v.fifteen_status eq 3">
 									<span class="btn btnGray">已失效</span>
 								<else/>
@@ -174,7 +178,7 @@
 				}
 				/***领取订单**/
 				function get_advEarnings_to_balance(order_id){
-					layer.msg('领取收益需消耗1%的悦玩豆', {
+					layer.msg('领取该收益需消耗1%的悦玩豆', {
 						  time: 0 //不自动关闭
 						  ,btn: ['确定', '取消']
 						  ,yes: function(index){
