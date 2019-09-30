@@ -381,7 +381,9 @@ class Goods extends Base {
             $store_count_change_num = $data['store_count'];
         }
         $goods->data($data, true);
-        $goods->last_update = time();
+        if (!($data['goods_id'] > 0)){
+            $goods->last_update = time();
+        }
         $goods->price_ladder = true;
         $goods->save();
         if(empty($spec_item)){
