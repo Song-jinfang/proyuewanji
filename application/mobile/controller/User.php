@@ -107,7 +107,7 @@ class User extends MobileBase
         $p = $param['p']?$param['p']:'1';
         $orderList = M('order')->field("order_id,order_amount,order_point,order_sn,FROM_UNIXTIME(add_time,'%Y.%m.%d') add_time,seven_days,
                     fourteen_days,fifteen_days,fifteen_status,twenty_eight_days,seven_status,fourteen_status,is_resale,order_status,order_point_status")
-        ->where('user_id = '.$this->user_id .' and pay_status = 1 and type = 1 and join_t = 1')->order('order_id','desc')->select();
+        ->where('user_id = '.$this->user_id .' and pay_status = 1 and type = 1 and join_t = 1 and order_status !=3')->order('order_id','desc')->select();
         $time = time();
         $confBeans = M('config')->column('value','name');
         foreach($orderList as $k=>$v){
@@ -287,7 +287,6 @@ class User extends MobileBase
             $end_time = $orderInfo['can_receive']+86400;//下单最晚的时间不能超过该时间点，超过则订单失效
             $order =  M('order')->field('order_id,order_amount')->where('user_id = '.$this->user_id .' and pay_time >'.$orderInfo['can_receive'].' and pay_time<'.$end_time.'  and  pay_status = 1 and type = 1')
                        ->order('pay_time','asc')->limit(1)->find();
-                       dump($order);
            if(time() > $end_time){
                if(M('order')->where('order_id = '.$order_id)->update(['fifteen_status'=>3])){
                    $this->ajaxReturn(
