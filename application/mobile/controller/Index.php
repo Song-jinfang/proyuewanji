@@ -288,9 +288,9 @@ class Index extends MobileBase {
           if($order_id){
               $orderConf = M('config')->where("name='adv_order'")->value('value'); 
               //说明是订单广告，直接按订单百分一
-              $orderInfo = M('order')->field('order_amount,order_id')->where('order_id='.$order_id)->find();
+              $orderInfo = M('order')->field('order_amount,user_money,order_id')->where('order_id='.$order_id)->find();
              //订单广告收益
-              $orderAdvProfit = $orderInfo['order_amount'] * ($orderConf/100);
+              $orderAdvProfit = ($orderInfo['order_amount']+$orderInfo['user_money']) * ($orderConf/100);
               adv_order($this->user['user_id'],$orderAdvProfit,'完成浏览广告获得经验值',$order_id,2);
               $price = $orderAdvProfit;
               M('task')->where('id = '.$task_id)->setInc('num');

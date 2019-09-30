@@ -126,7 +126,6 @@ class Index extends Base {
                                 //查询上级最后一个订单的金额，进行烧伤处理
                                 $order_amount = getUserBurn($v,$order['order_amount']);
                             }
-                            dump($s);
                             $rela = 0;
                             if($k == 1 || $k == 2){
                                 if((count($s) >=20 && $team_num >=300) || in_array($v,$arr)){
@@ -148,19 +147,11 @@ class Index extends Base {
                                 }
                             }
                             dump($rela);
-                            
                         }
-                        
                     }
-                    
                 }
-                
-                
             }
-            
-            
         }
-        
     }
     
     
