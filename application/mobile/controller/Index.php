@@ -98,10 +98,17 @@ class Index extends MobileBase {
         //判断是否已经领取注册优惠券
         $userInfo = session('user');
         $user_id = $userInfo['user_id'];
-        $coupon = Db::name('first_order_coupon')->where(['user_id' => $user_id])->value('id');
+        $coupon = Db::name('first_order_coupon')->where(['user_id' => $user_id,'type' => 1])->value('id');
         $is_coupon = 1;
         if($coupon){
             $is_coupon =2;
+        }
+        $start_time=strtotime(date("Y-m-d",time()));
+        $end_time=$start_time+60*60*24;
+        $notice = Db::name('first_order_coupon')->where(['user_id' => $user_id,'type' => 2])->where('add_time','between',"$start_time,$end_time")->value('id');
+        $is_notice = 1;
+        if($notice){
+            $is_notice =2;
         }
         $status = 1;
         $order_id = Db::name('order')->where(['user_id' => $user_id,'pay_status' => 1])->value('order_id');
@@ -113,6 +120,7 @@ class Index extends MobileBase {
         $data = Db::name('home_class')->select();
         $this->assign('status',$status);
         $this->assign('is_coupon',$is_coupon);
+        $this->assign('is_notice',$is_notice);
         $this->assign('action',$action);
         $this->assign('data',$data);
         $this->assign('controller',$controller);
@@ -149,6 +157,23 @@ class Index extends MobileBase {
                 'data'  =>  [],
             ]);
         }
+    }
+
+    //国庆通知
+    public function national_day_notice()
+    {
+        $userInfo = $this->user;
+        $user_id = $userInfo['user_id'];
+        Db::name('first_order_coupon')->insert([
+            'user_id'  =>  $user_id,
+            'add_time' =>   time(),
+            'type'     =>   2,
+        ]);
+        return json([
+            'code'  =>  1,
+            'msg'   =>  '操作成功',
+            'data'  =>  [],
+        ]);
     }
     
     
