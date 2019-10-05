@@ -283,11 +283,12 @@ class Order extends MobileBase
     //申请取消订单
     public function record_refund_order()
     {
+       
         $order_id   = input('post.order_id', 0);
         $user_note  = input('post.user_note', '');
         $consignee  = input('post.consignee', '');
         $mobile     = input('post.mobile', '');
-
+       
         $logic = new \app\common\logic\OrderLogic;
         $return = $logic->recordRefundOrder($this->user_id, $order_id, $user_note, $consignee, $mobile);
 

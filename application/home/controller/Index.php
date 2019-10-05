@@ -148,6 +148,7 @@ class Index extends Base {
                                     $rela = ($vip_level_conf['vip_level_'.$k]/100) * $order_amount;
                                 }
                             }
+                            dump($v);
                             dump($rela);
                         }
                     }

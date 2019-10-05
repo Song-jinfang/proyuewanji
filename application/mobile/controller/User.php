@@ -183,7 +183,9 @@ class User extends MobileBase
         $profitArr['share_profit'] = M('adv_log')->where('type=3 and user_id='.$this->user_id)->sum('user_money');//分享总收益
         $profitArr['order_profit'] = M('withdrawal_balance')->where('user_id='.$this->user_id .' and type=1')->sum('money');//分享总提取到余额的额度
         $profitArr['dynamic_profit'] = M('users')->where('user_id='.$this->user_id)->value('dynamic_profit');
-        $profitArr['profit_already'] = M('withdrawal_balance')->where('user_id='.$this->user_id.' and type=2')->sum('money');
+        //$profitArr['profit_already'] = M('withdrawal_balance')->where('user_id='.$this->user_id.' and type=2')->sum('money');
+        //总账户；冻结账户
+        $profitArr['profit_already'] = M('users')->where('user_id='.$this->user_id)->value('frozen_dynamic_profit');
         $this->assign('profitArr',$profitArr);
         $this->assign('data',$data);
         return $this->fetch();
@@ -285,27 +287,40 @@ class User extends MobileBase
         }
         if($day_mark == 'fifteen'){//如果为15-28天的话查询当天有没有订单生成
             $end_time = $orderInfo['can_receive']+86400;//下单最晚的时间不能超过该时间点，超过则订单失效
-            $order =  M('order')->field('order_id,order_amount,user_money')->where('user_id = '.$this->user_id .' and pay_time >'.$orderInfo['can_receive'].' and pay_time<'.$end_time.'  and  pay_status = 1 and type = 1')
+            $order =  M('order')->field('order_id,order_amount,user_money,pay_time')->where('user_id = '.$this->user_id .' and pay_time >'.$orderInfo['can_receive'].' and pay_time<'.$end_time.'  and  pay_status = 1 and type = 1 and matching_order_id = 0')
                        ->order('pay_time','asc')->limit(1)->find();
-           if(time() > $end_time){
-               if(M('order')->where('order_id = '.$order_id)->update(['fifteen_status'=>3])){
-                   $this->ajaxReturn(
-                       array(
-                           'status'=>1,
-                           'msg'=>'您在规定的时间里面没有及时下单，该订单收益和广告收益已失效',
-                           'url'=>'/Mobile/User/earnings'
-                       ));
-               }
-           }
-           if($orderInfo['order_amount'] >($order['order_amount'] + $order['user_money'])){
-                $end_time = date('m-d H:i:s',$end_time);
-                $this->ajaxReturn(
-                    array(
-                        'status'=>-1,
-                        'msg'=>'在'.$end_time.'之前购买大于等于此订单金额才能提取',
-                        'url'=>'/Mobile/User/earnings'
-                    ));
-            }
+                       if(!empty($order)){
+                           if($order['pay_time'] > $end_time){
+                               if(M('order')->where('order_id = '.$order_id)->update(['fifteen_status'=>3])){
+                                   $this->ajaxReturn(
+                                       array(
+                                           'status'=>1,
+                                           'msg'=>'您下单的时间已经超过了规定时间，该订单收益和广告收益已失效',
+                                           'url'=>'/Mobile/User/earnings'
+                                       ));
+                               }
+                           }
+                           if($orderInfo['order_amount'] >($order['order_amount'] + $order['user_money'])){
+                               $end_time = date('m-d H:i:s',$end_time);
+                               $this->ajaxReturn(
+                                   array(
+                                       'status'=>-1,
+                                       'msg'=>'在'.$end_time.'之前购买大于等于此订单金额才能提取',
+                                       'url'=>'/Mobile/User/earnings'
+                                   ));
+                           }
+                       }else{
+                           if(time() > $end_time){
+                               M('order')->where('order_id = '.$order_id)->update(['fifteen_status'=>3]);
+                           }
+                           $this->ajaxReturn(
+                               array(
+                                   'status'=>1,
+                                   'msg'=>'在'.$end_time.'之前购买大于等于此订单金额才能提取',
+                                   'url'=>'/Mobile/User/earnings'
+                               ));
+                      }
+         
             
             
         }

@@ -1197,7 +1197,7 @@ function dynamic_profit($user_id,$money,$desc,$order_id = 0,$type){
      'dynamic_profit'        => ['exp','dynamic_profit+'.$money],
      );
      $update = Db::name('users')->where("user_id = $user_id")->save($update_data); */
-    $update = M('users')->where("user_id = $user_id")->setInc('dynamic_profit',$money);
+    $update = M('users')->where("user_id = $user_id")->setInc('frozen_dynamic_profit',$money);
         M('adv_log')->add($account_log);
 
    
@@ -1230,6 +1230,7 @@ function confirm_order($id,$user_id = 0){
         $row = M('order')->where(array('order_id'=>$id))->save($data);
         if(!$row)
             return array('status'=>-3,'msg'=>'操作失败');
+            auto($id,true);//计算团队业绩
             
             // 商品待评价提醒
             $order_goods = M('order_goods')->field('goods_id,goods_name,rec_id')->where(["order_id" => $id])->find();
@@ -1258,6 +1259,79 @@ function confirm_order($id,$user_id = 0){
             return array('status'=>1,'msg'=>'操作成功','url'=>U('Order/order_detail',['id'=>$id]));
 }
 
+
+
+
+
+
+//根据订单查询用户所有的上级应该得到的分享收益
+function auto($order_id,$status = true){
+    $order = M('order')->field('user_id,order_amount,pay_time,user_money')->where('order_id ='.$order_id)->find();
+    if($order['order_amount'] > 0){
+        //$parentArr = explode(',',$order[''])
+        $userlist = M('users')->field('pid_list')->where('user_id = '.$order['user_id'])->find();
+        if($userlist){
+            $pidArr = array_reverse(explode(',',$userlist['pid_list']));
+            unset($pidArr[0]);
+            $conf = M('config')->where('id >=172 and id <=177')->column('value','name');
+            $vip_level_conf = M('config')->where('id >=192 and id <=197')->column('value','name');
+            $arr = array('171');
+            foreach($pidArr as $k=>$v){
+                if($v){
+                    $s = array();
+                    $pidCount = M('users')->where("first_leader ='$v'")->column('user_id');
+                    if(!empty($pidCount)){
+                        /****计算团队总的有效会员个数****/
+                        foreach($pidCount as $k1=>$v1){
+                            $order_id = $order['order_id'];
+                            $p = M('order')->where("user_id = ".$v1." and pay_status = 1 and type = 1 and pay_time <=".$order['pay_time'])->find();
+                            if($p>0){
+                                $s[] = $v1;//计算有多少个下级
+                            }
+                        }
+                        /****计算团队总的有效会员个数****/
+                        $userBurn = M('users')->where("user_id = $v")->value('burn');
+                        $team_num = team_num($v);//团队总人数
+                        // $order_amount = $order['order_amount']+intval($order['user_money']);
+                        $order_amount = $order['order_amount']+intval($order['user_money']);
+                        if($userBurn == 1){
+                            //查询上级最后一个订单的金额，进行烧伤处理
+                            // $order_amount = getUserBurn($v,$order['order_amount']+intval($order['user_money']));
+                            $order_amount = getUserBurn($v,$order['order_amount']+intval($order['user_money']));
+                        }
+                        $rela = 0;
+                        if($k == 1 || $k == 2){
+                            if((count($s) >=20 && $team_num >=300) || in_array($v,$arr)){
+                                $rela = ($vip_level_conf['vip_level_'.$k]/100) * $order_amount;
+                            }else if(count($s) >= 1){
+                                $rela = ($conf['level_'.$k]/100) * $order_amount;
+                            }
+                        }
+                        if($k == 3 || $k == 4){
+                            if((count($s) >=20 && $team_num >=300) || in_array($v,$arr)){
+                                $rela = ($vip_level_conf['vip_level_'.$k]/100) * $order_amount; //返额10 8 5 3 1 0.5
+                            }else if(count($s) >= 6){
+                                $rela = ($conf['level_'.$k]/100) * $order_amount;//返额10 5 3 1
+                            }
+                        }
+                        if($k == 5 || $k == 6){//直推用户大于等于20，团队人数小于等于300
+                            if((count($s) >=20 && $team_num >=300) || in_array($v,$arr)){
+                                $rela = ($vip_level_conf['vip_level_'.$k]/100) * $order_amount;
+                            }
+                        }
+                        if($rela > 0){
+                            if($status == true){//确认收货
+                                //减去冻结账户加在活期账户里面
+                                M('users')->where("user_id = $v")->setInc('dynamic_profit',$rela);
+                            }
+                            M('users')->where("user_id = $v")->setDec('frozen_dynamic_profit',$rela);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 /**
  * 下单赠送活动：优惠券，积分
  * @param $order|订单数组
