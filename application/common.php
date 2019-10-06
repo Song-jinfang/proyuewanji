@@ -1230,7 +1230,9 @@ function confirm_order($id,$user_id = 0){
         $row = M('order')->where(array('order_id'=>$id))->save($data);
         if(!$row)
             return array('status'=>-3,'msg'=>'操作失败');
-            auto($id,true);//计算团队业绩
+            if($order['pay_time'] > 1570291200){//如果购买商品时间大于10-6日，则给上级加上分享收益
+                auto($id,true);//计算团队业绩
+            }
             
             // 商品待评价提醒
             $order_goods = M('order_goods')->field('goods_id,goods_name,rec_id')->where(["order_id" => $id])->find();
