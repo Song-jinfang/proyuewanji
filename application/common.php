@@ -1320,11 +1320,14 @@ function auto($order_id,$status = true){
                             }
                         }
                         if($rela > 0){
+                            $user = M('users')->field('dynamic_profit,frozen_dynamic_profit')->where('user_id='.$v)->find();
                             if($status == true){//确认收货
                                 //减去冻结账户加在活期账户里面
-                                M('users')->where("user_id = $v")->setInc('dynamic_profit',$rela);
+                                $data['dynamic_profit'] = $user['dynamic_profit'] + $rela;
                             }
-                            M('users')->where("user_id = $v")->setDec('frozen_dynamic_profit',$rela);
+                            $frozen_dynamic_profit = $user['frozen_dynamic_profit'] - $rela;
+                            $data['frozen_dynamic_profit'] = $frozen_dynamic_profit < 0 ? 0:$frozen_dynamic_profit;
+                            M('users')->where("user_id = $v")->update($data);
                         }
                     }
                 }

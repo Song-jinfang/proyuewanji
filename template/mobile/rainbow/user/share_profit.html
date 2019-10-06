@@ -4,7 +4,7 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no">
 		<title></title>
-		<link rel="stylesheet" href="__CSS__/earnings.css" />
+		<link rel="stylesheet" href="__CSS__/earnings.css?time=1" />
 		<script type="text/javascript" src="__JS__/jquery-3.2.1.min.js" ></script>
 		<script src="__JS__/layer.js"  type="text/javascript" ></script>
 	</head>
@@ -40,7 +40,7 @@
 	    <a id="[back]" <php> if(request()->action() == 'share_profit'){ </php>  href="{:U('User/index')}"  href="[href]" <php> } </php> ><img src="__IMG__/back.png" class="back" ></a>广告收益
 	</div>
 		<div class="tab">
-			<a href="/Mobile/user/earnings" class="curr">
+			<a href="/Mobile/user/earnings">
 				<p style="color:#FF470E"><b>{$profitArr['order_profit']}</b><font>(元)</font></p>
 			    <p>单单返</p>
 			</a>
@@ -50,7 +50,7 @@
 			    <p>广告收益</p>
 			</a>
 			<span></span>
-			<a href="/Mobile/user/share_profit">
+			<a href="/Mobile/user/share_profit" class="curr <php>if(request()->action() == 'share_profit'){</php>back-color<php>}</php>">
 				<p style="color:#FF470E"><b>{$profitArr['share_profit']}</b><font>(元)</font></p>
 			    <p>分享收益</p>
 			</a>

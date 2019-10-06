@@ -4,7 +4,7 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no">
 		<title></title>
-		<link rel="stylesheet" href="__CSS__/earnings.css?time=1" />
+		<link rel="stylesheet" href="__CSS__/earnings.css?time=2" />
 		<script type="text/javascript" src="__JS__/jquery-3.2.1.min.js" ></script>
 				<script src="__JS__/layer.js"  type="text/javascript" ></script>
 	</head>
@@ -13,7 +13,7 @@
 	    <a id="[back]" <php> if(request()->action() == 'earnings'){ </php>  href="{:U('User/index')}" <php> }</php>><img src="__IMG__/back.png" class="back" ></a>单单返
 	</div>
 		<div class="tab">
-			<a href="/Mobile/user/earnings" class="curr">
+			<a href="/Mobile/user/earnings" class="curr <php>if(request()->action() == 'earnings'){</php>back-color<php>}</php>">
 				<p style="color:#FF470E"><b>{$profitArr['order_profit']}</b><font>(元)</font></p>
 			    <p>单单返</p>
 			</a>
