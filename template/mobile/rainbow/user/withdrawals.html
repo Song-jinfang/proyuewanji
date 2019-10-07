@@ -105,7 +105,7 @@
 			</div>
 			<div class="withdraw-cont-wrap withdraw-border16">
 				<ul class="withdraw-cont-ul">
-					<li class="p">
+				<!-- 	<li class="p">
 						<span class="withdraw-cont-ul-name fl">支付密码：</span>
 						<div class="withdraw-cont-input fl">
 							<input name="paypwd" id="paypwd" type="password" placeholder="请填写支付密码"/>
@@ -115,7 +115,7 @@
 					<div class="withdraw-cont-pwd p">
 						<div class="fr withdraw-pwd-btn"><a href="{:U('User/paypwd')}"><input type="button" value="前往设置或修改交易密码" /></a></div>
 						<span class="withdraw-pwd-span fr"></span> 
-					</div>
+					</div> -->
 					<div class="withdraw-cont-btn cont-btn-two" style="margin-bottom: 0;">
 						<input type="button" onclick="checkSubmit()" value="提交申请" />
 						<label></label>
@@ -392,10 +392,10 @@
             layer.open({content:'提现金额大于您的账户余额',time:2});
             return false;
         }
-        if(paypwd == ''){
+       /*  if(paypwd == ''){
             layer.open({content:'请输入支付密码',time:2});
             return false;
-        }
+        } */
         $.ajax({
             type: "post",
             url :"{:U('Mobile/User/withdrawals')}",

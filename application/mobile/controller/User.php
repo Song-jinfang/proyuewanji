@@ -106,14 +106,14 @@ class User extends MobileBase
         $param = I('get.');
         $p = $param['p']?$param['p']:'1';
         $orderList = M('order')->field("order_id,order_amount,order_point,order_sn,FROM_UNIXTIME(add_time,'%Y.%m.%d') add_time,seven_days,
-                    fourteen_days,fifteen_days,fifteen_status,twenty_eight_days,seven_status,fourteen_status,is_resale,order_status,order_point_status")
+                    fourteen_days,fifteen_days,fifteen_status,twenty_eight_days,seven_status,fourteen_status,is_resale,order_status,order_point_status,total_amount")
         ->where('user_id = '.$this->user_id .' and pay_status = 1 and type = 1 and join_t = 1 and order_status !=3')->order('order_id','desc')->select();
         $time = time();
         $confBeans = M('config')->column('value','name');
         foreach($orderList as $k=>$v){
             if($v['seven_days']){
                 $orderList[$k]['status_7'] = 1;//默认可以领取
-                $orderList[$k]['money_7'] = ($confBeans['seven_profit']/100) * $v['order_amount'];
+                $orderList[$k]['money_7'] = ($confBeans['seven_profit']/100) * $v['total_amount'];
                 if($v['seven_days'] > $time){
                     //没有到领取时间
                     $orderList[$k]['status_7'] = 2;
@@ -126,7 +126,7 @@ class User extends MobileBase
             }
             if($v['fourteen_days']){
                 $orderList[$k]['status_14'] = 1;//默认可以领取
-                $orderList[$k]['money_14'] = ($confBeans['fourteen_profit']/100) * $v['order_amount'];
+                $orderList[$k]['money_14'] = ($confBeans['fourteen_profit']/100) * $v['total_amount'];
                 if($v['fourteen_days'] > $time){
                     $orderList[$k]['status_14'] = 2; //没有到领取时间
                     $orderList[$k]['fourteen_days'] = date('Y.m.d',$v['fourteen_days']);
@@ -263,7 +263,7 @@ class User extends MobileBase
         $order_id = I('post.order_id');
         $day_mark = I('post.day');
         $start_time = strtotime(date('Y-m-d'));
-        $orderInfo = M('order')->field('order_amount,can_receive,order_status,user_money')->where('order_id='.$order_id)
+        $orderInfo = M('order')->field('order_amount,can_receive,order_status,user_money,total_amount')->where('order_id='.$order_id)
         ->find();
         if($orderInfo['order_status'] < 2){
             $this->ajaxReturn(
@@ -287,7 +287,7 @@ class User extends MobileBase
         }
         if($day_mark == 'fifteen'){//如果为15-28天的话查询当天有没有订单生成
             $end_time = $orderInfo['can_receive']+86400;//下单最晚的时间不能超过该时间点，超过则订单失效
-            $order =  M('order')->field('order_id,order_amount,user_money,pay_time')->where('user_id = '.$this->user_id .' and pay_time >'.$orderInfo['can_receive'].' and pay_time<'.$end_time.'  and  pay_status = 1 and type = 1 and matching_order_id = 0')
+            $order =  M('order')->field('order_id,order_amount,user_money,pay_time,total_amount,integral_money')->where('user_id = '.$this->user_id .' and pay_time >'.$orderInfo['can_receive'].' and pay_time<'.$end_time.'  and  pay_status = 1 and type = 1 and matching_order_id = 0')
                        ->order('pay_time','asc')->limit(1)->find();
                        if(!empty($order)){
                            if($order['pay_time'] > $end_time){
@@ -300,7 +300,7 @@ class User extends MobileBase
                                        ));
                                }
                            }
-                           if($orderInfo['order_amount'] >($order['order_amount'] + $order['user_money'])){
+                           if($orderInfo['total_amount'] > $order['total_amount']){
                                $end_time = date('m-d H:i:s',$end_time);
                                $this->ajaxReturn(
                                    array(
@@ -326,7 +326,7 @@ class User extends MobileBase
         }
         $profit_status = $day_mark.'_status';
         $day_mark = $day_mark.'_profit';
-        $orderProfit = ($orderInfo['order_amount'] + $orderInfo['user_money']) * ($confBeans[$day_mark]/100);
+        $orderProfit = $orderInfo['total_amount'] * ($confBeans[$day_mark]/100);
         $orderBeansProfit = ($confBeans['profit_cons_beans']/100) * $orderProfit;
         //领取订单收益消费悦豌豆百分比
         $orderBeansProfit = ceil($orderBeansProfit);
@@ -1643,9 +1643,9 @@ class User extends MobileBase
             $data['create_time'] = time();
             $cash = tpCache('cash');
 
-            if(encrypt($data['paypwd']) != $this->user['paypwd']){
+         /*    if(encrypt($data['paypwd']) != $this->user['paypwd']){
                 $this->ajaxReturn(['status'=>0, 'msg'=>'支付密码错误']);
-            }
+            } */
             if ($data['money'] > $this->user['user_money']) {
                 $this->ajaxReturn(['status'=>0, 'msg'=>"本次提现余额不足"]);
             } 
@@ -1708,6 +1708,7 @@ class User extends MobileBase
             }
 
             if (M('withdrawals')->add($data)) {
+                accountLog($this->user_id,-$data['money'],0,'提现申请');
                 $this->ajaxReturn(['status'=>1,'msg'=>"已提交申请",'url'=>U('User/account',['type'=>2])]);
             } else {
                 $this->ajaxReturn(['status'=>0,'msg'=>'提交失败,联系客服!']);

@@ -955,7 +955,7 @@ class User extends Base
                     header("Content-type: text/html; charset=utf-8");
 exit("请联系TPshop官网客服购买高级版支持此功能");
                 } else {
-                    accountLog($val['user_id'], ($val['money'] * -1), 0, "管理员处理用户提现申请");//手动转账，默认视为已通过线下转方式处理了该笔提现申请
+                    //accountLog($val['user_id'], ($val['money'] * -1), 0, "管理员处理用户提现申请");//手动转账，默认视为已通过线下转方式处理了该笔提现申请
                     $r = M('withdrawals')->where(array('id' => $val['id']))->save(array('status' => 2, 'pay_time' => time()));
                     expenseLog($rdata);//支出记录日志
                     // 提现通知
