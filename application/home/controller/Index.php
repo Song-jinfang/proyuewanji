@@ -101,7 +101,7 @@ class Index extends Base {
     //根据订单查询用户所有的上级应该得到的分享收益
     public function auto($order_id,$user_id){
         // $order_id =  input('get.order_id');
-        $order = M('order')->field('user_id,order_amount,pay_time,user_money')->where('order_id ='.$order_id)->find();
+        $order = M('order')->field('user_id,order_amount,pay_time,user_money,total_amount')->where('order_id ='.$order_id)->find();
         
         if(($order['order_amount']+$order['user_money']) > 0){
             $userlist = M('users')->field('pid_list')->where('user_id = '.$order['user_id'])->find();
@@ -133,11 +133,11 @@ class Index extends Base {
                             $userBurn = M('users')->where("user_id = $v")->value('burn');
                             $team_num = team_num($v);//团队总人数
                             // $order_amount = $order['order_amount']+intval($order['user_money']);
-                            $order_amount = $order['order_amount']+intval($order['user_money']);
+                            $order_amount = $order['total_amount'];
                             if($userBurn == 1){
                                 //查询上级最后一个订单的金额，进行烧伤处理
                                 // $order_amount = getUserBurn($v,$order['order_amount']+intval($order['user_money']));
-                                $order_amount = getUserBurn($v,$order['order_amount']+intval($order['user_money']));
+                                $order_amount = getUserBurn($v,$order['total_amount']);
                             }
                             $rela = 0;
                             if($k == 1 || $k == 2){
@@ -218,7 +218,7 @@ class Index extends Base {
     //根据订单查询用户所有的上级应该得到的分享收益
     public function auto2(){
         $order_id =  input('get.order_id');
-        $order = M('order')->field('user_id,order_amount,pay_time,user_money')->where('order_id ='.$order_id)->find();
+        $order = M('order')->field('user_id,order_amount,pay_time,user_money,total_amount')->where('order_id ='.$order_id)->find();
         if($order['order_amount'] > 0){
             //$parentArr = explode(',',$order[''])
             $userlist = M('users')->field('pid_list')->where('user_id = '.$order['user_id'])->find();
@@ -246,11 +246,11 @@ class Index extends Base {
                             $userBurn = M('users')->where("user_id = $v")->value('burn');
                             $team_num = team_num($v);//团队总人数
                             // $order_amount = $order['order_amount']+intval($order['user_money']);
-                            $order_amount = $order['order_amount']+intval($order['user_money']);
+                            $order_amount = $order['total_amount'];
                             if($userBurn == 1){
                                 //查询上级最后一个订单的金额，进行烧伤处理
                                 // $order_amount = getUserBurn($v,$order['order_amount']+intval($order['user_money']));
-                                $order_amount = getUserBurn($v,$order['order_amount']+intval($order['user_money']));
+                                $order_amount = getUserBurn($v,$order['total_amount']);
                             }
                             $rela = 0;
                             if($k == 1 || $k == 2){

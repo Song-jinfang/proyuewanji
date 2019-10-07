@@ -1017,10 +1017,11 @@ function update_pay_status($order_sn,$ext=array())
                                     $userBurn = M('users')->where("user_id = $v")->value('burn');  //$userBurn为1要进行烧伤   2针对部分用户不进行烧伤
                                     $rela = 0;
                                     $team_num = team_num($v);
-                                    $order_amount = $order['order_amount']+intval($order['user_money']);
+                                    //$order_amount = $order['order_amount']+intval($order['user_money']);
+                                    $order_amount = $order['total_amount'];
                                     if($userBurn == 1){
                                         //查询上级最后一个订单的金额，进行烧伤处理
-                                        $order_amount = getUserBurn($v,$order['order_amount']+intval($order['user_money']));
+                                        $order_amount = getUserBurn($v,$order['total_amount']);
                                     }
                                  /*    if($order['order_consum_ywd'] == 0 && $order_amount > 0){
                                         $order_amount = $order_amount - $order['ywd_price'];
