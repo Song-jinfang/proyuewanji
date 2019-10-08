@@ -211,6 +211,9 @@ class Index extends MobileBase {
      * 
      */
     public function adv_list(){
+        if(!$this->user['user_id']){
+            header("location:" . U('Mobile/User/login'));
+        }
         $order_id = !empty(I('get.order_id'))?I('get.order_id'):'';
         if($order_id){
             $this->assign('order_id',$order_id);
