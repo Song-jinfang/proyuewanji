@@ -91,7 +91,6 @@
 	       <!--  <div class="swiper-pagination swiper-paginationB"></div> -->
 		</div>
 		<input type="hidden" id="is_coupon" value="{$is_coupon}">
-		<input type="hidden" id="is_notice" value="{$is_notice}">
 	</div>
 	<style>
 		.link1 img{width:6.95rem}
@@ -279,49 +278,21 @@
         spaceBetween: 10,
     });
 	var is_coupon;
-	var is_notice;
-	// $(document).ready(function(){
-	// 	is_coupon = $("#is_coupon").val();
-	// 	if(is_coupon == 1){
-    //         layer.open({
-    //             type: 1,
-    //             title: false,
-    //             closeBtn: 0,
-    //             shadeClose: true,
-    //             skin: 'yourclass',
-    //             content: "<div class='img_div' onclick='s()'><img src='__IMG__/activity.png'/></div>",
-    //         });
-	// 	}
-	// 	$(".yourclass").css('top','200px');
-	// 	$(".yourclass").css('left','0px');
-	// });
-    $(document).ready(function(){
-		is_notice = $("#is_notice").val();
+	$(document).ready(function(){
 		is_coupon = $("#is_coupon").val();
-        if(is_notice == 1){
-			layer.open({
-				type: 1,
-				title: false,
-				closeBtn: 0,
-				shadeClose: true,
-				skin: 'yourclass',
-				content: "<div class='img_div' onclick='ss()'><img src='__IMG__/d202a52ae6539116b0a25718d3f9b75.png'/></div>",
-			});
-			$(".yourclass").css('top','60px');
-			$(".yourclass").css('left','0.5rem');
-		}else if(is_notice != 1 && is_coupon == 1){
-			layer.open({
-				type: 1,
-				title: false,
-				closeBtn: 0,
-				shadeClose: true,
-				skin: 'yourclass',
-				content: "<div class='img_div' onclick='s()'><img src='__IMG__/activity.png'/></div>",
-			});
-			$(".yourclass").css('top','200px');
-			$(".yourclass").css('left','0px');
+		if(is_coupon == 1){
+            layer.open({
+                type: 1,
+                title: false,
+                closeBtn: 0,
+                shadeClose: true,
+                skin: 'yourclass',
+                content: "<div class='img_div' onclick='s()'><img src='__IMG__/activity.png'/></div>",
+            });
 		}
-    });
+		$(".yourclass").css('top','200px');
+		$(".yourclass").css('left','0px');
+	});
     function s(){
 		$.ajax({
 			url:'/mobile/index/first_order_coupon',
@@ -334,32 +305,6 @@
 				layer.msg('网络异常，请稍后再试');
 			}
 		}); 
-	}
-    function ss(e)
-	{
-		$.ajax({
-			url:'/mobile/index/national_day_notice',
-			type:'post',
-			success:function(e){
-				layer.closeAll();
-				is_coupon = $("#is_coupon").val();
-				if(is_coupon == 1){
-					layer.open({
-						type: 1,
-						title: false,
-						closeBtn: 0,
-						shadeClose: true,
-						skin: 'yourclass',
-						content: "<div class='img_div' onclick='s()'><img src='__IMG__/activity.png'/></div>",
-					});
-				}
-				$(".yourclass").css('top','200px');
-				$(".yourclass").css('left','0px');
-			},
-			error:function(){
-				layer.msg('网络异常，请稍后再试');
-			}
-		});
 	}
 /* 	//上拉加载分页更多
 	$(window).scroll(function(){
