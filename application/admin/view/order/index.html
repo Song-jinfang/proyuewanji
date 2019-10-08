@@ -37,6 +37,7 @@
             <input type="hidden" name="sort" value="desc">
             <input type="hidden" name="user_id" value="{$Request.param.user_id}">
             <input type="hidden" name="order_ids" value="">
+            <input type="hidden" name="dupm_type" id="dupm_type" value="">
             <!--用于查看结算统计 包含了哪些订单-->
             <input type="hidden" value="{$_GET['order_statis_id']}" name="order_statis_id" />
                                     
@@ -157,18 +158,18 @@
     <div class="tDiv">
       <div class="tDiv2">
         <div class="fbutton"> 
-        	<a href="javascript:exportReport()">
+        	<a href="javascript:exportReport(1)">
 	          	<div class="add" title="选定行数据导出excel文件,如果不选中行，将导出列表所有数据">
 	            	<span><i class="fa fa-plus"></i>导出数据</span>
 	          	</div>
           	</a>
           </div>
-          <div class="fbutton"> 
-        	<!--<a href="/index.php?m=Admin&c=Order&a=add_order">
-	          	<div class="add" title="添加订单">
-	            	<span><i class="fa fa-plus"></i>添加订单</span>
-	          	</div>
-          	</a> -->
+          <div class="fbutton">
+              <a href="javascript:exportReport(2)">
+                  <div class="add" title="选定行数据导出excel文件,如果不选中行，将导出列表所有数据">
+                      <span><i class="fa fa-plus"></i>导出数据(供货商)</span>
+                  </div>
+              </a>
           </div>
       </div>
       <div style="clear:both"></div>
@@ -242,7 +243,7 @@
         ajax_get_table('search-form2',cur_page);
     }
 	
-	function exportReport(){
+	function exportReport(dupm_type){
         var selected_ids = '';
         $('.trSelected' , '#flexigrid').each(function(i){
             selected_ids += $(this).data('order-id')+',';
@@ -250,7 +251,12 @@
         if(selected_ids != ''){
             $('input[name="order_ids"]').val(selected_ids.substring(0,selected_ids.length-1));
         }
-		$('#search-form2').submit();
+        if(dupm_type == 1){
+            $("#dupm_type").val(1);
+        }else{
+            $("#dupm_type").val(2);
+        }
+        $('#search-form2').submit();
 	}
 	
 	 

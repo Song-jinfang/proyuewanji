@@ -1145,6 +1145,7 @@ exit("请联系TPshop官网客服购买高级版支持此功能");
         $prom_type = I('prom_type'); //订单类型
         $keyType =   I("key_type");  //查找类型
         $keywords = I('keywords','','trim');
+        $dupm_type = I('dupm_type','');
         $where= ['add_time'=>['between',"$this->begin,$this->end"]];
         if(!empty($keywords)){
             $keyType == 'mobile'   ? $where['mobile']  = $keywords : false;
@@ -1181,59 +1182,117 @@ exit("请联系TPshop官网客服购买高级版支持此功能");
                     break;
             }
         }
-        $orderList = Db::name('order')->field("*,FROM_UNIXTIME(add_time,'%Y-%m-%d') as create_time")->where($where)->order('order_id')->select();
-    	$strTable ='<table width="500" border="1">';
-    	$strTable .= '<tr>';
-    	$strTable .= '<td style="text-align:center;font-size:12px;width:120px;">订单编号</td>';
-    	$strTable .= '<td style="text-align:center;font-size:12px;" width="100">日期</td>';
-    	$strTable .= '<td style="text-align:center;font-size:12px;" width="*">收货人</td>';
-    	$strTable .= '<td style="text-align:center;font-size:12px;" width="*">收货地址</td>';
-    	$strTable .= '<td style="text-align:center;font-size:12px;" width="*">电话</td>';
-    	$strTable .= '<td style="text-align:center;font-size:12px;" width="*">订单金额</td>';
-    	$strTable .= '<td style="text-align:center;font-size:12px;" width="*">实际支付</td>';
-    	$strTable .= '<td style="text-align:center;font-size:12px;" width="*">支付方式</td>';
-    	$strTable .= '<td style="text-align:center;font-size:12px;" width="*">支付状态</td>';
-    	$strTable .= '<td style="text-align:center;font-size:12px;" width="*">发货状态</td>';
-        $strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品数量</td>';
-    	$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品信息</td>';
-    	$strTable .= '</tr>';
-	    if(is_array($orderList)){
-	    	$region	= get_region_list();
-	    	foreach($orderList as $k=>$val){
-	    		$strTable .= '<tr>';
-	    		$strTable .= '<td style="text-align:center;font-size:12px;">&nbsp;'.$val['order_sn'].'</td>';
-	    		$strTable .= '<td style="text-align:left;font-size:12px;">'.$val['create_time'].' </td>';	    		
-	    		$strTable .= '<td style="text-align:left;font-size:12px;">'.$val['consignee'].'</td>';
+        if($dupm_type == 1){
+            $orderList = Db::name('order')->field("*,FROM_UNIXTIME(add_time,'%Y-%m-%d') as create_time")->where($where)->order('order_id')->select();
+            $strTable ='<table width="500" border="1">';
+            $strTable .= '<tr>';
+            $strTable .= '<td style="text-align:center;font-size:12px;width:120px;">订单编号</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="100">日期</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">收货人</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">收货地址</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">电话</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">订单金额</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">实际支付</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">支付方式</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">支付状态</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">发货状态</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品数量</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品信息</td>';
+            $strTable .= '</tr>';
+            if(is_array($orderList)){
+                $region	= get_region_list();
+                foreach($orderList as $k=>$val){
+                    $strTable .= '<tr>';
+                    $strTable .= '<td style="text-align:center;font-size:12px;">&nbsp;'.$val['order_sn'].'</td>';
+                    $strTable .= '<td style="text-align:left;font-size:12px;">'.$val['create_time'].' </td>';
+                    $strTable .= '<td style="text-align:left;font-size:12px;">'.$val['consignee'].'</td>';
+                    $strTable .= '<td style="text-align:left;font-size:12px;">'."{$region[$val['province']]},{$region[$val['city']]},{$region[$val['district']]},{$region[$val['twon']]}{$val['address']}".' </td>';
+                    $strTable .= '<td style="text-align:left;font-size:12px;">'.$val['mobile'].'</td>';
+                    $strTable .= '<td style="text-align:left;font-size:12px;">'.$val['goods_price'].'</td>';
+                    $strTable .= '<td style="text-align:left;font-size:12px;">'.$val['order_amount'].'</td>';
+                    $strTable .= '<td style="text-align:left;font-size:12px;">'.$val['pay_name'].'</td>';
+                    $strTable .= '<td style="text-align:left;font-size:12px;">'.$this->pay_status[$val['pay_status']].'</td>';
+                    $strTable .= '<td style="text-align:left;font-size:12px;">'.$this->shipping_status[$val['shipping_status']].'</td>';
+                    $orderGoods = D('order_goods')->where('order_id='.$val['order_id'])->select();
+                    $strGoods="";
+                    $goods_num = 0;
+                    foreach($orderGoods as $goods){
+                        $goods_num = $goods_num + $goods['goods_num'];
+                        $strGoods .= "商品编号：".$goods['goods_sn']." 商品名称：".$goods['goods_name'];
+                        if ($goods['spec_key_name'] != '') $strGoods .= " 规格：".$goods['spec_key_name'];
+                        $strGoods .= " 数量：" . $goods['goods_num'];
+                        $strGoods .= "成本价：" . $goods['cost_price'];
+                        $strGoods .= "<br />";
+                    }
+                    unset($orderGoods);
+                    $strTable .= '<td style="text-align:left;font-size:12px;">'.$goods_num.' </td>';
+                    $strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods.' </td>';
+                    $strTable .= '</tr>';
+                }
+            }
+        }else{
+            $orderList = Db::name('order')->field("*,FROM_UNIXTIME(add_time,'%Y-%m-%d') as create_time")->where($where)->order('order_id')->select();
+            $order_id_arr = Db::name('order')->where($where)->order('order_id')->column('order_id');
+            $strTable ='<table width="500" border="1">';
+            $strTable .= '<tr>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">供货商</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;width:120px;">订单编号</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="100">日期</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">收货人</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">收货地址</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">电话</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">订单金额</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">实际支付</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">支付方式</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">支付状态</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">发货状态</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品数量</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品信息</td>';
+            $strTable .= '</tr>';
+            $orderGoods = Db::name('order_goods')->alias('a')
+                ->join('ywj_goods b','a.goods_id = b.goods_id')
+                ->join('ywj_suppliers c','b.suppliers_id = c.suppliers_id')
+                ->where('a.order_id','in',$order_id_arr)
+                ->order('c.suppliers_id','desc')
+                ->field('a.*,c.suppliers_name')
+                ->select();
+            $region	= get_region_list();
+            foreach ($orderGoods as $k => $goods){
+                $val = Db::name('order')
+                    ->field("*,FROM_UNIXTIME(add_time,'%Y-%m-%d') as create_time")
+                    ->where('order_id',$goods['order_id'])
+                    ->find();
+                $strTable .= '<tr>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$goods['suppliers_name'].' </td>';
+                $strTable .= '<td style="text-align:center;font-size:12px;">&nbsp;'.$val['order_sn'].'</td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$val['create_time'].' </td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$val['consignee'].'</td>';
                 $strTable .= '<td style="text-align:left;font-size:12px;">'."{$region[$val['province']]},{$region[$val['city']]},{$region[$val['district']]},{$region[$val['twon']]}{$val['address']}".' </td>';
-	    		$strTable .= '<td style="text-align:left;font-size:12px;">'.$val['mobile'].'</td>';
-	    		$strTable .= '<td style="text-align:left;font-size:12px;">'.$val['goods_price'].'</td>';
-	    		$strTable .= '<td style="text-align:left;font-size:12px;">'.$val['order_amount'].'</td>';
-	    		$strTable .= '<td style="text-align:left;font-size:12px;">'.$val['pay_name'].'</td>';
-	    		$strTable .= '<td style="text-align:left;font-size:12px;">'.$this->pay_status[$val['pay_status']].'</td>';
-	    		$strTable .= '<td style="text-align:left;font-size:12px;">'.$this->shipping_status[$val['shipping_status']].'</td>';
-	    		$orderGoods = D('order_goods')->where('order_id='.$val['order_id'])->select();
-	    		$strGoods="";
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$val['mobile'].'</td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$val['goods_price'].'</td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$val['order_amount'].'</td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$val['pay_name'].'</td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$this->pay_status[$val['pay_status']].'</td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$this->shipping_status[$val['shipping_status']].'</td>';
+                $strGoods="";
                 $goods_num = 0;
-	    		foreach($orderGoods as $goods){
-                    $goods_num = $goods_num + $goods['goods_num'];
-	    			$strGoods .= "商品编号：".$goods['goods_sn']." 商品名称：".$goods['goods_name'];
-	    			if ($goods['spec_key_name'] != '') $strGoods .= " 规格：".$goods['spec_key_name'];
-	    			$strGoods .= " 数量：" . $goods['goods_num'];
-	    			$strGoods .= "成本价：" . $goods['cost_price'];
-	    			$strGoods .= "<br />";
-	    		}
-	    		unset($orderGoods);
+                $goods_num = $goods_num + $goods['goods_num'];
+                $strGoods .= "商品编号：".$goods['goods_sn']." 商品名称：".$goods['goods_name'];
+                if ($goods['spec_key_name'] != '') $strGoods .= " 规格：".$goods['spec_key_name'];
+                $strGoods .= " 数量：" . $goods['goods_num'];
+                $strGoods .= "成本价：" . $goods['cost_price'];
+                $strGoods .= "<br />";
                 $strTable .= '<td style="text-align:left;font-size:12px;">'.$goods_num.' </td>';
-	    		$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods.' </td>';
-	    		$strTable .= '</tr>';
-	    	}
-	    }
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods.' </td>';
+                $strTable .= '</tr>';
+            }
+        }
     	$strTable .='</table>';
     	unset($orderList);
     	downloadExcel($strTable,'order');
     	exit();
     }
-    
+
     /**
      * 退货单列表
      */
