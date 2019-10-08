@@ -1168,14 +1168,14 @@ function team_num ($user_id){
 
 function getUserBurn($uid,$order_amount){
     //查询上级最后一个订单的金额，进行烧伤
-    $parentOrder = M('order')->field('order_amount')
+    $parentOrder = M('order')->field('total_amount')
     ->where('user_id='.$uid.' and pay_status = 1 and type=1')
     ->order('order_id','desc')
     ->limit(1)->find();
-    if($parentOrder['order_amount'] >= $order_amount){
+    if($parentOrder['total_amount'] >= $order_amount){
         $order_amount1 = $order_amount;
     }else{
-        $order_amount1 = $parentOrder['order_amount'];
+        $order_amount1 = $parentOrder['total_amount'];
     }
     return $order_amount1;
 }
@@ -1269,7 +1269,7 @@ function confirm_order($id,$user_id = 0){
 
 //根据订单查询用户所有的上级应该得到的分享收益
 function auto($order_id,$status = true){
-    $order = M('order')->field('user_id,order_amount,pay_time,user_money')->where('order_id ='.$order_id)->find();
+    $order = M('order')->field('user_id,order_amount,pay_time,user_money,total_amount')->where('order_id ='.$order_id)->find();
     if($order['order_amount'] > 0){
         //$parentArr = explode(',',$order[''])
         $userlist = M('users')->field('pid_list')->where('user_id = '.$order['user_id'])->find();
@@ -1296,11 +1296,11 @@ function auto($order_id,$status = true){
                         $userBurn = M('users')->where("user_id = $v")->value('burn');
                         $team_num = team_num($v);//团队总人数
                         // $order_amount = $order['order_amount']+intval($order['user_money']);
-                        $order_amount = $order['order_amount']+intval($order['user_money']);
+                        $order_amount = $order['total_amount'];
                         if($userBurn == 1){
                             //查询上级最后一个订单的金额，进行烧伤处理
                             // $order_amount = getUserBurn($v,$order['order_amount']+intval($order['user_money']));
-                            $order_amount = getUserBurn($v,$order['order_amount']+intval($order['user_money']));
+                            $order_amount = getUserBurn($v,$order['total_amount']);
                         }
                         $rela = 0;
                         if($k == 1 || $k == 2){
