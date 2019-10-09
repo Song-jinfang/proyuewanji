@@ -148,7 +148,7 @@ class RefundLogic extends Model
     function updateRefundOrder($order,$type=0){
         //使用积分或者余额抵扣部分一一退还
         if ($order['user_money'] > 0 || $order['integral'] > 0) {
-            $update_money_res = accountLog($order['user_id'], $order['user_money'], $order['integral'], '用户申请订单退款', 0, $order['order_id'], $order['order_sn']);
+            $update_money_res = accountLog1($order['user_id'], $order['user_money'], $order['integral'], '用户申请订单退款', 0, $order['order_id'], $order['order_sn']);
             if(!$update_money_res){
                 return false;
             }
