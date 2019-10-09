@@ -1007,8 +1007,8 @@ function update_pay_status($order_sn,$ext=array())
                                     $pidCount = M('users')->where("first_leader ='$v'")->column('user_id');
                                     if(!empty($pidCount)){
                                         foreach($pidCount as $k1=>$v1){
-                                            $order_id = $order['order_id'];
-                                                $p = M('order')->where("user_id = ".$v1." and pay_status = 1 and type = 1 and fifteen_status not in(3)")->find();
+                                            $order_id = $order['order_id'];//can_receive  = 0 || fifteen_status in (0,1,2)   can_receive为0是没有匹配上，大于0匹配上了，
+                                                $p = M('order')->where("user_id = ".$v1." and pay_status = 1 and type = 1 and (can_receive  = 0 || fifteen_status =2)) ")->find();
                                                 if($p>0){
                                                     $s[] = $v1;
                                                 }

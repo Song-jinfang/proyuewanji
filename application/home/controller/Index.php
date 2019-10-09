@@ -21,7 +21,7 @@ use think\Image;
 use think\Db;
 class Index extends Base {
     /*
-     * 修改订单15-28天收益状态 ,筛选符合条件的
+     * 修改订单15-28天收益状态 ,筛选符合条件的，定时任务1
      */
     public function is_withdraw(){
         $time = time();
@@ -48,6 +48,12 @@ class Index extends Base {
         }
     }
     
+    /*
+     * 15-28天匹配上没有购买商品导致失效的，把状态太改为3
+     */
+    public function failure(){
+        $order = M('order')->where("type = 1 and pay_status = 1 and fifteen_status = 2 and order_id=1370")->update(['fifteen_status'=>3]);
+    }
     
     
     
