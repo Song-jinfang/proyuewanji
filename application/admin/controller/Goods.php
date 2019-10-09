@@ -229,7 +229,9 @@ class Goods extends Base {
         $show = $Page->show();
         $order_str = "`{$_POST['orderby1']}` {$_POST['orderby2']}";
         $goodsList = M('Goods')->where($where)->order($order_str)->limit($Page->firstRow.','.$Page->listRows)->select();
-
+        foreach ($goodsList as &$vo){
+            $vo['suppliers_name'] = Db::name('suppliers')->where(['suppliers_id' => $vo['suppliers_id']])->value('suppliers_name');
+        }
         $catList = D('goods_category')->select();
         $catList = convert_arr_key($catList, 'id');
         $this->assign('catList',$catList);

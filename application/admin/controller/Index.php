@@ -34,6 +34,8 @@ class Index extends Base {
     }
    
     public function welcome(){
+        $admin_info = getAdminInfo(session('admin_id'));
+        
     	$this->assign('sys_info',$this->get_sys_info());
 //    	$today = strtotime("-1 day");
     	$today = strtotime(date("Y-m-d"));
@@ -45,6 +47,7 @@ class Index extends Base {
     	$count['today_login'] = M('users')->where("last_login>=$today")->count();//今日访问
     	$count['new_users'] = M('users')->where("reg_time>=$today")->count();//新增会员
     	$count['comment'] = M('comment')->where("is_show=0")->count();//最新评论
+    	$this->assign('admin_info',$admin_info);           
     	$this->assign('count',$count);
         return $this->fetch();
     }

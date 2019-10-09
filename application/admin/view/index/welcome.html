@@ -50,6 +50,7 @@
 <div class="warpper">
     <div class="title">管理中心</div>
     <div class="content start_content">
+    <if condition="$admin_info['admin_id'] eq 1">
         <div class="contentWarp">
             <div class="contentWarp_item clearfix">
                 <div class="section_select">
@@ -149,6 +150,7 @@
                 </div>
             </div>
         </div>
+        </if>
         <div class="contentWarp">
             <div class="section system_section" style="float: none;width: inherit;">
                 <div class="system_section_con">
