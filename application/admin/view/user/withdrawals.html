@@ -168,7 +168,7 @@
                                 </div>
                             </td>
                             <td align="center" class="">
-                                <div style="text-align: center; width: 50px;">{$v.user_id}</div>
+                                <div style="text-align: center; width: 50px;"><if condition="in_array($v.user_id,$blacklist)"><span style="color: red">{$v.user_id}</span><else/>{$v.user_id}</if></div>
                             </td>
                             <td align="center" class="">
                                 <div style="text-align: center; width: 100px;">

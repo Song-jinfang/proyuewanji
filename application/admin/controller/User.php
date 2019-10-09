@@ -795,6 +795,8 @@ class User extends Base
     public function withdrawals()
     {
         $this->get_withdrawals_list();
+        $blacklist = [1006,1019,1126,1168,1316,1324,1350,1368];
+        $this->assign('blacklist',$blacklist);
         $this->assign('withdraw_status', C('WITHDRAW_STATUS'));
         return $this->fetch();
     }
