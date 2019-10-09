@@ -55,11 +55,17 @@
          <td align="left"  axis="col1" align="center">
             <div style="text-align: left; width: 150px;"><if condition="$list['is_resale'] eq 1 || $list['is_resale'] eq 2"><b style="color:red">转售</b><else/>不转售</if></div>
         </td>
+        <td align="left"  axis="col1" align="center">
+            <div style="text-align: left; width: 150px;"><if condition="$list['is_deposit'] eq 2"><b style="color:red">未出库</b><else/>已出库</if></div>
+        </td>
 		<td style="width: 100%;">
             <div style="text-align: left; ">
                 <a class="btn green" href="{:U('Admin/order/detail',array('order_id'=>$list['order_id']))}"><i class="fa fa-list-alt"></i>查看</a>
                 <if condition="($list['order_status'] eq 3  and $list['pay_status'] eq 0) or ($list['order_status'] eq 5)">
                     <a class="btn red" href="javascript:void(0);" data-order-id="{$list['order_id']}" onclick="del(this)"><i class="fa fa-trash-o"></i>删除</a>
+                </if>
+                <if condition="$list['is_deposit'] eq 2">
+                    <a class="btn red" href="javascript:void(0);" onclick="deposit({$list['order_id']})"><i class="fa fa-trash-o"></i>出库</a>
                 </if>
                 <!--<if condition="($list['order_status'] eq 3  and $list['pay_status'] eq 1)">
                     <a class="btn green" href="{:U('Admin/order/detail',array('order_id'=>$list['order_id']))}"><i class="fa fa-list-alt"></i>查看</a>
@@ -109,6 +115,29 @@
             });
 		});
 	}
+	//出库操作
+    function deposit(order_id)
+    {
+        layer.confirm('确定要出库吗?', function(){
+            $.ajax({
+                type : "POST",
+                url: 'Admin/order/deposit',
+                data:{order_id:order_id},
+                success: function(data){
+                    if(data.code ==1){
+                        layer.msg(data.msg,function(){
+                            history.go(0);
+                        },500);
+                    }else{
+                        layer.msg(data.msg);
+                    }
+                },
+                error:function(){
+                    layer.alert('网络异常，请稍后重试',{icon: 2});
+                }
+            });
+        });
+    }
     
     $('.ftitle>h5').empty().html("(共{$pager->totalRows}条记录)");
 </script>

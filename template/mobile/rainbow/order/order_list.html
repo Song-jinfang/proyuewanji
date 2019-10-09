@@ -49,6 +49,9 @@
                         <div class="fr">
                             <span>{$order['order_status_detail']}</span>
                         </div>
+                        <div class="fr">
+                            <span><if condition="$order.is_deposit eq 1">已出库<else/>未出库</if>&nbsp;&nbsp;</span>
+                        </div>
                     </div>
                 </div>
                 <div class="shop-mfive p">
@@ -109,7 +112,7 @@
                                 <a class="shop-rebuy" href="{:U('Order/refund_order', ['order_id'=>$order['order_id']])}">取消订单</a>
                             </if>
                         </if>
-                        <if condition="$order.receive_btn eq 1 && order.pay_status eq 1">
+                        <if condition="$order.is_deposit eq 1 && $order.pay_status eq 1 && $order.order_status neq 2">
                             <a class="shop-rebuy paysoon" onclick="orderConfirm({$order.order_id})">确认收货</a>
                         </if>
                         <if condition="$order.comment_btn eq 1">

@@ -148,6 +148,35 @@ class Order extends Base {
         return $this->fetch();
     }
 
+    /*
+     * 出库操作
+     * */
+    public function deposit()
+    {
+        $order_id = request()->post('order_id');
+        if(!$order_id){
+            return json([
+                'code'  =>  -1,
+                'msg'   =>  '参数异常，请重新再试',
+                'data'  =>  []
+            ]);
+        }
+        $res = Db::name('order')->where(['order_id' => $order_id])->update(['is_deposit' =>1]);
+        if($res === false){
+            return json([
+                'code'  =>  -1,
+                'msg'   =>  '参数异常，请重新再试',
+                'data'  =>  []
+            ]);
+        }else{
+            return json([
+                'code'  =>  1,
+                'msg'   =>  '出库成功',
+                'data'  =>  []
+            ]);
+        }
+    }
+
     /**
      * 虚拟订单列表
      * @return mixed
@@ -1246,8 +1275,12 @@ exit("请联系TPshop官网客服购买高级版支持此功能");
             $strTable .= '<td style="text-align:center;font-size:12px;" width="*">支付方式</td>';
             $strTable .= '<td style="text-align:center;font-size:12px;" width="*">支付状态</td>';
             $strTable .= '<td style="text-align:center;font-size:12px;" width="*">发货状态</td>';
-            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品数量</td>';
             $strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品信息</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品数量</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品编号</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品名称</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">规格</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">成本价</td>';
             $strTable .= '</tr>';
             $orderGoods = Db::name('order_goods')->alias('a')
                 ->join('ywj_goods b','a.goods_id = b.goods_id')
@@ -1282,8 +1315,12 @@ exit("请联系TPshop官网客服购买高级版支持此功能");
                 $strGoods .= " 数量：" . $goods['goods_num'];
                 $strGoods .= "成本价：" . $goods['cost_price'];
                 $strGoods .= "<br />";
-                $strTable .= '<td style="text-align:left;font-size:12px;">'.$goods_num.' </td>';
                 $strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods.' </td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$goods_num.' </td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$goods['goods_sn'].' </td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$goods['goods_name'].' </td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$goods['spec_key_name'].' </td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$goods['cost_price'].' </td>';
                 $strTable .= '</tr>';
             }
         }
