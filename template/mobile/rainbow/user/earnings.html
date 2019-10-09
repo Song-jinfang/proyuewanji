@@ -31,8 +31,12 @@
 		<div class="list">
 		<volist name="orderList" id="v">
 			<div class="orderLists">
-				<p class="orderTitle" style="color:#ffffff">①订单号：{$v.order_sn}&nbsp&nbsp&nbsp<font>日期：{$v.add_time}</font></p>
+				<p class="orderTitle" style="color:#ffffff">订单金额：<b>￥{$v.total_amount}</b>&nbsp&nbsp&nbsp<font>日期：{$v.add_time}</font></p>
 				<div class="form">
+				<div class="dayBox">
+						<p style="font-size:0.3rem;line-height:0.8rem">订单号：{$v.order_sn}&nbsp&nbsp&nbsp</p>
+					</div>
+				
 					<div class="dayBox">
 						<div class="div">
 							<font>7天</font>
@@ -67,7 +71,10 @@
 								<if condition="$v.fifteen_status eq 2"><!--在15-28天内可以领取-->
 									<a  style="text-decoration:none"><span class="btn btnGreen" onclick="get_money_to_balance('{$v.order_id}','fifteen')">领取</span></a>
 								<elseif condition="$v.fifteen_status eq 3"><!--过了28天，领取失效 -->
-									<a  style="text-decoration:none"><span class="btn btnGreen" onclick="get_money_to_beans('{$v.order_id}')">领取悦玩豆</span></a>
+									<a  style="text-decoration:none"><span class="btn btnGray">已失效</span></a>
+								<elseif condition="$v.fifteen_status eq 4"><!--过了28天，领取失效 -->
+									<a  style="text-decoration:none"><span class="btn btnGreen" onclick="get_money_to_beans('{$v.order_id}')">领取悦玩豆</span></a>	
+									
 								<elseif condition="$v.fifteen_status eq 1"><!--已经领取到余额/悦玩豆-->
 									<a style="text-decoration:none"><span class="btn btnGray">已领取</span></a>
 								<else/>

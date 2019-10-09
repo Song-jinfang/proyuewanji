@@ -114,15 +114,14 @@ class User extends MobileBase
             if($v['seven_days']){
                 $orderList[$k]['status_7'] = 1;//默认可以领取
                 $orderList[$k]['money_7'] = ($confBeans['seven_profit']/100) * $v['total_amount'];
-                if($v['seven_days'] > $time){
+                if($v['seven_days'] > $time){//还没有到第七天
                     //没有到领取时间
                     $orderList[$k]['status_7'] = 2;
                     $orderList[$k]['seven_days'] = date('Y.m.d',$v['seven_days']);
                 }
-                if($v['seven_status'] == 1){
+                if($v['seven_status'] == 1){ 
                     $orderList[$k]['status_7'] = 3;
                 }
-                
             }
             if($v['fourteen_days']){
                 $orderList[$k]['status_14'] = 1;//默认可以领取
@@ -135,7 +134,7 @@ class User extends MobileBase
                     $orderList[$k]['status_14'] = 3;
                 }
             }
-            if($v['twenty_one_days']){
+       /*      if($v['twenty_one_days']){
                 $orderList[$k]['twenty_one_status'] = 1;//默认可以领取
                 if($v['twenty_one_days'] > $time){
                     $orderList[$k]['twenty_one_status'] = 2; //没有到领取时间
@@ -146,7 +145,7 @@ class User extends MobileBase
                         $orderList[$k]['twenty_one_days'] = '已过期';
                     }
                 }
-            }
+            } */
             $orderList[$k]['adv_task'] = 1;
             $time = strtotime(date('Y-m-d'));
             $user_task_count = M('user_task')->where('user_id='.$this->user_id.' and order_id='.$v['order_id'].' and add_time >'.$time)->count();

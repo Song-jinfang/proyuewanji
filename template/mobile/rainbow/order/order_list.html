@@ -112,7 +112,7 @@
                                 <a class="shop-rebuy" href="{:U('Order/refund_order', ['order_id'=>$order['order_id']])}">取消订单</a>
                             </if>
                         </if>
-                        <if condition="$order.is_deposit eq 1 && $order.pay_status eq 1 && $order.order_status neq 2">
+                       <if condition="$order.is_deposit eq 1 && $order.pay_status eq 1 && $order.order_status lt 2">
                             <a class="shop-rebuy paysoon" onclick="orderConfirm({$order.order_id})">确认收货</a>
                         </if>
                         <if condition="$order.comment_btn eq 1">
