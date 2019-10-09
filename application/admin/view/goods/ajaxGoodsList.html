@@ -24,9 +24,6 @@
                 <td align="center" axis="col0">
                   <div style="text-align: left; width: 300px;"><if condition="$list[is_virtual] eq 1"><span class="type-virtual" title="虚拟兑换商品">虚拟</span></if>{$list.goods_name|getSubstr=0,33}</div>
                 </td>
-                 <td align="center" axis="col0">
-                  <div style="width: 50px;">{$list.suppliers_name}</div>
-                </td> 
                 <td align="center" axis="col0">
                   <div style="text-align: center; width: 100px;">{$list.goods_sn}</div>
                 </td>
@@ -80,7 +77,10 @@
                 <td align="center" axis="col0">                  
                 <div style="text-align: center; width: 50px;">
                   <input type="text" onKeyUp="this.value=this.value.replace(/[^\d]/g,'')" onpaste="this.value=this.value.replace(/[^\d]/g,'')" onblur="changeTableVal('goods','goods_id','{$list.goods_id}','sort',this)" size="4" value="{$list.sort}" />
-                </div>                  
+                </div>
+                <td align="center" axis="col0">
+                  <div style="width: 50px;">{$list.suppliers_name}</div>
+                </td>
                 </td>                     
                 <td align="" class="" style="width: 100%;">
                   <div>&nbsp;</div>
