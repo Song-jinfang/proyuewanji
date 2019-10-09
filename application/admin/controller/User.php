@@ -947,11 +947,11 @@ class User extends Base
             $oauthUsers = M("OauthUsers")->where(['user_id' => $user['user_id'], 'oauth' => 'weixin'])->find();
             //获取用户绑定openId
             $user['openid'] = $oauthUsers['openid'];
-            if ($user['user_money'] < $val['money']) {
+          /*   if ($user['user_money'] < $val['money']) {
                 $data = array('status' => -2, 'remark' => '账户余额不足');
                 M('withdrawals')->where(array('id' => $val['id']))->save($data);
                 $this->error('账户余额不足');
-            } else {
+            } else { */
                 $rdata = array('type' => 1, 'money' => $val['money'], 'log_type_id' => $val['id'], 'user_id' => $val['user_id']);
                 if ($atype == 'online') {
                     header("Content-type: text/html; charset=utf-8");
@@ -964,7 +964,7 @@ exit("请联系TPshop官网客服购买高级版支持此功能");
                     $messageLogic->withdrawalsNotice($val['id'], $val['user_id'], $val['money'] - $val['taxfee']);
 
                 }
-            }
+           // }
         }
         if ($alipay['batch_num'] > 0) {
             //支付宝在线批量付款

@@ -123,7 +123,8 @@ class Index extends Base {
                     }
                 }
                 foreach($pidArr as $k=>$v){
-                    if($v){
+                    $effectiveOrderCount = M('order')->where("type = 1 and pay_status = 1 and (can_receive  = 0 || fifteen_status =2) and user_id = $v")->count();
+                    if($effectiveOrderCount > 0){
                         $s = array();
                         $pidCount = M('users')->where("first_leader ='$v'")->column('user_id');
                         if(!empty($pidCount)){
@@ -236,7 +237,8 @@ class Index extends Base {
                 $vip_level_conf = M('config')->where('id >=192 and id <=197')->column('value','name');
                 $arr = array('171');
                 foreach($pidArr as $k=>$v){
-                    if($v){
+                    $effectiveOrderCount = M('order')->where("type = 1 and pay_status = 1 and (can_receive  = 0 || fifteen_status =2) and user_id = $v")->count();
+                    if($effectiveOrderCount > 0){
                         $s = array();
                         $pidCount = M('users')->where("first_leader ='$v'")->column('user_id');
                         if(!empty($pidCount)){
