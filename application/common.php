@@ -1002,30 +1002,28 @@ function update_pay_status($order_sn,$ext=array())
                         $arr = array('171');
                         if(!empty($pidArr)){
                             foreach($pidArr as $k=>$v){
-                                if($v){
+                                //查询有效订单个数
+                                $effectiveOrderCount = M('order')->where("type = 1 and pay_status = 1 and (can_receive  = 0 || fifteen_status =2) and user_id = $v")->count();
+                                if($effectiveOrderCount > 0){
                                     $s = array();
                                     $pidCount = M('users')->where("first_leader ='$v'")->column('user_id');
                                     if(!empty($pidCount)){
                                         foreach($pidCount as $k1=>$v1){
-                                            $order_id = $order['order_id'];//can_receive  = 0 || fifteen_status in (0,1,2)   can_receive为0是没有匹配上，大于0匹配上了，
-                                                $p = M('order')->where("user_id = ".$v1." and pay_status = 1 and type = 1 and (can_receive  = 0 || fifteen_status =2)) ")->find();
-                                                if($p>0){
-                                                    $s[] = $v1;
-                                                }
+                                            //$order_id = $order['order_id'];//can_receive  = 0 || fifteen_status in (0,1,2)   can_receive为0是没有匹配上，大于0匹配上了，
+                                            $p = M('order')->where("user_id = ".$v1." and pay_status = 1 and type = 1 and (can_receive  = 0 || fifteen_status =2)) ")->count();
+                                            if($p>0){
+                                                $s[] = $v1;
+                                            }
                                         }
                                     }
                                     $userBurn = M('users')->where("user_id = $v")->value('burn');  //$userBurn为1要进行烧伤   2针对部分用户不进行烧伤
                                     $rela = 0;
                                     $team_num = team_num($v);
-                                    //$order_amount = $order['order_amount']+intval($order['user_money']);
                                     $order_amount = $order['total_amount'];
                                     if($userBurn == 1){
                                         //查询上级最后一个订单的金额，进行烧伤处理
                                         $order_amount = getUserBurn($v,$order['total_amount']);
                                     }
-                                 /*    if($order['order_consum_ywd'] == 0 && $order_amount > 0){
-                                        $order_amount = $order_amount - $order['ywd_price'];
-                                    } */
                                     if($k == 1 || $k == 2){
                                         if((count($s) >=20 && $team_num >=300) || in_array($v,$arr)){
                                             $rela = ($vip_level_conf['vip_level_'.$k]/100) * $order_amount;
