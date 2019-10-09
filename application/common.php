@@ -1008,7 +1008,7 @@ function update_pay_status($order_sn,$ext=array())
                                     if(!empty($pidCount)){
                                         foreach($pidCount as $k1=>$v1){
                                             $order_id = $order['order_id'];
-                                                $p = M('order')->where("user_id = ".$v1." and pay_status = 1 and type = 1")->find();
+                                                $p = M('order')->where("user_id = ".$v1." and pay_status = 1 and type = 1 and fifteen_status not in(3)")->find();
                                                 if($p>0){
                                                     $s[] = $v1;
                                                 }
@@ -1217,7 +1217,7 @@ function confirm_order($id,$user_id = 0){
         $where['user_id'] = $user_id;
     }
     $order = M('order')->where($where)->find();
-    if($order['order_status'] != 1)
+    if($order['order_status'] != 1  && $order['is_deposit'] ==2)
         return array('status'=>-1,'msg'=>'该订单不能收货确认');
         if(empty($order['pay_time']) || $order['pay_status'] != 1){
             return array('status'=>-1,'msg'=>'商家未确定付款，该订单暂不能确定收货');
