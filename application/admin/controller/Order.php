@@ -79,6 +79,10 @@ class Order extends Base {
                     ->where($where)
                     ->where(['pay_status' => 1,'type' => 1])
                     ->sum('order_amount');
+        $order_amount2 += Db::name('order')
+                    ->where($where)
+                    ->where(['pay_status' => 1,'type' => 1])
+                    ->sum('user_money');
         $start_time = strtotime(date('Y-m-d'),time()) - 3600*24;
         $end_time = strtotime(date('Y-m-d 23:59:59'),time()) - 3600*24;
         $count1 = Db::name('order')
@@ -89,7 +93,10 @@ class Order extends Base {
             ->where('add_time','between',"$start_time,$end_time")
             ->where(['pay_status' => 1,'type' => 1])
             ->sum('order_amount');
-
+        $order_amount1 += Db::name('order')
+            ->where('add_time','between',"$start_time,$end_time")
+            ->where(['pay_status' => 1,'type' => 1])
+            ->sum('user_money');
 
         $condition['prom_type'] = array('lt',5);
         $order_sn = ($keyType && $keyType == 'order_sn') ? $keywords : I('order_sn') ;
