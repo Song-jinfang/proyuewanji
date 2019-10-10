@@ -197,7 +197,23 @@ a.green:hover { color: #FFF; background-color: #1BBC9D; border-color: #16A086; }
                     </if>
                 </td>
                 <td width="50px">
-                    <input type="text" class="input-txt" id="company-{$good.rec_id}" name="company" value="{$good.company}" placeholder="请输入快递公司名称">
+<!--                    <input type="text" class="input-txt" id="company-{$good.rec_id}" name="company" value="{$good.company}" placeholder="请输入快递公司名称">-->
+                    <select id="company-{$good.rec_id}" name="company" id="">
+                        <option value="邮政快递包裹" <eq name="$good.company" value="邮政快递包裹">selected</eq>>邮政快递包裹</option>
+                        <option value="韵达快递" <eq name="$good.company" value="韵达快递">selected</eq>>韵达快递</option>
+                        <option value="中通快递" <eq name="$good.company" value="中通快递">selected</eq>>中通快递</option>
+                        <option value="顺丰速运" <eq name="$good.company" value="顺丰速运">selected</eq>>顺丰速运</option>
+                        <option value="圆通速递" <eq name="$good.company" value="圆通速递">selected</eq>>圆通速递</option>
+                        <option value="百世快递" <eq name="$good.company" value="百世快递">selected</eq>>百世快递</option>
+                        <option value="申通快递" <eq name="$good.company" value="申通快递">selected</eq>>申通快递</option>
+                        <option value="京东物流" <eq name="$good.company" value="京东物流">selected</eq>>京东物流</option>
+                        <option value="天天快递" <eq name="$good.company" value="天天快递">selected</eq>>天天快递</option>
+                        <option value="EMS" <eq name="$good.company" value="EMS">selected</eq>>EMS</option>
+                        <option value="德邦" <eq name="$good.company" value="德邦">selected</eq>>德邦</option>
+                        <option value="德邦快递" <eq name="$good.company" value="德邦快递">selected</eq>>德邦快递</option>
+                        <option value="品骏快递" <eq name="$good.company" value="品骏快递">selected</eq>>品骏快递</option>
+                        <option value="中通快运" <eq name="$good.company" value="中通快运">selected</eq>>中通快运</option>
+                    </select>
                 </td>
                 <td width="50px">
                     <input type="text" class="input-txt" id="waybill_number-{$good.rec_id}" name="waybill_number" value="{$good.waybill_number}" onkeyup="this.value=this.value.replace(/[^\d]/g,'')">

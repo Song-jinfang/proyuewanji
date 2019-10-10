@@ -49,14 +49,14 @@
         <td align="center" abbr="article_time" axis="col6" class="">
           <div style="text-align: center; width: 120px;" class="">{$list.add_time|date='Y-m-d H:i',###}</div>
         </td>
-        <td align="left"  axis="col1" align="center">
-            <div style="text-align: left; width: 150px;">{$list.invoice_title}</div>
+        <td align="center" abbr="article_time" axis="col6" class="">
+            <div style="text-align: center; width: 60px;">{$list.invoice_title}</div>
         </td>
-         <td align="left"  axis="col1" align="center">
-            <div style="text-align: left; width: 150px;"><if condition="$list['is_resale'] eq 1 || $list['is_resale'] eq 2"><b style="color:red">转售</b><else/>不转售</if></div>
+        <td align="center" abbr="article_time" axis="col6" class="">
+            <div style="text-align: center; width: 60px;"><if condition="$list['is_resale'] eq 1 || $list['is_resale'] eq 2"><b style="color:red">转售</b><else/>不转售</if></div>
         </td>
-        <td align="left"  axis="col1" align="center">
-            <div style="text-align: left; width: 150px;"><if condition="$list['is_deposit'] eq 2"><b style="color:red">未出库</b><else/>已出库</if></div>
+        <td align="center" abbr="article_time" axis="col6" class="">
+            <div style="text-align: center; width: 60px;"><if condition="$list['is_deposit'] eq 2"><b style="color:red">未出库</b><else/>已出库</if></div>
         </td>
 		<td style="width: 100%;">
             <div style="text-align: left; ">
