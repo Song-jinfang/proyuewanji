@@ -131,7 +131,7 @@ class Index extends Base {
                             /****计算团队总的有效会员个数****/
                             foreach($pidCount as $k1=>$v1){
                                 $order_id = $order['order_id'];
-                                $p = M('order')->where("user_id = ".$v1." and pay_status = 1 and type = 1 and pay_time <=".$order['pay_time'])->find();
+                                $p = M('order')->where("user_id = ".$v1." and pay_status = 1 and type = 1 and (can_receive  = 0 || fifteen_status =2)")->count();
                                 if($p>0){
                                     $s[] = $v1;//计算有多少个下级
                                 }
@@ -245,7 +245,7 @@ class Index extends Base {
                             /****计算团队总的有效会员个数****/
                             foreach($pidCount as $k1=>$v1){
                                 $order_id = $order['order_id'];
-                                $p = M('order')->where("user_id = ".$v1." and pay_status = 1 and type = 1 and pay_time <=".$order['pay_time'])->find();
+                                $p = M('order')->where("user_id = ".$v1." and pay_status = 1 and type = 1 and (can_receive  = 0 || fifteen_status =2)")->count();
                                 if($p>0){
                                     $s[] = $v1;//计算有多少个下级
                                 }

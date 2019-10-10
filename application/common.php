@@ -578,14 +578,14 @@ function accountLog($user_id, $user_money = 0,$pay_points = 0, $desc = '',$distr
     $update_data = array(
         'user_money'        => ['exp','user_money+'.$user_money],
         'pay_points'        => ['exp','pay_points+'.$pay_points],
-      /*   'distribut_money'   => ['exp','distribut_money+'.$distribut_money], */
+        /*   'distribut_money'   => ['exp','distribut_money+'.$distribut_money], */
     );
     if(($user_money+$pay_points+$distribut_money) == 0)return false;
     $update = Db::name('users')->where("user_id = $user_id")->save($update_data);
     //if($update){
-        M('account_log')->add($account_log);
-   //     return true;
-   // }else{
+    M('account_log')->add($account_log);
+    //     return true;
+    // }else{
     //    return false;
     //}
 }
@@ -609,9 +609,9 @@ function accountLog1($user_id, $user_money = 0,$pay_points = 0, $desc = '',$dist
     if(($user_money+$pay_points+$distribut_money) == 0)return false;
     $update = Db::name('users')->where("user_id = $user_id")->save($update_data);
     if($update){
-    M('account_log')->add($account_log);
-         return true;
-     }else{
+        M('account_log')->add($account_log);
+        return true;
+    }else{
         return false;
     }
 }
@@ -709,9 +709,9 @@ function consumption_beans($user_id,$beans,$desc){
         'happy_beans'   => ['exp','happy_beans+'.$beans]
     );
     $update = Db::name('users')->where("user_id = $user_id")->save($update_data);
-   // if($update){
-        M('adv_log')->add($account_log);
-     //   return true;
+    // if($update){
+    M('adv_log')->add($account_log);
+    //   return true;
     //}else{
     //    return false;
     //}
@@ -732,8 +732,8 @@ function lose_beans($user_id,$beans,$desc){
         'happy_beans'   => ['exp','happy_beans-'.$beans]
     );
     $update = Db::name('users')->where("user_id = $user_id")->save($update_data);
-   // if($update){
-        M('adv_log')->add($account_log);
+    // if($update){
+    M('adv_log')->add($account_log);
     //    return true;
     //}else{
     //    return false;
@@ -985,15 +985,15 @@ function update_pay_status($order_sn,$ext=array())
             // 修改支付状态  已支付
             $update = array('pay_status'=>1,'pay_time'=>$time);
             if($order['type'] == 1 && $order['join_t'] == 1){
-                  $update['seven_days'] = strtotime('+7 day');
-                 $update['fourteen_days'] = strtotime('+14 day');
-                 $update['fifteen_days'] = strtotime('+15 day');
-                 $update['twenty_eight_days'] = strtotime('+28 day'); 
-              /*   $time = time();
-                $update['seven_days'] = $time+(3*60);
-                $update['fourteen_days'] =  $time+(6*60);
-                $update['fifteen_days'] =  $time+(9*60);
-                $update['twenty_eight_days'] =  $time+(10*60); */
+                $update['seven_days'] = strtotime('+7 day');
+                $update['fourteen_days'] = strtotime('+14 day');
+                $update['fifteen_days'] = strtotime('+15 day');
+                $update['twenty_eight_days'] = strtotime('+28 day');
+                /*   $time = time();
+                 $update['seven_days'] = $time+(3*60);
+                 $update['fourteen_days'] =  $time+(6*60);
+                 $update['fifteen_days'] =  $time+(9*60);
+                 $update['twenty_eight_days'] =  $time+(10*60); */
                 
             }
             if(isset($ext['transaction_id'])) $update['transaction_id'] = $ext['transaction_id'];
@@ -1036,7 +1036,7 @@ function update_pay_status($order_sn,$ext=array())
                                     if(!empty($pidCount)){
                                         foreach($pidCount as $k1=>$v1){
                                             //$order_id = $order['order_id'];//can_receive  = 0 || fifteen_status in (0,1,2)   can_receive为0是没有匹配上，大于0匹配上了，
-                                            $p = M('order')->where("user_id = ".$v1." and pay_status = 1 and type = 1 and (can_receive  = 0 || fifteen_status =2)) ")->count();
+                                            $p = M('order')->where("user_id = ".$v1." and pay_status = 1 and type = 1 and (can_receive  = 0 || fifteen_status =2)")->count();
                                             if($p>0){
                                                 $s[] = $v1;
                                             }
@@ -1061,8 +1061,8 @@ function update_pay_status($order_sn,$ext=array())
                                         if((count($s) >=20 && $team_num >=300) || in_array($v,$arr)){
                                             $rela = ($vip_level_conf['vip_level_'.$k]/100) * $order_amount; //返额10 8 5 3 1 0.5
                                         }else if(count($s) >= 6){
-                                             $rela = ($conf['level_'.$k]/100) * $order_amount;//返额10 5 3 1 
-                                         }
+                                            $rela = ($conf['level_'.$k]/100) * $order_amount;//返额10 5 3 1
+                                        }
                                     }
                                     if($k == 5 || $k == 6){//直推用户大于等于20，团队人数小于等于300
                                         if((count($s) >=20 && $team_num >=300) || in_array($v,$arr)){
@@ -1104,15 +1104,15 @@ function update_pay_status($order_sn,$ext=array())
                 }
                 
             }
-                Db::commit();
+            Db::commit();
         }catch (Exception $exception){
-                 Db::rollback();
-           /*  return json([
-                'code'  =>  -1,
-                //                    'msg'   =>  $exception->getMessage(),
-                'msg'   =>  '网络异常，请重新购买',
-                'data'  =>  [],
-            ]); */
+            Db::rollback();
+            /*  return json([
+             'code'  =>  -1,
+             //                    'msg'   =>  $exception->getMessage(),
+             'msg'   =>  '网络异常，请重新购买',
+             'data'  =>  [],
+             ]); */
         }
         
         
@@ -1223,9 +1223,9 @@ function dynamic_profit($user_id,$money,$desc,$order_id = 0,$type){
      );
      $update = Db::name('users')->where("user_id = $user_id")->save($update_data); */
     $update = M('users')->where("user_id = $user_id")->setInc('frozen_dynamic_profit',$money);
-        M('adv_log')->add($account_log);
-
-   
+    M('adv_log')->add($account_log);
+    
+    
     
 }
 
@@ -1963,9 +1963,9 @@ function synquery($com,$num)
     $post_data["param"] = json_encode($param);
     $sign = md5($post_data["param"].$key.$post_data["customer"]);
     $post_data["sign"] = strtoupper($sign);
-
+    
     $url = 'http://poll.kuaidi100.com/poll/query.do';	//实时查询请求地址
-
+    
     $params = "";
     foreach ($post_data as $k=>$v) {
         $params .= "$k=".urlencode($v)."&";		//默认UTF-8编码格式
@@ -2000,6 +2000,6 @@ function object_to_array($obj) {
             $obj[$k] = (array)object_to_array($v);
         }
     }
-
+    
     return $obj;
 }
