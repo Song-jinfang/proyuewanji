@@ -312,6 +312,7 @@ class User extends MobileBase
                            if(time() > $end_time){
                                M('order')->where('order_id = '.$order_id)->update(['fifteen_status'=>3]);
                            }
+                           $end_time = date('m-d H:i:s',$end_time);
                            $this->ajaxReturn(
                                array(
                                    'status'=>1,
