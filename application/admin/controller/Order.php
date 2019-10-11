@@ -83,6 +83,14 @@ class Order extends Base {
                     ->where($where)
                     ->where(['pay_status' => 1,'type' => 1])
                     ->sum('user_money');
+        $user_money2 = Db::name('order')
+                      ->where($where)
+                      ->where(['pay_status' => 1,'type' => 1])
+                      ->sum('user_money');
+        $integral2 = Db::name('order')
+                        ->where($where)
+                        ->where(['pay_status' => 1,'type' => 1])
+                        ->sum('integral');
         $start_time = strtotime(date('Y-m-d'),time()) - 3600*24;
         $end_time = strtotime(date('Y-m-d 23:59:59'),time()) - 3600*24;
         $count1 = Db::name('order')
@@ -97,7 +105,14 @@ class Order extends Base {
             ->where('add_time','between',"$start_time,$end_time")
             ->where(['pay_status' => 1,'type' => 1])
             ->sum('user_money');
-
+        $user_money1 = Db::name('order')
+                ->where('add_time','between',"$start_time,$end_time")
+                ->where(['pay_status' => 1,'type' => 1])
+                ->sum('user_money');
+        $integral1 = Db::name('order')
+                ->where('add_time','between',"$start_time,$end_time")
+                ->where(['pay_status' => 1,'type' => 1])
+                ->sum('integral');
         $condition['prom_type'] = array('lt',5);
         $order_sn = ($keyType && $keyType == 'order_sn') ? $keywords : I('order_sn') ;
         $order_sn ? $condition['order_sn'] = trim($order_sn) : false;
@@ -150,6 +165,10 @@ class Order extends Base {
         $this->assign('pager',$Page);
         $this->assign('count2',$count2);
         $this->assign('count1',$count1);
+        $this->assign('user_money1',$user_money1);
+        $this->assign('integral1',$integral1);
+        $this->assign('user_money2',$user_money2);
+        $this->assign('integral2',$integral2);
         $this->assign('order_amount1',$order_amount1);
         $this->assign('order_amount2',$order_amount2);
         return $this->fetch();

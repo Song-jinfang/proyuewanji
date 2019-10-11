@@ -60,7 +60,9 @@ class Index extends Base {
     public function team(){
         $user_id =  input('get.user_id');
         $rs = $this->team_num1($user_id);
+        $total_money = Db::name('order')->where('user_id','in',$rs)->sum('total_amount');
         dump($rs);
+        dump($total_money);
     }
     
     /***获取团队总人数***/
