@@ -1075,6 +1075,7 @@ function update_pay_status($order_sn,$ext=array())
                                 }
                             }
                         }
+                        agent_cost($order['user_id'],$order['order_id']);
                     }
                 }
                 /*
@@ -1229,6 +1230,31 @@ function dynamic_profit($user_id,$money,$desc,$order_id = 0,$type){
     
 }
 
+/*
+ * 区域管理收益记录
+ */
+function dynamic_profit1($user_id,$money,$desc,$order_id = 0,$type1,$type2){
+    /* 插入帐户变动记录 */
+    $account_log1 = array(
+        'user_id'       => $user_id,
+        'user_money'    => $money,
+        'add_time'   => time(),
+        'desc'   => $desc,
+        'type'=>$type1,
+        'order_id' => $order_id
+    );
+    $account_log2 = array(
+        'user_id'       => $user_id,
+        'user_money'    => $money,
+        'add_time'   => time(),
+        'desc'   => $desc,
+        'type'=>$type2,
+        'order_id' => $order_id
+    );
+    M('adv_log')->add($account_log1);
+    M('agent_log')->add($account_log2);
+}
+
 /**
  * 订单确认收货
  * @param $id 订单id
@@ -1255,6 +1281,10 @@ function confirm_order($id,$user_id = 0){
         $row = M('order')->where(array('order_id'=>$id))->save($data);
         if(!$row)
             return array('status'=>-3,'msg'=>'操作失败');
+            $response = relieve_frozen_money($user_id,$id);
+            if(!$response){
+                return array('status'=>-3,'msg'=>'操作失败');
+            }
             if($order['pay_time'] > 1570291200){//如果购买商品时间大于10-6日，则给上级加上分享收益
                 auto($id,true);//计算团队业绩
             }
@@ -2002,4 +2032,208 @@ function object_to_array($obj) {
     }
     
     return $obj;
+}
+
+/**
+ * 管理费用计算--下单增加收益
+ */
+function agent_cost($user_id = 0,$order_id = 0)
+{
+    if(!($user_id && $order_id)){
+        return false;
+    }
+    $total_amount = Db::name('order')->where(['order_id' => $order_id])->value('total_amount');
+    $user_id_arr = Db::name('users')->where(['user_id' => $user_id])->value('pid_list');
+    $agent_user_id_arr = Db::name('users')->where('user_id','in',$user_id_arr)->where('agent_lv','neq',0)->column('user_id');
+    $agent_user_id_arr = array_reverse(array_diff($agent_user_id_arr,[$user_id]));
+    $province = 0;//省
+    $city = 0;//市
+    $area = 0;//区
+    $money = 0;
+    $userId = 0;
+    if($agent_user_id_arr != []){
+        foreach ($agent_user_id_arr as $vo){
+            $agent_lv = Db::name('users')->where(['user_id' => $vo])->value('agent_lv');
+            if($agent_lv == 3){
+                Db::name('users')->where(['user_id' => $vo])->setInc('agent_total_money',$total_amount * 0.01);
+                Db::name('users')->where(['user_id' => $vo])->setInc('frozen_ahent_profit',$total_amount * 0.01);
+                $money = $total_amount * 0.01;
+                $area = 1;
+                $userId = $vo;
+            }elseif($agent_lv == 2){
+                if($area == 1){
+                    Db::name('users')->where(['user_id' => $vo])->setInc('agent_total_money',$total_amount * 0.01);
+                    Db::name('users')->where(['user_id' => $vo])->setInc('frozen_ahent_profit',$total_amount * 0.01);
+                    $money = $total_amount * 0.01;
+                }else{
+                    Db::name('users')->where(['user_id' => $vo])->setInc('agent_total_money',$total_amount * 0.02);
+                    Db::name('users')->where(['user_id' => $vo])->setInc('frozen_ahent_profit',$total_amount * 0.02);
+                    $money = $total_amount * 0.02;
+                }
+                $userId = $vo;
+                $city = 1;
+            }elseif($agent_lv == 1){
+                if($province == 0){
+                    if($city == 1){
+                        Db::name('users')->where(['user_id' => $vo])->setInc('agent_total_money',$total_amount * 0.01);
+                        Db::name('users')->where(['user_id' => $vo])->setInc('frozen_ahent_profit',$total_amount * 0.01);
+                        $money = $total_amount * 0.01;
+                        $province = ($total_amount * 0.01) * 0.2;
+                    }else{
+                        Db::name('users')->where(['user_id' => $vo])->setInc('agent_total_money',$total_amount * 0.03);
+                        Db::name('users')->where(['user_id' => $vo])->setInc('frozen_ahent_profit',$total_amount * 0.03);
+                        $money = $total_amount * 0.03;
+                        $province = ($total_amount * 0.03) * 0.2;
+                    }
+                    $userId = $vo;
+                }else{
+                    Db::name('users')->where(['user_id' => $vo])->setInc('agent_total_money',$province);
+                    Db::name('users')->where(['user_id' => $vo])->setInc('frozen_ahent_profit',$province);
+                    $money = $province;
+                    $province = $province * 0.2;
+                    $userId = $vo;
+                }
+            }
+            dynamic_profit1($userId,$money,'获得区域代理收益',$order_id,5,1);
+        }
+    }
+    return $province;
+}
+
+/**
+ * 管理费用计算--取消订单减少收益
+ */
+function agent_cost1($user_id = 0,$order_id = 0)
+{
+    if(!($user_id && $order_id)){
+        return false;
+    }
+    $total_amount = Db::name('order')->where(['order_id' => $order_id])->value('total_amount');
+    $user_id_arr = Db::name('users')->where(['user_id' => $user_id])->value('pid_list');
+    $agent_user_id_arr = Db::name('users')->where('user_id','in',$user_id_arr)->where('agent_lv','neq',0)->column('user_id');
+    $agent_user_id_arr = array_reverse(array_diff($agent_user_id_arr,[$user_id]));
+    $province = 0;//省
+    $city = 0;//市
+    $area = 0;//区
+    $money = 0;
+    $userId = 0;
+    if($agent_user_id_arr != []){
+        foreach ($agent_user_id_arr as $vo){
+            $agent_lv = Db::name('users')->where(['user_id' => $vo])->value('agent_lv');
+            if($agent_lv == 3){
+                Db::name('users')->where(['user_id' => $vo])->setDec('agent_total_money',$total_amount * 0.01);
+                Db::name('users')->where(['user_id' => $vo])->setDec('frozen_ahent_profit',$total_amount * 0.01);
+                $money = $total_amount * 0.01;
+                $area = 1;
+                $userId = $vo;
+            }elseif($agent_lv == 2){
+                if($area == 1){
+                    Db::name('users')->where(['user_id' => $vo])->setDec('agent_total_money',$total_amount * 0.01);
+                    Db::name('users')->where(['user_id' => $vo])->setDec('frozen_ahent_profit',$total_amount * 0.01);
+                    $money = $total_amount * 0.01;
+                }else{
+                    Db::name('users')->where(['user_id' => $vo])->setDec('agent_total_money',$total_amount * 0.02);
+                    Db::name('users')->where(['user_id' => $vo])->setDec('frozen_ahent_profit',$total_amount * 0.02);
+                    $money = $total_amount * 0.02;
+                }
+                $userId = $vo;
+                $city = 1;
+            }elseif($agent_lv == 1){
+                if($province == 0){
+                    if($city == 1){
+                        Db::name('users')->where(['user_id' => $vo])->setDec('agent_total_money',$total_amount * 0.01);
+                        Db::name('users')->where(['user_id' => $vo])->setDec('frozen_ahent_profit',$total_amount * 0.01);
+                        $money = $total_amount * 0.01;
+                        $province = ($total_amount * 0.01) * 0.2;
+                    }else{
+                        Db::name('users')->where(['user_id' => $vo])->setDec('agent_total_money',$total_amount * 0.03);
+                        Db::name('users')->where(['user_id' => $vo])->setDec('frozen_ahent_profit',$total_amount * 0.03);
+                        $money = $total_amount * 0.03;
+                        $province = ($total_amount * 0.03) * 0.2;
+                    }
+                    $userId = $vo;
+                }else{
+                    Db::name('users')->where(['user_id' => $vo])->setDec('agent_total_money',$province);
+                    Db::name('users')->where(['user_id' => $vo])->setDec('frozen_ahent_profit',$province);
+                    $money = $province;
+                    $province = $province * 0.2;
+                    $userId = $vo;
+                }
+            }
+            dynamic_profit1($userId,0 - $money,'因订单取消扣除区域代理收益',$order_id,5,1);
+        }
+    }
+    return $province;
+}
+
+/**
+ * 确认订单--解除区域代理冻结金额
+ */
+function relieve_frozen_money($user_id = 0,$order_id = 0)
+{
+    if(!($user_id && $order_id)){
+        return false;
+    }
+    $total_amount = Db::name('order')->where(['order_id' => $order_id])->value('total_amount');
+    $user_id_arr = Db::name('users')->where(['user_id' => $user_id])->value('pid_list');
+    $agent_user_id_arr = Db::name('users')->where('user_id','in',$user_id_arr)->where('agent_lv','neq',0)->column('user_id');
+    $agent_user_id_arr = array_reverse(array_diff($agent_user_id_arr,[$user_id]));
+    $province = 0;//省
+    $city = 0;//市
+    $area = 0;//区
+    $money = 0;
+    $userId = 0;
+    if($agent_user_id_arr != []){
+        Db::startTrans();
+        try{
+            foreach ($agent_user_id_arr as $vo){
+                $agent_lv = Db::name('users')->where(['user_id' => $vo])->value('agent_lv');
+                if($agent_lv == 3){
+                    Db::name('users')->where(['user_id' => $vo])->setInc('dynamic_profit',$total_amount * 0.01);
+                    Db::name('users')->where(['user_id' => $vo])->setDec('frozen_ahent_profit',$total_amount * 0.01);
+                    $money = $total_amount * 0.01;
+                    $area = 1;
+                    $userId = $vo;
+                }elseif($agent_lv == 2){
+                    if($area == 1){
+                        Db::name('users')->where(['user_id' => $vo])->setInc('dynamic_profit',$total_amount * 0.01);
+                        Db::name('users')->where(['user_id' => $vo])->setDec('frozen_ahent_profit',$total_amount * 0.01);
+                        $money = $total_amount * 0.01;
+                    }else{
+                        Db::name('users')->where(['user_id' => $vo])->setInc('dynamic_profit',$total_amount * 0.02);
+                        Db::name('users')->where(['user_id' => $vo])->setDec('frozen_ahent_profit',$total_amount * 0.02);
+                        $money = $total_amount * 0.02;
+                    }
+                    $userId = $vo;
+                    $city = 1;
+                }elseif($agent_lv == 1){
+                    if($province == 0){
+                        if($city == 1){
+                            Db::name('users')->where(['user_id' => $vo])->setInc('dynamic_profit',$total_amount * 0.01);
+                            Db::name('users')->where(['user_id' => $vo])->setDec('frozen_ahent_profit',$total_amount * 0.01);
+                            $money = $total_amount * 0.01;
+                            $province = ($total_amount * 0.01) * 0.2;
+                        }else{
+                            Db::name('users')->where(['user_id' => $vo])->setInc('dynamic_profit',$total_amount * 0.03);
+                            Db::name('users')->where(['user_id' => $vo])->setDec('frozen_ahent_profit',$total_amount * 0.03);
+                            $money = $total_amount * 0.03;
+                            $province = ($total_amount * 0.03) * 0.2;
+                        }
+                        $userId = $vo;
+                    }else{
+                        Db::name('users')->where(['user_id' => $vo])->setInc('dynamic_profit',$province);
+                        Db::name('users')->where(['user_id' => $vo])->setDec('frozen_ahent_profit',$province);
+                        $money = $province;
+                        $province = $province * 0.2;
+                        $userId = $vo;
+                    }
+                }
+            }
+            Db::commit();
+            return true;
+        }catch (Exception $exception){
+            Db::rollback();
+            return false;
+        }
+    }
 }

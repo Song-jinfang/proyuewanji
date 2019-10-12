@@ -16,6 +16,22 @@
                     <div style="text-align: center; width: 50px;">{$level[$list.level]}</div>
                 </td>
                 <td align="left" class="">
+                    <div style="text-align: center; width: 50px;">
+                        <if condition="$list.agent_lv eq 1">省代
+                            <elseif condition="$list.agent_lv eq 2"/>市代
+                            <elseif condition="$list.agent_lv eq 3"/>区代
+                            <elseif condition="$list.agent_lv eq 4"/>个体
+                            <else/>无
+                        </if>
+                    </div>
+                </td>
+                <td align="left" class="">
+                    <div style="text-align: center; width: 50px;">{$list.agent_total_money}</div>
+                </td>
+                <td align="left" class="">
+                    <div style="text-align: center; width: 150px;">{$list.agent_address}</div>
+                </td>
+                <td align="left" class="">
                     <div style="text-align: center; width: 50px;">{$list.total_amount}</div>
                 </td>
                 <td align="left" class="">

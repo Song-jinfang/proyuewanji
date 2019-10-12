@@ -73,6 +73,30 @@
                     </select>
                 </dd>
             </dl>
+
+            <dl class="row">
+                <dt class="tit">
+                    <label>区域代理级别</label>
+                </dt>
+                <dd class="opt">
+                    <select id="agent" name="agent_lv">
+                        <option value="4" <if condition="$user.agent_lv eq 4">selected</if>>个体</option>
+                        <option value="3" <if condition="$user.agent_lv eq 3">selected</if>>区代</option>
+                        <option value="2" <if condition="$user.agent_lv eq 2">selected</if>>市代</option>
+                        <option value="1" <if condition="$user.agent_lv eq 1">selected</if>>省代</option>
+                    </select>
+                </dd>
+            </dl>
+
+            <dl class="row">
+                <dt class="tit">
+                    <label class="tit">代理区域</label>
+                </dt>
+                <dd class="opt">
+                    <input id="agent_address" name="agent_address" value="{$user.agent_address}" class="input-txt" type="text">
+                    <span class="err"></span> </dd>
+            </dl>
+
             <dl class="row">
                 <dt class="tit">
                     <label for="email"><em>*</em>电子邮箱</label>
