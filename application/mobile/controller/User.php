@@ -337,13 +337,15 @@ class User extends MobileBase
         withdrawal_balance_finance($this->user_id,$orderProfit,'领取订单收益',$order_id);
         accountLog($this->user_id,$orderProfit,0,'领取订单收益',$order_id);//加余额
         $data[$profit_status] = 1;
+        M('order')->where('order_id = '.$order_id)->update($data);
         if($day_mark == 'fifteen_profit'){
             $fiften_profit['status'] = 1;
             $fiften_profit['matching_order_id'] = $order['order_id'];
             M('fiften_profit')->where('user_id = '.$this->user_id.' and order_id = '.$order_id)->update($fiften_profit);
-            $data['matching_order_id'] = $order['order_id'];
+            $data1['matching_order_id'] = $order_id;
+            M('order')->where('order_id = '.$order['order_id'])->update($data1);
         }
-        M('order')->where('order_id = '.$order_id)->update($data);
+       
         M('fiften_profit')->where('user_id='.$this->user_id.' and order_id='.$order_id)->update(['status'=>1]);
         $this->ajaxReturn(
             array(

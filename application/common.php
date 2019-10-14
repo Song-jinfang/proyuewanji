@@ -1075,7 +1075,7 @@ function update_pay_status($order_sn,$ext=array())
                                 }
                             }
                         }
-                        agent_cost($order['user_id'],$order['order_id']);
+                       // agent_cost($order['user_id'],$order['order_id']);
                     }
                 }
                 /*
@@ -1281,10 +1281,10 @@ function confirm_order($id,$user_id = 0){
         $row = M('order')->where(array('order_id'=>$id))->save($data);
         if(!$row)
             return array('status'=>-3,'msg'=>'操作失败');
-            $response = relieve_frozen_money($user_id,$id);
+           /*  $response = relieve_frozen_money($user_id,$id);
             if(!$response){
                 return array('status'=>-3,'msg'=>'操作失败');
-            }
+            } */
             if($order['pay_time'] > 1570291200){//如果购买商品时间大于10-6日，则给上级加上分享收益
                 auto($id,true);//计算团队业绩
             }
@@ -1324,7 +1324,7 @@ function confirm_order($id,$user_id = 0){
 //根据订单查询用户所有的上级应该得到的分享收益
 function auto($order_id,$status = true){
     $order = M('order')->field('user_id,order_amount,pay_time,user_money,total_amount')->where('order_id ='.$order_id)->find();
-    if($order['order_amount'] > 0){
+    if($order['total_amount'] > 0){
         //$parentArr = explode(',',$order[''])
         $userlist = M('users')->field('pid_list')->where('user_id = '.$order['user_id'])->find();
         if($userlist){
@@ -2183,9 +2183,9 @@ function relieve_frozen_money($user_id = 0,$order_id = 0)
     $area = 0;//区
     $money = 0;
     $userId = 0;
-    if($agent_user_id_arr != []){
         Db::startTrans();
         try{
+            if($agent_user_id_arr != []){
             foreach ($agent_user_id_arr as $vo){
                 $agent_lv = Db::name('users')->where(['user_id' => $vo])->value('agent_lv');
                 if($agent_lv == 3){
@@ -2229,11 +2229,12 @@ function relieve_frozen_money($user_id = 0,$order_id = 0)
                     }
                 }
             }
+         }
             Db::commit();
             return true;
         }catch (Exception $exception){
             Db::rollback();
             return false;
         }
-    }
+   
 }
