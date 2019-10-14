@@ -1253,6 +1253,7 @@ exit("请联系TPshop官网客服购买高级版支持此功能");
             $strTable .= '<td style="text-align:center;font-size:12px;" width="*">发货状态</td>';
             $strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品数量</td>';
             $strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品信息</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">是否转售</td>';
             $strTable .= '</tr>';
             if(is_array($orderList)){
                 $region	= get_region_list();
@@ -1276,12 +1277,19 @@ exit("请联系TPshop官网客服购买高级版支持此功能");
                         $strGoods .= "商品编号：".$goods['goods_sn']." 商品名称：".$goods['goods_name'];
                         if ($goods['spec_key_name'] != '') $strGoods .= " 规格：".$goods['spec_key_name'];
                         $strGoods .= " 数量：" . $goods['goods_num'];
-                        $strGoods .= "成本价：" . $goods['cost_price'];
+                        $strGoods .= " 成本价：" . $goods['cost_price'];
+                        $strGoods .= " 本店售价：" . $goods['goods_price'];
                         $strGoods .= "<br />";
                     }
                     unset($orderGoods);
+                    if($val['is_resale'] == 1){
+                        $is_resale = "转售";
+                    }else{
+                        $is_resale = "不转售";
+                    }
                     $strTable .= '<td style="text-align:left;font-size:12px;">'.$goods_num.' </td>';
                     $strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods.' </td>';
+                    $strTable .= '<td style="text-align:left;font-size:12px;">'.$is_resale.' </td>';
                     $strTable .= '</tr>';
                 }
             }
@@ -1307,6 +1315,8 @@ exit("请联系TPshop官网客服购买高级版支持此功能");
             $strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品名称</td>';
             $strTable .= '<td style="text-align:center;font-size:12px;" width="*">规格</td>';
             $strTable .= '<td style="text-align:center;font-size:12px;" width="*">成本价</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">本店售价</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;" width="*">是否转售</td>';
             $strTable .= '</tr>';
             $orderGoods = Db::name('order_goods')->alias('a')
                 ->join('ywj_goods b','a.goods_id = b.goods_id')
@@ -1340,6 +1350,11 @@ exit("请联系TPshop官网客服购买高级版支持此功能");
                 if ($goods['spec_key_name'] != '') $strGoods .= " 规格：".$goods['spec_key_name'];
                 $strGoods .= " 数量：" . $goods['goods_num'];
                 $strGoods .= "成本价：" . $goods['cost_price'];
+                if($val['is_resale'] == 1){
+                    $is_resale = "转售";
+                }else{
+                    $is_resale = "不转售";
+                }
                 $strGoods .= "<br />";
                 $strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods.' </td>';
                 $strTable .= '<td style="text-align:left;font-size:12px;">'.$goods_num.' </td>';
@@ -1347,6 +1362,8 @@ exit("请联系TPshop官网客服购买高级版支持此功能");
                 $strTable .= '<td style="text-align:left;font-size:12px;">'.$goods['goods_name'].' </td>';
                 $strTable .= '<td style="text-align:left;font-size:12px;">'.$goods['spec_key_name'].' </td>';
                 $strTable .= '<td style="text-align:left;font-size:12px;">'.$goods['cost_price'].' </td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$goods['goods_price'].' </td>';
+                $strTable .= '<td style="text-align:left;font-size:12px;">'.$is_resale.'</td>';
                 $strTable .= '</tr>';
             }
         }
