@@ -52,7 +52,18 @@ class Index extends Base {
      * 15-28天匹配上没有购买商品导致失效的，把状态太改为3
      */
     public function failure(){
-        $order = M('order')->where("type = 1 and pay_status = 1 and fifteen_status = 2")->update(['fifteen_status'=>3]);
+        $orderArr = M('order')->where("type = 1 and pay_status = 1 and fifteen_status = 2")->select();
+        $orderStr = '';
+        foreach($orderArr as $k=>$v){
+            $end_time = $v['can_receive'] + 86400;
+            $orderCount =  M('order')
+            ->where('user_id = '.$v['user_id'] .' and total_amount <='.$v['total_amount'].'  and pay_time >'.$v['can_receive'].' and pay_time<'.$end_time.'  and  pay_status = 1 and type = 1 and matching_order_id = 0')
+            ->order('pay_time','asc')->count();
+            if(!$orderCount){
+                M('order')->where('order_id ='.$v['order_id'])->update(['fifteen_status'=>3]);
+            }
+        }
+        
     }
     
     
