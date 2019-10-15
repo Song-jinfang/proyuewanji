@@ -1,232 +1,387 @@
 <!DOCTYPE html>
 <html>
+
+<head>
+
 	<head>
 		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no">
-	<link rel="stylesheet" href="__CSS__/swiper.min.css" />
-		<link rel="stylesheet" href="__CSS__/home.css" />
-	<link rel="stylesheet" href="__CSS__/public.css" />
-		<title></title>
-	</head>	
-<body>
-	<div class="bannerDiv">
-		<div class="swiper-container swiper-containerA">
-	        <div class="swiper-wrapper">
-	             <adv pid ="546" limit="3" item="v">
-		            <a href="{$v.ad_link}">
-			            <div class="swiper-slide">
-			            	<img src="{$v[ad_code]}">
-			            </div>
-		            </a>
-	         	</adv>
-	        </div>
-	        <!-- Add Pagination -->
-	        <div class="swiper-pagination"></div>
-	    </div>
+		<meta charset="UTF-8">
+		<title>悦玩豆</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="format-detection" content="telephone=no">
+		<meta http-equiv="Expires" content="0">
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-control" content="no-cache">
+		<meta http-equiv="Cache" content="no-cache">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" href="__CSS__/common_new.css">
+		<link rel="stylesheet" href="__CSS__/base_new.css">
+		<link rel="stylesheet" href="__CSS__/style_new.css" />
+		<script type="text/javascript">
+		</script>
+		<style>
+			html,
+			body {
+				margin: 0;
+				padding: 0
+			}
+
+			a {
+				color: inherit;
+			}
+
+			.doubao_centent {
+				margin: 1rem;
+				height: 13.5rem;
+				background-color: #999;
+				border-radius: 1rem;
+				background: url(__IMG__/doubaobg.png) no-repeat;
+				background-size: 100% 100%;
+				box-shadow: 0px 3px 3px 0px rgba(153, 153, 153, 0.5);
+			}
+
+			.doubao_centent p {
+				color: #fff;
+				text-align: center;
+				font-weight: 700;
+				line-height: 3.2rem;
+			}
+
+			p.name_doubao {
+				font-size: 1.5rem;
+			}
+
+			.medio {
+				font-size: 1rem;
+				font-weight: normal;
+			}
+
+			@media only screen and (min-width: 320px) and (max-width: 360px) {
+				.doubao_centent p {
+					line-height: 1.8rem;
+				}
+				.medio {
+					margin-top: 1.8rem;
+				}
+			}
+
+			@media only screen and (min-width: 760px) and (max-width: 768px) {
+				.ipar {
+					font-size: 0.8rem;
+				}
+			}
+
+			.doubao_artice {
+				text-align: center;
+				padding: 1rem 0;
+				box-shadow: 0px 3px 3px 0px rgba(153, 153, 153, 0.5);
+			}
+
+			.doubao_artice img {
+				height: 4rem;
+				width: 4rem;
+				display: inline-block;
+				margin-bottom: 0.5rem;
+			}
+
+			.namerjiaoyi {
+				margin-top: 0.5rem;
+				font-size: 1.5rem;
+				color: #976027;
+				font-weight: 700;
+			}
+
+			.pro_doubao {
+				font-size: 1rem;
+				color: #999;
+				margin-top: 0.5rem;
+			}
+
+			.goods-item .wall-column {
+				margin-bottom: 0px !important;
+			}
+
+			.slider-tit {
+				text-align: left;
+				margin: 10px 10px 20px 10px;
+			}
+
+			.slider-tit .Generalterm {
+				font-size: 1.5rem;
+				font-weight: 600;
+			}
+
+			.slider-tit .english {
+				color: #999999;
+				margin-left: 10px;
+				font-size: 12px;
+			}
+			.tab ul{
+				margin: 0 1rem;
+			}
+			.title li {
+				display: inline-block;
+				font-size: 1.5rem;
+				border-radius: 3rem;
+				color: #333;
+				text-align: center;
+
+			}
+			.title li:nth-of-type(1){
+				width: 22%;
+			}
+			.title li:nth-of-type(2){
+				width: 25%;
+			}
+			.title li:nth-of-type(3){
+				width: 25%;
+			}
+			.title li:nth-of-type(4){
+				width: 25%;
+			}
+			.title li a {}
+
+			.title .active {
+				background: linear-gradient(70deg, #f0d4ad, #ac6e33);
+
+				box-shadow: 0px 3px 3px 0px rgba(153, 153, 153, 0.5);
+				color: #fff;
+			}
+
+			#content {
+				margin: 0;
+				/*border: 1px solid #ccc;
+                border-top: 2px solid #a00;*/
+				width: 100%
+			}
+
+			#content div {
+				display: none;
+				padding: 10px 0
+			}
+
+			#content .mod {
+				display: block;
+			}
+
+			.tab {
+				width: 100%;
+				margin: 10px auto
+			}
+
+			.mod ul li {
+				float: left;
+			}
+
+			.mod table {
+				width: 100%;
+				text-align: center;
+				border-collapse: collapse;
+				border-spacing: 0;
+			}
+
+			.mod th {
+				background: #cea06e;
+				color: #fff;
+				font-size: 1.2rem;
+				font-weight: normal;
+				text-align: center;
+				padding: 0.7rem 0;
+				border-bottom: 1px solid #d0e7f3;
+			}
+
+			.mod td {
+				color: #909088;
+				font-size:1rem;
+				font-weight: normal;
+				text-align: center;
+				padding: 0.9rem 0;
+				position: relative;
+			}
+
+			.mod tr:nth-child(even) {
+				background: #f0f0f0;
+			}
+			.add-num{
+				color: red;
+			}
+			.even-num{
+				color: green;
+			}
+		</style>
+	</head>
+
+<body style="background-color: #fff;">
+<div class="doubao_centent" style="">
+	<div style="padding: 1.5rem;">
+		<p class="name_doubao">我的悦玩豆</p>
+		<p class="number_doubao medio" style="font-size: 1.5rem;">{$have_price}<i style="font-size: 1rem;">&nbsp;&nbsp;悦玩豆</i></p>
+		<p class="medio ipar" style="">悦玩豆用于领取订单收益、购买商品、分享收益、发布广告等用途</p>
 	</div>
-    <!--广播-->
-	<div class="broadcast">
-		  <img src="__IMG__/lb.png">
-		  <div class="swiper-container swiper-containerB">
-			 <volist name="data" id="vo">
-				<div class="swiper-wrapper" class="dataBox">
-					 <div class="swiper-slide swiper-no-swiping">
-					  <p>{$vo.title}</p>
-					</div>
-				</div>
-			 </volist>
-		  </div>
-	</div>
-	<!--广播-->
-    <ul class="nextList">
-    	<li>
-    		<a href="ywd_detailed.html">
-    			<img src="__IMG__/icon-1.png" class="iconName">
-    			<img src="__IMG__/next.png" class="next">
-    			<font>豆包</font>
-    			<span>我的悦玩豆({$have_price}个)</span>
-    		</a>   		
-    	</li>
-    	<li>
-    		<a href="buy">
-    			<img src="__IMG__/icon-5.png" class="iconName">
-    			<img src="__IMG__/next.png" class="next">
-    			<font>交易大厅</font>
-    			<span>悦玩豆交易</span>
-    		</a>   		
-    	</li>
-    	<li>
-    		<a  class="payPop">
-    			<img src="__IMG__/icon-2.png" class="iconName">
-    			<img src="__IMG__/next.png" class="next">
-    			<font>悦玩豆转让</font>
-    			<span>用户与用户之间可以互相转让</span>
-    		</a>   		
-    	</li>
-    	<if condition="$type eq 0">
-			<li>
-				<a  class="payPop1">
-					<img src="__IMG__/icon-3.png" class="iconName">
-					<img src="__IMG__/next.png" class="next">
-					<font>购买</font>
-					<span>购买悦玩豆</span>
+</div>
+<div class="goods-item clearfix" style="margin: 0 0.5rem;">
+	<div class="wrapper">
+		<ul class="wall">
+			<li class="article doubao_artice">
+				<a href="buy_new">
+					<img src="__IMG__/doubaoicon2.png" />
+					<div class="namerjiaoyi">交易大厅</div>
+					<div class="pro_doubao">用于悦玩豆交易</div>
 				</a>
 			</li>
-		</if>
-    	<li>
-    		<a href="mine">
-    			<img src="__IMG__/icon-4.png" class="iconName">
-    			<img src="__IMG__/next.png" class="next">
-    			<font>悦玩豆订单</font>
-    			<span>我的交易记录</span>
-    		</a>   		
-    	</li>
-    </ul>
+			<li class="article doubao_artice">
+				<img src="__IMG__/doubaoicon1.png" />
+				<div class="namerjiaoyi">悦玩豆转让</div>
+				<div class="pro_doubao">用户可相互转换</div>
+			</li>
+	</div>
+</div>
+<div class="goods-item clearfix" style="">
+	<div class="slider-tit"><span class="Generalterm">交易明细</span>
+		<span class="english">Transaction details</span>
+	</div>
 
-
-
-    <div style="width: 100%;height: 1.8rem;"></div>
-   <include file="public/footer_nav1" title="个人中心" body=""/>
-    <div class="pop">
-		<div class="hint">
-			<div class="affirmBtn">确认订单</div>
-			<!--		    <p class="p1">40</p>-->
-			<!--		    <p class="p2">(个)</p>-->
-			<!--		    <p class="p3">正在转让悦玩豆</p>-->
-			<p class="p4">余额{$have_price}(个)</p>
-
-
-			<p class="tips">提示：请认真核对转让数量</p>
-			<ul class="formList">
-				<li>
-					<span>转给TA</span>
-					<div>
-						<input type="text" id="id" placeholder="请输入TA的手机号" />
-					</div>
-				</li>
-				<li>
-					<span>交易密码</span>
-					<div>
-						<input type="password"  id="pwd" placeholder="请输入交易密码" />
-					</div>
-				</li>
-				<li>
-					<span>转出数量</span>
-					<div>
-						<input type="number" id="number" placeholder="只能输入整数" min="0" max="{$have_price}"/>(个)
-					</div>
-				</li>
-			</ul>
-			<div class="btnDiv">
-				<div class="btn btn1" id="submit">确认</div>
-				<div class="btn btn2">取消</div>
+	<!--top开始-->
+	<div class="tab">
+		<ul class="title">
+			<li class="active">
+				明细</a>
+			</li>
+			<li>
+				<a href="#">订单</a>
+			</li>
+			<li>
+				<a href="#">转让</a>
+			</li>
+			<li class="">
+				<a href="#">挂卖</a>
+			</li>
+			<!--<li><a href="#">家居</a></li>-->
+		</ul>
+		<div id="content">
+			<div class="mod">
+				<table>
+					<thead>
+					<tr>
+						<th>交易时间</th>
+						<th>交易个数</th>
+						<th>详细描述</th>
+					</tr>
+					</thead>
+					<tbody>
+					<volist name="mx_list" id="vo">
+						<tr>
+							<td>{$vo.add_time|date="Y-m-d H:i",###}</td>
+							<td><em class="add-num">{$vo.user_money}</em></td>
+							<td>{$vo.desc}</td>
+						</tr>
+					</volist>
+					</tbody>
+				</table>
+			</div>
+			<div class="mod" style="display: none">
+				<table>
+					<thead>
+					<tr>
+						<th>交易时间</th>
+						<th>交易个数</th>
+						<th>详细描述</th>
+					</tr>
+					</thead>
+					<tbody>
+					<volist name="dd_list" id="vo">
+						<tr>
+							<td>{$vo.add_time|date="y-m-d h:i",###}</td>
+							<td><em class="add-num">{$vo.ywd_price}</em></td>
+							<td>购买悦玩豆</td>
+						</tr>
+					</volist>
+					</tbody>
+				</table>
+			</div>
+			<div class="mod" style="display: none">
+				<table>
+					<thead>
+					<tr>
+						<th>交易时间</th>
+						<th>交易个数</th>
+						<th>详细描述</th>
+					</tr>
+					</thead>
+					<tbody>
+					<volist name="zr_list" id="vo">
+						<tr>
+							<td>{$vo.add_time|date="Y-m-d h:i",###}</td>
+							<td><em class="add-num">{$vo.number}</em></td>
+							<td>转让给{$vo.mobile}悦玩豆</td>
+						</tr>
+					</volist>
+					</tbody>
+				</table>
+				</table>
+			</div>
+			<div class="mod" style="display: none">
+				<table>
+					<thead>
+					<tr>
+						<th>挂卖总数</th>
+						<th>剩余个数</th>
+						<th>获得金额</th>
+						<th>冻结个数</th>
+						<th>操作</th>
+					</tr>
+					</thead>
+					<tbody>
+					<volist name="gm_list" id="vo">
+						<tr>
+							<td>{$vo.total_num}</td>
+							<td>{$vo.surplus_num}</td>
+							<td>{$vo.available_amount}</td>
+							<td>{$vo.count_number}</td>
+							<td>
+								<neq name="$vo.surplus_num" value="0">
+									<input type="button" id="button" onclick="revoke({$vo.sell_id})" style="background-color: #cea06e;color: #FFFFFF" value="撤销挂卖">
+								</neq>
+							</td>
+						</tr>
+					</volist>
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>
+	<div style="height: 50px;display: block;"></div>
+	<include file="public/footer_nav1" title="个人中心" body=""/>
 
-
-	<div class="pop1" style="display: none;">
-		<div class="hint">
-			<div class="affirmBtn">确认订单</div>
-			<p class="p4">余额{$have_price}(个)</p>
-
-
-			<p class="tips">提示：1个悦玩豆=1元</p>
-			<ul class="formList">
-				<li>
-					<span>购买数量</span>
-					<div>
-						<input type="number" id="number1" placeholder="只能输入整数" min="0" max="{$have_price}"/>(个)
-					</div>
-				</li>
-			</ul>
-			<div class="btnDiv">
-				<div class="btn btn1" id="submit1">确认</div>
-				<div class="btn btn2">取消</div>
-			</div>
-		</div>
-	</div>
-</body>
-<script type="text/javascript" src="__JS__/jquery-3.2.1.min.js" ></script>
-<script type="text/javascript" src="__IMG__/swiper.min.js" ></script>
+	<div style="height: 1rem;"></div>
+	<script src="__JS__/jquery-1.8.3.min.js"></script>
+	<script src="__JS__/jaliswall.js"></script>
+	<script src="__JS__/index.js"></script>
+	<script src="/static/node_modules/swiper/dist/js/swiper.js"></script>
 	<script src="__JS__/layer.js"  type="text/javascript" ></script>
-<script>
-    var swiper = new Swiper('.swiper-containerA', {
-        pagination: '.swiper-pagination',
-        paginationClickable: true
-    });
-    var swiper = new Swiper('.swiper-containerB', {
-	    direction: 'vertical',
-	    loop : true,
-	    autoplay:2000,
-	});
-	$(".payPop").click(function(){
-		$(".pop").fadeIn();
-	})
-	$(".payPop1").click(function(){
-		$(".pop1").fadeIn();
-	})
-	$(".btn2").click(function(){
-   	    $(".pop").hide()
-   	    $(".pop1").hide()
-   })
-
-    $('#submit').click(function(){
-        var id = $("#id").val();
-        var pwd = $("#pwd").val();
-        var number = $("#number").val();
-        // var formData = new FormData();
-        // formData.append('id',id);
-        // formData.append('pwd',pwd);
-        // formData.append('number',number);
-        // console.log(formData);
-		if(!(pwd || number)){
-			layer.msg('请将信息填写完整');
-			return;
-		}
-        $.ajax({
-            url:'home',
-            type:'post',
-            data:{'id':id,'pwd':pwd,'number':number},
-            success:function(e){
-                if(e.code == 1){
-					layer.msg(e.msg);
-                }else{
-					layer.msg(e.msg);
-                }
-            },
-            error:function(){
-				layer.msg('请求出错，请重新再试');
-            }
-        });
-    });
-	$('#submit1').click(function(){
-		var number = $("#number1").val();
-		// var formData = new FormData();
-		// formData.append('id',id);
-		// formData.append('pwd',pwd);
-		// formData.append('number',number);
-		// console.log(formData);
-		if(!(number > 0)){
-			layer.msg('请输入正确的数额');
-			return;
-		}
-		$.ajax({
-			url:'buy_ywd',
-			type:'post',
-			data:{'number':number},
-			success:function(e){
-				if(e.code == 1){
-					window.location.href = "/index.php?m=Mobile&c=Cart&a=cart4&order_id=" + e.data.order_id;
-				}else{
-					layer.msg(e.msg);
-				}
-			},
-			error:function(){
-				layer.msg('请求出错，请重新再试');
-			}
+	<script type="text/javascript">
+		$(function() {
+			$(".title li").click(function() {
+				$(this).addClass("active").siblings().removeClass("active");
+				$("#content .mod").eq($(".title li").index(this)).show().siblings("#content .mod").hide();
+			});
 		});
-	});
+		function revoke(sell_id){
+			$.ajax({
+				url:'revoke',
+				type:'post',
+				data:{'sell_id':sell_id},
+				success:function(e){
+					layer.msg(e.msg);
+					history.go(0);
+				},
+				error:function(){
+					layer.msg('网络异常，请重新再试');
+				},
+			});
+		}
+	</script>
+</body>
 
-</script>
 </html>

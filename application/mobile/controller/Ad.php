@@ -115,7 +115,7 @@ class Ad extends MobileBase
         }
     }
 
-    public function home()
+    public function home_new()
     {
         if(request()->isGet()){
             $session_user = session('user');
@@ -956,5 +956,65 @@ class Ad extends MobileBase
                 ]);
             }
         }
+    }
+
+    //交易大厅————新版
+    public function buy_new()
+    {
+        $data = Db::name('sell')->alias('a')
+            ->join('users b','a.user_id = b.user_id')
+            ->where('surplus_num','gt',0)
+            ->order('a.add_time','asc')
+            ->field('a.*,b.nickname,b.head_pic')
+            ->select();
+        foreach ($data as &$vo){
+            $vo['count'] = Db::name('buy')->alias('a')
+                ->join('sell b','a.sell_id = b.sell_id')
+                ->join('order c','a.order_id = c.order_id')
+                ->where(['b.user_id' => $vo['user_id'],'c.pay_status' => 1])
+                ->sum('a.number');
+        }
+        $beans_price = Db::name('config')->where(['name' => 'beans_price'])->value('value');
+        $this->assign('beans_price',$beans_price);
+        $this->assign('data',$data);
+        return $this->fetch();
+    }
+
+    //豆包————新版
+    public function home()
+    {
+        $session_user = session('user');
+        $uid = $session_user['user_id'];
+        $have_price  = M('users')->where(['user_id' => $uid])->value('happy_beans');
+        $data = Db::name('notify')->where(['type' => 1,'status' => 1])->select();
+        $type = Db::name('sell')->where('surplus_num','gt',0)->count();
+        $mx_list = Db::name('adv_log')->where(['user_id' => $uid,'type' => 1])->order('add_time','desc')->select();
+        $dd_list = D('order')->where(['user_id' => $uid,'pay_status' => 1,'type' => 2])->field('add_time,ywd_price')->select();
+        $zr_list = D('turn_out')->where(['uid' => $uid])->select();
+        $gm_list = Db::name('sell')
+            ->where(['user_id' => $uid])
+            ->order('add_time','desc')
+            ->select();
+        foreach ($gm_list as &$vo){
+            $number = Db::name('buy')->alias('a')
+                ->join('ywj_sell b','a.sell_id = b.sell_id')
+                ->join('ywj_order c','a.order_id = c.order_id')
+                ->where(['a.sell_id' => $vo['sell_id'],'c.pay_status' => 1])
+                ->sum('a.number');
+            $vo['available_amount'] = $number  *$vo['unit_price'];
+            $vo['count_number'] = Db::name('buy')->alias('a')
+                ->join('ywj_sell b','a.sell_id = b.sell_id')
+                ->join('ywj_order c','a.order_id = c.order_id')
+                ->where(['a.sell_id' => $vo['sell_id'],'c.pay_status' => 0])
+                ->sum('a.number');
+        }
+        $this->assign('data',$data);
+        $this->assign('mx_list',$mx_list);
+        $this->assign('dd_list',$dd_list);
+        $this->assign('zr_list',$zr_list);
+        $this->assign('gm_list',$gm_list);
+        $this->assign('type',$type);
+        $this->assign('have_price',$have_price);
+        return $this->fetch();
     }
 }

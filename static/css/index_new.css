@@ -1,0 +1,407 @@
+* i {
+	font-style: normal !important;
+}
+
+
+/*搜索框样式*/
+
+.mui-bar-nav {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	align-items: center;
+	font-size: .36rem;
+}
+
+.mui-bar {
+	position: absolute;
+	right: 0;
+	left: 0;
+	z-index: 999;
+	height: 6rem;
+	/* background-color: #f7f7f7;*/
+	border-bottom: 0;
+	-webkit-backface-visibility: hidden;
+	/*backface-visibility: hidden;
+    border-bottom: 1px solid #ccc;
+    box-shadow: 0 1px 1px #ccc;
+    -webkit-box-shadow: 0 1px 1px #ccc;*/
+}
+
+.top-sch-box {
+	height: 3.2rem;
+	line-height: 3.2rem;
+	margin: 0 .3rem;
+	padding: 0 .3rem;
+	font-size: 13px;
+	opacity: .7;
+	background-color: #edebe7;
+	-webkit-border-radius: 1000px;
+	border-radius: 1000px;
+}
+
+.centerflex input {
+	width: 100%;
+	height: 3.2rem;
+	text-align: center;
+	background: none;
+	-webkit-border-radius: 1000px;
+	border-radius: 1000px;
+}
+
+.flex-col {
+	display: block;
+	-webkit-box-flex: 1;
+	-webkit-flex: 1;
+	flex: 1;
+	width: .1px;
+}
+
+.top-sch-box .sch-txt {
+	width: 100%;
+	padding: 0 10px;
+	text-align: center;
+}
+
+.mui-bar-nav .btn p {
+	color: #333;
+	font-size: .6em;
+}
+
+.mui-bar-nav .iconfont,
+.mui-bar-nav .mui-icon {
+	display: inline-block;
+	color: #fafafa;
+}
+
+.centerflex {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	align-items: center;
+}
+
+.mui-bar-nav .btn {
+	position: relative;
+	z-index: 11;
+	display: block;
+	width: 5%;
+}
+
+.mui-bar-nav .btn.but_1 {
+	width: 12%;
+}
+
+.mui-bar-nav .btn.but_1 button {
+	width: 100%;
+	font-size: 13px;
+	text-align: center;
+	height: 36px;
+	background: none;
+	color: #fff;
+}
+
+.mui-bar-nav .btn {
+	position: relative;
+	z-index: 11;
+	display: block;
+	width: 5%;
+}
+
+.index-page .swiper-slide img {
+	width: 100%;
+}
+
+.swiper-pagination-bullet-active {
+	opacity: 1;
+	background: #dbb4a3 !important;
+}
+
+.index-page .index-search {
+	z-index: 10;
+	padding: 10px 0;
+	background: rgba(0, 0, 0, 0.6);
+	display: flex;
+	justify-content: center;
+}
+
+.index-page .index-search div {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	position: relative;
+}
+
+.index-page .index-search input {
+	background: #ffffff;
+	border: 1px solid #ebebeb;
+	width: 90%;
+	height: 30px;
+	border-radius: 5px;
+	background: url("../img/search.svg") no-repeat 10px center;
+	background-size: 16px 16px;
+	text-indent: 35px;
+}
+
+.index-page .index-search span {
+	position: absolute;
+	left: 50px;
+	top: 8px;
+}
+
+.index-page .index-item-top {
+	width: 100%;
+	display: flex;
+	justify-content: space-around;
+	margin-top: 20px;
+}
+
+.index-page .index-item-top div {
+	font-size: 12px;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+}
+
+.index-page .slider-tit {
+	text-align: left;
+	margin: 30px 10px 20px 10px;
+}
+
+.index-page .slider-tit .Generalterm {
+	font-size: 22px;
+	font-weight: 600;
+}
+
+.index-page .slider-tit .english {
+	color: #999999;
+	margin-left: 10px;
+	font-size: 12px;
+}
+
+.index-page .index-item-top .iconfont {
+	font-size: 20px;
+}
+
+.index-page .index-slider {
+	background: #ffffff;
+	padding: 5px 0 15px 0;
+	margin-top: 20px;
+}
+
+.index-page .swiper-container2 .swiper-slide {
+	font-size: 12px;
+	text-align: left;
+	margin-left: 10px;
+}
+
+.index-page .swiper-container2 .swiper-slide .indous {
+	margin-left: 4px;
+}
+
+.index-page .swiper-container2 .swiper-slide img {
+	height: 10rem;
+}
+
+.index-page .slider-item-price {
+	color:#d07b52;
+	font-size: 1.4rem;
+}
+
+.index-page .good-item-tit {
+	text-align: center;
+	margin: 20px 0 10px 0;
+}
+
+.index-page .wrapper {
+	background: #fafafa;
+}
+
+.index-page .dating-theme-tit {
+	background: url("../img/bag_bg.jpg") no-repeat center;
+	background-size: cover;
+	text-align: center;
+	padding: 30px 20%;
+}
+
+.index-page .dating-theme-tit span {
+	background: rgba(255, 255, 255, 0.6);
+	height: 100px;
+	width: 100%;
+	margin: 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 10px;
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.theme-footer {
+	box-shadow: 0.2rem 0.2rem 0.75rem #ddd;
+	padding: 10px 0;
+}
+
+.col-xs-4 {
+	width: 33.33333333%;
+	text-align: center;
+}
+
+.theme-footer li img {
+	width: 90%;
+}
+
+.theme-footer ul {
+	display: flex;
+}
+
+.margin-top-bottom-1d5rem {
+	margin-top: 1.5rem;
+	margin-bottom: 1.5rem;
+}
+
+.margin-auto {
+	margin: auto;
+}
+
+.padding-0 {
+	padding: 0;
+}
+
+.xx-motion-footer {
+	margin: 0 10px;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+}
+
+.baokuan {
+	height: 13.5rem;
+}
+
+.baokuan img {
+	width: 100%;
+	height: 13.5rem;
+}
+
+.xx-2 {
+	margin-top: 20px;
+}
+
+.baokuan_inpor {
+	height: 50px;
+	/*border-left: 1px solid #999999;
+	border-right: 1px solid #999999;
+	border-bottom:1px solid #999999 ;*/
+	/*border-bottom-left-radius:10px ;
+	border-bottom-right-radius:10px ;*/
+}
+
+.baokuan_inpor p {
+	line-height: 50px;
+	font-weight: 600;
+	font-size: 1.2rem;
+}
+
+.Product_name {
+	float: left;
+	margin-left: 5px;
+	color: #333333;
+}
+
+.buy_moeny {
+	float: right;
+	border-color: #999999;
+	margin-right: 5px;
+	color: #e26563;
+}
+
+.buy_moeny span {
+	border: 1px #e26563 solid;
+	padding: 0.3rem 1rem;
+	border-radius: 20rem;
+}
+
+.price_small {
+	float: left;
+}
+
+.buy_small {
+	float: right;
+	margin-right: 10px;
+	font-weight: 600;
+	color: #df131f;
+}
+
+.slider-item-tit {
+	font-size: 1.2rem;
+	font-weight: 600;
+}
+
+.index-item-top img {
+	height: 5rem;
+}
+
+.bar {
+	height: 3.2rem;
+	line-height: 3.2rem;
+	margin: 0 1rem;
+	width: 100%;
+	font-size: 13px;
+	opacity: .7;
+	background-color: #edebe7;
+	-webkit-border-radius: 1000px;
+	border-radius: 1000px;
+}
+.bar input{
+	width: 100%;
+	text-align: center;
+}
+.bar input,
+.bar3 button {
+	background: transparent;
+}
+
+.bar button {
+	
+}
+
+/*.bar button:before {
+	content: "\f002";
+	font-family: FontAwesome;
+	font-size: 4rem;
+	color: #F9F0DA;
+}*/
+
+.bar form {
+	position: relative;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.bar button {
+	top: 0;
+	right: 0;
+	cursor: pointer;
+	position: absolute;
+	background: url(../img/sec.png) no-repeat 50%;
+	
+	display: block;
+	    height: 100%;
+	    width: 5rem;
+}
+.fukuang{
+ position: fixed;
+ z-index: 9999;
+ margin-top: 60%;
+ right: 0;
+ bottom: 100px;
+}
+.fukuang img{
+ height: 9rem;
+ width: 9rem;
+}

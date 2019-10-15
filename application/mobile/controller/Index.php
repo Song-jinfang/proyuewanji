@@ -32,7 +32,7 @@ class Index extends MobileBase {
         $this->user = M('users')->where('user_id', $session_user['user_id'])->find();
     }
     
-    public function index(){
+    public function index_new(){
         $diy_index = M('mobile_template')->where('is_index=1')->field('template_html,block_info')->find();
         if($diy_index){
             $html = htmlspecialchars_decode($diy_index['template_html']);
@@ -61,7 +61,7 @@ class Index extends MobileBase {
       //  $this->assign('hot_goods',$hot_goods);
         /**商品精选**/
         $new_goods = M('goods')->field('goods_id,original_img,shop_price,market_price,goods_name,sales_sum')->where("is_on_sale=1")->order('last_update desc')->limit(40)->cache(true,TPSHOP_CACHE_TIME)->select();//
-        
+
         $this->assign('new_goods',$new_goods);
         $goodsCategory = M('goods_category')->field('id,adv_id')->where('is_hot=1')->select();
         if(!empty($goodsCategory)){
@@ -641,6 +641,112 @@ class Index extends MobileBase {
         $this->assign('showTip' , $showTip);
         $this->assign('down_url' , $down_url);
         $this->assign('wap_url' , $wap_url);
+        return $this->fetch();
+    }
+
+    /*
+     * 新首页
+     * */
+    public function index(){
+        $diy_index = M('mobile_template')->where('is_index=1')->field('template_html,block_info')->find();
+        if($diy_index){
+            $html = htmlspecialchars_decode($diy_index['template_html']);
+            $logo=tpCache('shop_info.wap_home_logo');
+            $this->assign('wap_logo',$logo);
+            $this->assign('html',$html);
+            $this->assign('is_index',"1");
+            $this->assign('info',$diy_index['block_info']);
+            return $this->fetch('index2');
+            exit();
+        }
+        /*
+            //获取微信配置
+            $wechat_list = M('wx_user')->select();
+            $wechat_config = $wechat_list[0];
+            $this->weixin_config = $wechat_config;
+            // 微信Jssdk 操作类 用分享朋友圈 JS
+            $jssdk = new \Mobile\Logic\Jssdk($this->weixin_config['appid'], $this->weixin_config['appsecret']);
+            $signPackage = $jssdk->GetSignPackage();
+            print_r($signPackage);
+        */
+        /*热门商品*/
+        // $hot_goods = M('goods')->field('goods_id,shop_price,goods_name,original_img')->where("is_hot=1 and is_on_sale=1")->order('goods_id DESC')->limit(8)->select();//首页热卖商品
+        $thems = M('goods_category')->where('level=1')->order('sort_order')->limit(9)->cache(true,TPSHOP_CACHE_TIME)->select();
+        $this->assign('thems',$thems);
+        //  $this->assign('hot_goods',$hot_goods);
+        /**商品新品**/
+        $new_goods = M('goods')->field('goods_id,original_img,shop_price,market_price,goods_name,sales_sum')->where("is_on_sale=1")->order('last_update desc')->limit(40)->cache(true,TPSHOP_CACHE_TIME)->select();//
+        //热卖商品
+        $hot_goods = M('goods')->field('goods_id,original_img,shop_price,market_price,goods_name,sales_sum')->where("is_on_sale=1 and is_hot=1")->order('last_update desc')->limit(10)->cache(true,TPSHOP_CACHE_TIME)->select();//
+        $this->assign('new_goods',$new_goods);
+        $goodsCategory = M('goods_category')->field('id,adv_id')->where('is_hot=1')->select();
+        if(!empty($goodsCategory)){
+            foreach ($goodsCategory as $k=>$v){
+                if($v['adv_id']){
+                    $adv_link = M('ad')->field('ad_link,ad_code')->where('ad_id ='.$v['adv_id'])->find();
+                }
+                $goodsInfo = M('goods')->field('goods_id,goods_name,original_img,shop_price')->where('cat_id='.$v['id'].' and is_hot=1')->select();
+                $goodsCategory[$k]['ad_link'] = $adv_link['ad_link'];
+                $goodsCategory[$k]['ad_code'] = $adv_link['ad_code'];
+                $goodsCategory[$k]['goods_info'] = $goodsInfo;
+            }
+        }
+        $this->assign('hot_goods',$goodsCategory);
+
+        /**推荐商品**/
+        $favourite_goods = M('goods')->field('goods_id,original_img,shop_price,market_price,goods_name,sales_sum')->where("is_recommend=1 and is_on_sale=1")->order('sort DESC')->limit(10)->cache(true,TPSHOP_CACHE_TIME)->select();//首页推荐商品
+        /*    $is_recommend = M('goods')->where('') */
+        //秒杀商品
+        $now_time = time();  //当前时间
+        if(is_int($now_time/7200)){      //双整点时间，如：10:00, 12:00
+            $start_time = $now_time;
+        }else{
+            $start_time = floor($now_time/7200)*7200; //取得前一个双整点时间
+        }
+        $end_time = $start_time+7200;   //结束时间
+        $flash_sale_list = Db::name('goods')->alias('g')
+            ->field('g.goods_id,f.price,s.item_id')
+            ->join('flash_sale f','g.goods_id = f.goods_id','LEFT')
+            ->join('__SPEC_GOODS_PRICE__ s','s.prom_id = f.id AND g.goods_id = s.goods_id','LEFT')
+            ->where("start_time >= $start_time and end_time <= $end_time and f.is_end=0")
+            ->limit(3)->select();
+
+        //判断是否已经领取注册优惠券
+        $userInfo = session('user');
+        $user_id = $userInfo['user_id'];
+        $coupon = Db::name('first_order_coupon')->where(['user_id' => $user_id,'type' => 1])->value('id');
+        $is_coupon = 1;
+        if($coupon){
+            $is_coupon =2;
+        }
+        $start_time=strtotime(date("Y-m-d",time()));
+        $end_time=$start_time+60*60*24;
+        $notice = Db::name('first_order_coupon')->where(['user_id' => $user_id,'type' => 2])->where('add_time','between',"$start_time,$end_time")->value('id');
+        $is_notice = 1;
+        if($notice){
+            $is_notice =2;
+        }
+        $status = 1;
+        $order_id = Db::name('order')->where(['user_id' => $user_id,'pay_status' => 1])->value('order_id');
+        if($order_id){
+            $status = 2;
+        }
+        $class_list = Db::name('goods_category')->where(['level' => 3])->limit(10)->select();
+        $action = request()->action();
+        $controller = request()->controller();
+        $data = Db::name('home_class')->select();
+        $this->assign('class_list',$class_list);
+        $this->assign('status',$status);
+        $this->assign('is_coupon',$is_coupon);
+        $this->assign('is_notice',$is_notice);
+        $this->assign('action',$action);
+        $this->assign('data',$data);
+        $this->assign('controller',$controller);
+        $this->assign('flash_sale_list',$flash_sale_list);
+        $this->assign('start_time',$start_time);
+        $this->assign('end_time',$end_time);
+        $this->assign('hot_goods',$hot_goods);
+        $this->assign('favourite_goods',$favourite_goods);
         return $this->fetch();
     }
 }

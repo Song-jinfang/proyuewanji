@@ -1,32 +1,35 @@
- <div class="footer">
-    	<a href="/mobile/index/index.html">
+<div class="footer-icon border-top">
+	<div class="home icon-active">
+		 <a href="/mobile/index/index">
+			 <div><img style="height: 40px;" src="__IMG__/top0.png" /></div>
 
-			<if condition="$action eq index">
-				<img src="__IMG__/src/a1_red.png">
-				<else />
-				<img src="__IMG__/src/a1_gray.png">
-			</if>
+		 </a>
+	 </div>
+	 <div class="sort">
+		 <a href="/mobile/index/share">
+			 <div>
+				 <img src="__IMG__/li.png" />
+			 </div>
+			 <div>分享</div>
+		 </a>
+	 </div>
+	 <div class="home">
+		 <a href="/mobile/ad/home">
+			 <div><img src="__IMG__/top.png" /></div>
+			 <div>豆包</div>
+		 </a>
+	 </div>
 
-    		<span>首页</span>
-    	</a>
-    	<a href="/mobile/ad/home.html">
-			<if condition="$action eq home">
-				<img src="__IMG__/src/a2_red.png">
-				<else />
-				<img src="__IMG__/src/a2_gray.png">
-			</if>
-    		<span>豆包</span>
-    	</a>
-    	<a href="/mobile/Cart/index.html">
-				<img src="__IMG__/src/a3_gray.png">
-    		<span>购物车</span>
-    	</a>
-    	<a href="/mobile/user/index">
-			<if condition="$action eq index and $controller eq User">
-				<img src="__IMG__/src/a4_red.png">
-				<else />
-				<img src="__IMG__/src/a4_gray.png">
-			</if>
-    		<span>我的</span>
-    	</a>
-    </div>
+	 <div class="buy">
+		 <a href="/mobile/Cart/index">
+			 <div><img src="__IMG__/top3.png" /></div>
+			 <div>购物车</div>
+		 </a>
+	 </div>
+	 <div class="stage">
+		 <a href="/mobile/user/index">
+			 <div><img src="__IMG__/top5.png" /></div>
+			 <div>我的</div>
+		 </a>
+	 </div>
+</div>

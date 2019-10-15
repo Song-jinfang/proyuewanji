@@ -1,346 +1,209 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no">
-		<link rel="stylesheet" href="__CSS__/swiper.min.css" />
-		<link rel="stylesheet" href="__CSS__/index.css" />
-		<link rel="stylesheet" href="__CSS__/public.css" />
-		<title></title>
-	</head>
-	
-<body>
-	<div style="background: url(/static/img/top_back.png) no-repeat;background-size:100%">
-			<div class="header">
-				<a href="/mobile/Goods/ajaxSearch.html">
-					<div class="searchDiv" style="color:#ccc;opacity: 0.6">
-						<img src="__IMG__/search.png" class="searchIcon">
-						<input type="text" placeholder="搜索商品"  class="searchInput" />
-					</div>
-				</a> 
-			</div>
-			<div style="width: 100%;height: 1rem;"></div>
-			<div class="bannerDiv">
-				<div class="bannerbox">
-					<div class="swiper-container swiper-containerA">
-				        <div class="swiper-wrapper">
-				             <adv pid ="9" limit="5" item="v">
-					            <div class="swiper-slide">
-					             	<a href="{$v.ad_link}">
-					            		<img src="{$v[ad_code]}" title="{$v[title]}" style="{$v[style]}" >
-					            	 </a>
-					            </div>
-				             </adv>
-				        </div>
-				        <!-- Add Pagination -->
-				        <div class="swiper-pagination swiper-paginationA"></div>
-				    </div>
-				</div>
-			</div>
-	</div>
-	<div class="iconBox">
-		<div class="swiper-container swiper-containerB">
-	        <div class="swiper-wrapper">
-	            <div class="swiper-slide">
-	            	<volist name="data" id="vo" key="k">
-					   <if condition="($status == 2) AND ($k == 6)">
-					      <else/>
-					      <a href="{$vo.link}">
-					         <img src="{$vo.pic_address}">
-					         <span>{$vo.class_name}</span>
-					      </a>
-					   </if>
-					</volist>
-	            </div>
-<!-- 	            <div class="swiper-slide">
-	            	<a href="###">
-	            		<img src="__IMG__/11.png">
-	            		<span>每日新品</span>
-	            	</a>
-	            	<a href="###">
-	            		<img src="__IMG__/12.png">
-	            		<span>每日新品</span>
-	            	</a>
-	            	<a href="###">
-	            		<img src="__IMG__/13.png">
-	            		<span>每日新品</span>
-	            	</a>
-	            	<a href="###">
-	            		<img src="__IMG__/14.png">
-	            		<span>每日新品</span>
-	            	</a>
-	            	<a href="###">
-	            		<img src="__IMG__/15.png">
-	            		<span>每日新品</span>
-	            	</a>
-	            	<a href="###">
-	            		<img src="__IMG__/16.png">
-	            		<span>每日新品</span>
-	            	</a>
-	            	<a href="###">
-	            		<img src="__IMG__/17.png">
-	            		<span>每日新品</span>
-	            	</a>
-	            	<a href="###">
-	            		<img src="__IMG__/18.png">
-	            		<span>每日新品</span>
-	            	</a>
-	            </div> -->
-	        </div>
-	        <!-- Add Pagination -->
-	       <!--  <div class="swiper-pagination swiper-paginationB"></div> -->
-		</div>
-		<input type="hidden" id="is_coupon" value="{$is_coupon}">
-	</div>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>首页</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="format-detection" content="telephone=no">
+	<meta http-equiv="Expires" content="0">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Cache-control" content="no-cache">
+	<meta http-equiv="Cache" content="no-cache">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<link rel="stylesheet" href="__CSS__/common_new.css">
+	<link rel="stylesheet" href="__CSS__/base_new.css">
+	<link rel="stylesheet" href="__CSS__/index_new.css">
+	<link rel="stylesheet" href="/static/node_modules/swiper/dist/css/swiper.css">
+	<link rel="stylesheet" href="__CSS__/iconfont_new.css">
+	<link rel="stylesheet" href="__CSS__/style_new.css">
+
 	<style>
-		.link1 img{width:6.95rem}
+		.little-logo {
+			position: fixed;
+			background-color: #fff;
+			box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.05);
+		}
+		.aui-palace {
+			padding-top: 0.5rem;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.aui-palace-grid {
+			position: relative;
+			float: left;
+			padding: 1px;
+			width: 20%;
+			box-sizing: border-box;
+			margin: 5px 0;
+		}
+
+		.aui-palace-one .aui-palace-grid-icon {
+			width: 5rem;
+			height: 5rem;
+		}
+
+		.aui-palace-grid-icon {
+			width: 30px;
+			height: 30px;
+			margin: 0 auto;
+		}
+
+		.aui-palace-grid-text {
+			display: block;
+			text-align: center;
+			color: #333;
+			font-size: 0.85rem;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
+			padding-top: 0.2rem;
+		}
+
+		.aui-palace-grid-icon img {
+			display: block;
+			width: 100%;
+			height: 100%;
+			border: none;
+		}
 	</style>
-	<div style="clear:both"></div>
-	<!-- 	<adv pid ="545" limit="1" item="v">
-			<a href="{$v[ad_link]}" >
-				<div class="link1">
-				<img src="{$v[ad_code]}"/>
+</head>
+
+<body>
+<!--<a class="fukuang"><img src="__IMG__/xf.gif"/></a>-->
+<div class="index-page" style="background-color: #fff;">
+	<!--<div class="index-search ">-->
+	<!--<input type="text" class="border" placeholder="搜索">-->
+	<!--</div>-->
+	<div class="index-banner">
+		<header class="mui-bar mui-bar-nav little-logo" id="header">
+			<div class="search bar">
+				<a href="/mobile/Goods/ajaxSearch.html">
+					<form>
+						<input type="text" placeholder="请输入您要搜索的内容...">
+						<button type="submit"></button>
+					</form>
+				</a>
+			</div>
+		</header>
+		<div class="swiper-container swiper-container1">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide">
+					<img src="__IMG__/1.png" alt="">
+				</div>
+				<div class="swiper-slide"><img src="__IMG__/1.png" alt=""></div>
+				<div class="swiper-slide"><img src="__IMG__/1.png" alt=""></div>
+			</div>
+			<!-- 如果需要分页器 -->
+			<div class="swiper-pagination"></div>
+		</div>
+	</div>
+	<div class="aui-palace aui-palace-one">
+		<volist name="class_list" id="vo" key="k">
+			<div>
+				<a href="/Mobile/Goods/goodsList/id/{$vo.id}" class="aui-palace-grid">
+					<div class="aui-palace-grid-icon">
+						<img src="{$vo.image}" alt="">
+					</div>
+					<div class="aui-palace-grid-text">
+						<h2 class="Classification_name">{$vo.name}</h2>
+					</div>
+				</a>
+			</div>
+		</volist>
+	</div>
+	<div class="index-slider">
+		<div class="slider-tit"><span class="Generalterm">爆款专卖</span>
+			<span class="english">Explosive monopoly</span></div>
+		<div class="swiper-container swiper-container2">
+			<div class="swiper-wrapper">
+				<volist name="favourite_goods" id="v1">
+					<a href="/Mobile/Goods/goodsInfo/id/{$v1.goods_id}">
+						<div class="swiper-slide">
+							<div class="slider-item">
+								<img src="{$v1.original_img}" alt="">
+								<div class="indous">
+									<div class="slider-item-tit ehn">{$v1.goods_name}</div>
+									<div class="slider-item-price"><i style="font-size: 1rem;">￥</i>{$v1.shop_price}</div>
+								</div>
+							</div>
+						</div>
+					</a>
+				</volist>
+			</div>
+		</div>
+	</div>
+	<div class="dating-theme">
+		<div class="slider-tit"><span class="Generalterm">TOP榜单</span>
+			<span class="english">TOP list</span></div>
+		<volist name="hot_goods" id="v">
+			<a href="/Mobile/Goods/goodsInfo/id/{$v.goods_id}">
+				<div class="xx-motion-footer clearfix">
+					<div class="baokuan "><img src="{$v.original_img}"></div>
+					<div class="baokuan_inpor">
+						<p class="Product_name">{$v.goods_name}</p>
+						<p class="buy_moeny"><span style="height: 30px;"><i style="font-size: 1rem;">¥&nbsp;&nbsp;</i>{$v.shop_price}</span></p>
+					</div>
 				</div>
 			</a>
-			</adv> -->
-<!-- 	<div class="linkBox">
-		<div  class="div a2 a_all">
-			<adv pid ="537" limit="1" item="v">
-				<a href="{$v[ad_link]}"><img  src="{$v[ad_code]}" title="{$v[title]}"></a>
-			</adv>
+		</volist>
+	</div>
+	<div class="goods-item clearfix">
+		<div class="slider-tit"><span class="Generalterm">新品上市</span>
+			<span class="english">New arrival</span></div>
+		<div class="wrapper">
+			<ul class="wall">
+				<volist name="new_goods" id="v">
+					<li class="article">
+						<a href="/Mobile/Goods/goodsInfo/id/{$v['goods_id']}">
+							<div>
+								<img src="{$v.original_img}" />
+							</div>
+							<div class="introduction_small">
+								<p class="indot" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap">{$v.goods_name}</p>
+								<div class="clearfix" style="">
+									<p class="price_small"><small><i style="font-size: 10px;">￥&nbsp;&nbsp;</i>{$v.shop_price}</small></p>
+									<p class="buy_small">立即抢购</p>
+								</div>
+							</div>
+							<!--<input type="button" value="投票" />-->
+						</a>
+					</li>
+				</volist>
+			</ul>
 		</div>
-		<div class="div a3 a_all">
-			<adv pid ="538" limit="1" item="v">
-				<a onclick="music()"><img  src="{$v[ad_code]}" title="{$v[title]}"></a>
-			</adv>
-		</div>
-		<adv pid ="541" limit="1" item="v">
-			<a href="{$v[ad_link]}" class="a4">
-				<img src="{$v[ad_code]}">
-			</a>
-		</adv>
-		
-		<div class="linkList">
-			<volist name="favourite_goods" id="v">
-				<a href="/Mobile/Goods/goodsInfo/id/{$v[goods_id]}">
-					<img src="{$v.original_img}">
-				</a>
-			</volist>
-		</div>
-	</div> -->
-   <!--  <div class="link2">
-    	<adv pid ="539" limit="4" item="v">
-	    	<a href="{$v['ad_link']}" class="a9">
-	    		<img src="{$v[ad_code]}">
-	    	</a>
-    	</adv>
-    </div> -->
-<!--     <adv pid ="540" limit="1" item="v">
-	    <a href="{$v['ad_link']}" class="link3">
-	    	<img src="{$v[ad_code]}">
-	    </a>
-    </adv>
-    <div class="lists">
-        <div class="swiper-container swiper-containerC">
-	        <div class="swiper-wrapper">
-	            <volist name="hot_goods" id="v">
-		            <div class="swiper-slide">
-		            	<a href="/Mobile/Goods/goodsInfo/id/{$v.goods_id}" style="width:120px;">
-		            		<img style="width:120px;height:115px;" src="{$v.original_img}">
-		            		<p class="proName">{$v.goods_name}</p>
-		            		<p class="proPrice">¥{$v.shop_price}</p>
-		            	</a>
-		            </div>
-	            </volist>
-	        </div>
-	        Add Pagination
-	        <div class="swiper-pagination swiper-paginationC"></div>
-	    </div>
-    </div> -->
-      	    <div class="lists">
-	        <div class="swiper-container swiper-containerC">
-		        <div class="swiper-wrapper">
-		            <volist name="favourite_goods" id="v1">
-			            <div class="swiper-slide">
-			            	<a href="/Mobile/Goods/goodsInfo/id/{$v1.goods_id}">
-			            		<img  src="{$v1.original_img}" style="position:relative;">
-			            		<p class="proName adv_banner">{$v1.goods_name}</p>
-			            		<p class="proPrice adv_banner" style="ma">¥{$v1.shop_price}</p>
-			            		<img  src="__IMG__/hot.png" style="position:absolute;top:0px;left:0px;z-index:999px;width:25px;">
-			            	</a>
-			            </div>
-		            </volist>
-		        </div>
-		    </div>
-	    </div>
-   <volist name="hot_goods" id="v">
-	    <a href="{$v['ad_link']}" class="link3">
-	    	<img src="{$v[ad_code]}">
-	    </a>
-	    <div class="lists">
-	        <div class="swiper-container swiper-containerC">
-		        <div class="swiper-wrapper">
-		            <volist name="$v['goods_info']" id="v1">
-			            <div class="swiper-slide">
-			            	<a href="/Mobile/Goods/goodsInfo/id/{$v1.goods_id}">
-			            		<img  src="{$v1.original_img}">
-			            		<p class="proName adv_banner">{$v1.goods_name}</p>
-			            		<p class="proPrice adv_banner" style="ma">¥{$v1.shop_price}</p>
-			            	</a>
-			            </div>
-		            </volist>
-		        </div>
-		        	Add Pagination
-		        <div class="swiper-pagination swiper-paginationC"></div>
-		    </div>
-	    </div>
-    </volist>
-    
-    
-    
-    <div class="titles">
-    	<img src="__IMG__/title1.png">
-    </div>
-<!--     <div class="list1">
-    	<volist name="new_goods" id="v">
-		    	<div class="proList">
-		    		<img src="{$v.original_img}" class="pros">
-		    		<p class="proName1">{$v.goods_name}</p>
-		    		<div class="prices">
-		    			<img src="__IMG__/d.png">
-		    			<span class="price1">¥{$v.shop_price}</span>
-		    			<span class="price2">¥{$v.market_price}</span>
-		    		</div>
-		    		<div class="lineBox">
-		    		   <div class="line">
-		    		   	 <div class="line1"></div>
-		    		   </div>
-		    		   <span class="bf">{$v.sales_sum}件</span>
-		    		</div>
-		    		<a href="###" class="buy">
-		    			<img src="__IMG__/buy.png">
-		    		</a>
-		    	</div>
-    	</volist>
-    </div> -->
-    
-   <div class="link2">
-    	<!--<adv pid ="539" limit="4" item="v">
-	    	<a href="{$v['ad_link']}" class="a9">
-	    		<img src="{$v[ad_code]}">
-	    	</a>
-    	</adv> -->
-    	<volist name="new_goods" id="v">
-    		<a href="/Mobile/Goods/goodsInfo/id/{$v['goods_id']}" class="a9">
-	    		<img src="{$v.original_img}">
-				<p class="proName" style="width:85%;margin-left:7.5%;margin-top:0.3rem">{$v.goods_name}</p>
-          		<p class="proPrice" style="width:85%;margin-left:7.5%;margin-top:0.2rem">¥{$v.shop_price}</p>
-	    	</a>
-    	</volist>
-    </div>
-    <div style="width: 100%;height: 1.8rem;"></div>
-  <!--   <a href="###" class="link4">
-    	<img src="__IMG__/banner10.png">
-    </a> -->
-     
-   <include file="public/footer_nav1" title="个人中心" body=""/>
-  
-   
+	</div>
+
+	<include file="public/footer_nav1" title="个人中心" body=""/>
+
+</div>
 </body>
-<script type="text/javascript" src="__JS__/jquery-3.2.1.min.js" ></script>
-<script src="__JS__/layer1.js"  type="text/javascript" ></script>
-<script type="text/javascript" src="__IMG__/swiper.min.js" ></script>
-<style>
-.img_div{width:100%;height:100%}
-.img_div img{width:100%}
- .yourclass{left:0px;top:200px;} 
-</style>
-
-<script>
-	function music(){
-		layer.msg('此功能暂未开通');    	
-	}
-    var swiperA = new Swiper('.swiper-containerA', {
-        pagination: '.swiper-paginationA',
-        paginationClickable: true,
-     	autoplay : 2000,
-        loop : true,
-
-    });
-    var swiperB = new Swiper('.swiper-containerB', {
-        pagination: '.swiper-paginationB',
-        paginationClickable: true,
-
-    });
-    var swiperC = new Swiper('.swiper-containerC', {
-        pagination: '.swiper-paginationC',
-        slidesPerView: 3,
-        spaceBetween: 10,
-    });
-	var is_coupon;
-	$(document).ready(function(){
-		is_coupon = $("#is_coupon").val();
-		if(is_coupon == 1){
-            layer.open({
-                type: 1,
-                title: false,
-                closeBtn: 0,
-                shadeClose: true,
-                skin: 'yourclass',
-                content: "<div class='img_div' onclick='s()'><img src='__IMG__/activity.png'/></div>",
-            });
-		}
-		$(".yourclass").css('top','200px');
-		$(".yourclass").css('left','0px');
-	});
-    function s(){
-		$.ajax({
-			url:'/mobile/index/first_order_coupon',
-			type:'post',
-			success:function(e){
-				layer.msg(e.msg);
-				setTimeout(function(){history.go(0)},2000);
-			},
-			error:function(){
-				layer.msg('网络异常，请稍后再试');
-			}
-		}); 
-	}
-/* 	//上拉加载分页更多
-	$(window).scroll(function(){
-	    var scrollTop = $(this).scrollTop();    //滚动条距离顶部的高度
-	    var scrollHeight = $(document).height();   //当前页面的总高度
-	    var clientHeight = $(this).height();    //当前可视的页面高度
-	    if(scrollTop + clientHeight >= scrollHeight - 50){   //距离顶部+当前高度 >=文档总高度 即代表滑动到底部 注：-50 上拉加载更灵敏
-	             //加载数据
-	    	ajax_sourch_submit();
-	    }
-	});
-    
-    var before_request = 1; // 上一次请求是否已经有返回来, 有才可以进行下一次请求
-    var page = 0;
-    function ajax_sourch_submit(){
-        if(before_request == 0)// 上一次请求没回来 不进行下一次请求
-            return false;
-        before_request = 0;
-        page++;
-        $.ajax({
-            type : "get",
-            url:"/index.php?m=Mobile&c=Index&a=ajaxGetMore&p="+page,
-            success: function(data)
-            {
-                if(data){
-                    $(".link2").append(data);
-                    before_request = 1;
-                }else{
-                    $('.get_more').hide();
-                }
-            }
-        });
-    }
- */
-
-</script>
-	
+<script src="__JS__/jquery-1.8.3.min.js"></script>
+<script src="__JS__/jaliswall.js"></script>
+<script src="__JS__/index.js"></script>
+<script src="/static/node_modules/swiper/dist/js/swiper.js"></script>
+<script type="text/x-javascript">
+		//屏幕向下走多高的距离，出现little-logo
+		//			$(window).scroll(function() {
+		//				if($(window).scrollTop() > 167) {
+		//					$('.little-logo').show();
+		//				} else {
+		//					$('.little-logo').hide();
+		//				}
+		//			});
+		$(function() {
+$("#header").removeClass("little-logo");
+//			$(".little-logo").hide();
+			$(window).scroll(function() {
+				if($(document).scrollTop() >= 100) {
+					$("#header").addClass("little-logo").slideDown();
+				} else {
+					$("#header").removeClass("little-logo").slideDown();
+				}
+			})
+		})
+	</script>
 
 </html>

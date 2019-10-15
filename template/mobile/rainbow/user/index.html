@@ -1,5 +1,11 @@
 <include file="public/header" title="个人中心" body=""/>
 <link rel="stylesheet" type="text/css" href="__STATIC__/css/personal.css"/>
+<link rel="stylesheet" href="__CSS__/common_new.css">
+<link rel="stylesheet" href="__CSS__/base_new.css">
+<link rel="stylesheet" href="__CSS__/index_new.css">
+<link rel="stylesheet" href="/static/node_modules/swiper/dist/css/swiper.css">
+<link rel="stylesheet" href="__CSS__/iconfont_new.css">
+<link rel="stylesheet" href="__CSS__/style_new.css">
 <div class="z_user_vs">
     <div class="z_user_head" style="background:url(/static/img/main_back.png) no-repeat;background-size:100%">
         <div class="z_user_top">
@@ -156,25 +162,44 @@
                     </div>
                 </case>
                 <default />
-               	 <a href="{$menu.menu_url}">
-                    <div class="z_user_list <if condition='$menu.is_tab eq 1'>border10</if>">
-                        <div class="user_list_cont padd10" style="border-bottom:0px;">
-                            <div class="cont_fl">
-                                <img src="__PUBLIC__/static/images/w{$menu.menu_id}.png"/>
-                                <span>{$menu.menu_name}</span>
-                            </div>
-                            <div class="cont_fr">
-                                <i class="zMright"></i>
+                <if condition="$is_agent eq 1 OR $is_agent eq 2 OR $is_agent eq 3">
+                    <a href="{$menu.menu_url}">
+                        <div class="z_user_list <if condition='$menu.is_tab eq 1'>border10</if>">
+                            <div class="user_list_cont padd10" style="border-bottom:0px;">
+                                <div class="cont_fl">
+                                    <img src="__PUBLIC__/static/images/w{$menu.menu_id}.png"/>
+                                    <span>{$menu.menu_name}</span>
+                                </div>
+                                <div class="cont_fr">
+                                    <i class="zMright"></i>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
+                    <else/>
+                    <if condition="$menu.menu_id neq 205">
+                        <a href="{$menu.menu_url}">
+                            <div class="z_user_list <if condition='$menu.is_tab eq 1'>border10</if>">
+                                <div class="user_list_cont padd10" style="border-bottom:0px;">
+                                    <div class="cont_fl">
+                                        <img src="__PUBLIC__/static/images/w{$menu.menu_id}.png"/>
+                                        <span>{$menu.menu_name}</span>
+                                    </div>
+                                    <div class="cont_fr">
+                                        <i class="zMright"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </if>
+                </if>
             </switch>
         </volist>
     </div>
 </div>
 <!--底部导航-start-->
-<include file="public/footer_nav"/>
+<!--<include file="public/footer_nav1"/>-->
+<include file="public/footer_nav1" title="个人中心" body=""/>
 <!--底部导航-end-->
 <script>
     $('.z_user_head').css("background-color", "#292a2b");

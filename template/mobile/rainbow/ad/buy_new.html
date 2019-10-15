@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta charset="UTF-8">
+        <title>交易大厅</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="format-detection" content="telephone=no">
+        <meta http-equiv="Expires" content="0">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Cache-control" content="no-cache">
+        <meta http-equiv="Cache" content="no-cache">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <link rel="stylesheet" href="__CSS__/common_new.css">
+        <link rel="stylesheet" href="__CSS__/base_new.css">
+        <script type="text/javascript" src="__JS__/jquery-1.8.3.min.js"></script>
+        <script type="text/javascript" src="__JS__/jquery-progress.js"></script>
+        <script type="text/javascript">
+            $(function() {
+                //加的效果
+                $(".product-add").click(function() {
+                    var n = $(this).prev().val();
+                    var num = parseInt(n) + 1;
+                    if(num > 100) {
+                        return;
+                    }
+                    $(this).prev().val(num);
+                    var total;
+                    var number;
+                    var unit_price;
+                    number = $("#heans_numbers").val();
+                    unit_price = $("#surplus_num").val();
+                    total = number * unit_price;
+                    var total_str = total.toString();
+                    var index = total_str.indexOf('.');
+                    var total_price = Number( total_str.slice(0, index + 3) )
+                    $("#yuan").html(total_price + "<em>元</em>");
+
+                });
+                //减的效果
+                $(".product-jian").click(function() {
+                    var n = $(this).next().val();
+                    var num = parseInt(n) - 1;
+                    if(n < 2) {
+                        return;
+                    }
+                    $(this).next().val(num);
+                    var total;
+                    var number;
+                    var unit_price;
+                    number = $("#heans_numbers").val();
+                    unit_price = $("#surplus_num").val();
+                    total = number * unit_price;
+                    var total_str = total.toString();
+                    var index = total_str.indexOf('.');
+                    var total_price = Number( total_str.slice(0, index + 3) )
+                    $("#yuan").html(total_price + "<em>元</em>");
+
+                });
+            });
+        </script>
+        <style>
+            .one_centent {
+                -webkit-box-shadow: 0px 3px 3px #c8c8c8;
+                -moz-box-shadow: 0px 3px 3px #c8c8c8;
+                box-shadow: 0px 3px 3px #c8c8c8;
+                margin: 1rem;
+                border: 0.07rem solid #9d6122;
+                border-radius: 0.8rem;
+                background-color: white;
+            }
+
+            .center_content {
+                padding: 10px 30px;
+            }
+
+            .product-amount {
+                /* position: absolute;*/
+                width: 10rem;
+                right: 15px;
+                bottom: 0;
+                height: 30px;
+                display: INLINE-BLOCK;
+                border: 1px solid #9d6122;
+                border-radius: 3px;
+                vertical-align: middle;
+            }
+
+            .product-amount .product-jian {
+                float: left;
+                width: 30px;
+                font-style: normal;
+                height: 30px;
+                border-right: 1px solid #9d6122;
+                text-align: center;
+                line-height: 30px;
+                font-size: 20px;
+                color: #333;
+                border-radius: 3px;
+            }
+
+            .product-amount .product-num {
+                width: 3.5rem;
+                height: 30px;
+                float: left;
+                border-radius: 0;
+                font-size: 1.2rem;
+                text-align: center;
+            }
+
+            .number_guamai {
+                border-radius: 3px;
+                border: 1px solid #976027;
+                width: 7rem;
+                height: 2.5rem;
+                text-align: center;
+            }
+
+            .product-amount .product-add {
+                float: right;
+                width: 30px;
+                font-style: normal;
+                height: 30px;
+                background: #976027;
+                text-align: center;
+                line-height: 30px;
+                font-size: 20px;
+                color: #fff;
+                border-radius: 3px;
+            }
+
+            .title_name {
+                color: #c07b51;
+                font-size: 1.5rem;
+                line-height: 4rem;
+                font-weight: 600;
+            }
+
+            .center_content img,
+            .content_sure img {
+                height: 2.15rem;
+                margin: 0 1.8rem 0 0.5rem;
+                vertical-align: middle;
+            }
+
+            .but_surn {
+                line-height: 3rem;
+                width: 100%;
+                display: block;
+                text-align: center;
+                background-color: #9a5f23;
+                font-size: 1.2rem;
+                letter-spacing: 2px;
+                color: #fff;
+                border-radius: 40px;
+                margin: 1rem 0;
+            }
+
+            .zhushi {
+                color: #976027;
+                font-size: 1rem;
+                margin-left: 0.5rem;
+            }
+
+            .one_centent ul li.xxx {
+                padding: 1rem 0;
+            }
+
+            .one_centent ul li.xxx {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+
+            .one_centent ul li {
+                float: left;
+                height: 6.8rem;
+            }
+
+            .one_centent ul {
+                height: 8.5rem;
+            }
+
+            .one_centent ul li img {
+                height: 4rem;
+            }
+
+            .one_centent ul li .xxx p {
+                line-height: 2rem;
+            }
+
+            .one_centent ul li p em {
+                color: #333;
+            }
+
+            .one_centent ul li p img {
+                height: 1rem;
+            }
+
+            .none_xx {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+
+            .one_centent ul li.samllll {
+                width: 39%;
+                padding-top: 0.5rem;
+                line-height: 2.4rem;
+                color: #976027;
+                font-size: 1.2rem;
+
+            }
+            @media only screen and (min-width: 640px) and (max-width: 1280px) {
+                .one_centent ul .but_buy {
+                    background: url(__IMG__/bdbt.jpg) no-repeat;
+                    width: 20%;
+                }
+            }
+            .one_centent ul .but_buy {
+                text-align: center;
+                background: url(__IMG__/bdbt.jpg) no-repeat 100%;
+                background-size: cover;
+                color: #fff;
+                display: block;
+                float: right;
+                height: 100%;
+                line-height: 8.5rem;
+                border-top-right-radius: 0.8rem;
+                border-bottom-right-radius: 0.8rem;
+                position: relative;
+            }
+
+            .but_buy {
+                position: relative;
+                width: 100px;
+                height: 50px;
+                color: #ffff00;
+            }
+
+            .promote_mask,
+            .seeimg_mask {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                display: none;
+                margin: 0 auto;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                z-index: 99999;
+            }
+
+            .promote_mask>div {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: 0 auto;
+                display: none;
+                width: 100%;
+                /* height:60%;*/
+                z-index: 3;
+                background: #fff;
+                border-top-right-radius: 1rem;
+                border-top-left-radius: 1rem;
+            }
+
+            .seeimg_mask>div {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: 0 auto;
+                display: none;
+                width: 100%;
+                height: 4.78rem;
+                z-index: 3;
+                background: #fff;
+            }
+
+            .promote_mask .operate {
+                padding: 0 0.3rem;
+                width: 100%;
+                height: 4rem;
+                font-size: 0.32rem;
+                box-sizing: border-box;
+                text-align: center;
+            }
+
+            .promote_mask .operate span img {
+                width: 1.8rem;
+                vertical-align: middle;
+                float: right;
+                margin-top: 1rem;
+                margin-right: 1rem;
+            }
+
+            .promote_mask .operate .determine {
+                color: #FF6602;
+                text-align: right;
+            }
+
+            .promote_mask .h2 {
+                font-size: 1.5rem;
+                text-align: center;
+                line-height: 4rem;
+                color: #333;
+            }
+
+            .content_sure {
+                padding: 0 2.5rem;
+                padding-top: 2rem;
+            }
+        </style>
+    </head>
+
+<body>
+<div class="order-header">
+    <a href="home.html">
+        <img src="__IMG__/return.png" alt="">
+    </a>
+    <h5>交易大厅</h5>
+
+</div>
+<div style="height: 4.2rem;display: block;"></div>
+<div class="one_centent" style="">
+    <img src="__IMG__/bg.png" style="width: 100%;" />
+    <p style="text-align: center;color: #9d6122;font-size: 2rem; font-weight: 700;letter-spacing: 4px;line-height: 4rem;">悦玩豆挂卖</p>
+
+    <div class="center_content">
+        <div style="height: 5rem;">
+            <span class="title_name">挂卖数量&nbsp;:&nbsp;</span>
+            <label><img src="__IMG__/icon3.png" /></label>
+            <form class="product-amount">
+                <em class="product-jian">-</em>
+                <input type="number" value="1" class="product-num" min="1" max="100" name="numbers" id="numbers">
+                <em class="product-add">+</em>
+            </form>
+        </div>
+        <div style="height: 5rem;">
+            <span class="title_name">挂卖单价&nbsp;:&nbsp;</span>
+            <img src="__IMG__/icon.png" />
+
+            <input type="text" value="" class="number_guamai" placeholder="1.00" name="unit_price" id="unit_price">
+            <i class="zhushi" style="">元/个</i>
+        </div>
+        <div>
+            <a class="but_surn" onclick="release()">确认挂卖</a>
+        </div>
+
+    </div>
+</div>
+<p style="margin: 2rem 1rem;font-size: 1.5rem;font-weight: 600;">用户交易<i class="zhushi">(需按挂卖顺序进行交易)</i></p>
+
+<volist name="data" id="vo" key="k">
+    <div class="one_centent" style="">
+            <ul class="clearfix">
+            <li class="xxx none_xx">
+                <img src="{$vo.head_pic}" />
+                <p style="text-align: center; padding-top: 0.5rem;">{$vo.nickname}</p>
+            </li>
+            <li class="none_xx samllll" style="">
+                <p>挂卖数量：<i><img src="__IMG__/icon3.png"/></i>&nbsp;&nbsp;<em>{$vo.surplus_num}<em>元</em></em>
+                </p>
+                <p>挂卖单价：<i><img src="__IMG__/icon.png"/></i>&nbsp;&nbsp;<em>{$vo.unit_price}<em>元</em></em>
+                </p>
+                <p>已成交数量：<em>{$vo.count}<em>个</em></em>
+                </p>
+            </li>
+            <eq name="$k" value="1">
+                <a class="but_buy btn" onclick="btn({$vo.sell_id},{$vo.unit_price})">
+                    <!--点击购买-->
+                </a>
+            </eq>
+        </ul>
+    </div>
+</volist>
+
+<div class="promote_mask">
+    <div>
+        <div class="clear operate">
+            <span class="h2">确认订单并前往微信支付 </span>
+            <span class="f_left cancel"><img src="__IMG__/close.png" /></span>
+
+        </div>
+        <hr style=" height:2px;border:none;border-top:1px dotted #999;    margin: 0 1rem;" />
+
+        <div class="content_sure">
+            <div style="height: 5rem;">
+                <span class="title_name">购买数量&nbsp;:&nbsp;</span>
+                <label><img src="__IMG__/icon3.png" /></label>
+                <form class="product-amount">
+                    <em class="product-jian">-</em>
+                    <input type="text" value="1" class="product-num" id="heans_numbers" onchange="change()">
+                    <em class="product-add">+</em>
+                </form>
+            </div>
+            <div style="height: 5rem;">
+                <span class="title_name">购买单价&nbsp;:&nbsp;</span>
+                <img src="__IMG__/icon.png" />
+
+                <input type="text" value="1.00" class="number_guamai" id="surplus_num" readonly="readonly">
+                <i class="zhushi" style="">元</i>
+            </div>
+            <div style="height: 5rem;">
+                <span class="title_name">支付金额&nbsp;:&nbsp;</span>
+                <img src="__IMG__/icon4.png" />
+
+                <span class="" style="font-size: 1.5rem;" id="yuan"></span>
+            </div>
+            <div>
+                <a class="but_surn active" onclick="submit_order()">确认购买</a>
+                <input type="hidden" name="sell_id" id="sell_id" value="">
+            </div>
+            <div style="height: 3rem;"></div>
+        </div>
+    </div>
+</div>
+<div style="height: 1rem;"></div>
+<script src="__JS__/layer.js"  type="text/javascript" ></script>
+<script>
+    $(function() {
+        //点击按钮
+        // $(".btn").click(function() {
+        //     $(".promote_mask").show();
+        //     $(".promote_mask>div").slideToggle();
+        // })
+        $(".promote_mask").click(function(e) {
+            var event = e || window.event;
+            var target = event.target || event.srcElement;
+            if(target.className == "promote_mask") {
+                $(".promote_mask>div").slideToggle(function() {
+                    $(".promote_mask").hide();
+                });
+            }
+        })
+
+        // 取消
+        $(".cancel").click(function() {
+            $(".promote_mask>div").slideToggle(function() {
+                $(".promote_mask").hide();
+            });
+        });
+    })
+    function btn(sell_id,unit_price)
+    {
+        $("#surplus_num").val(unit_price);
+        $("#yuan").html(unit_price + "<em>元</em>");
+        $("#sell_id").val(sell_id);
+        $(".promote_mask").show();
+        $(".promote_mask>div").slideToggle();
+    }
+    function change()
+    {
+        var total;
+        var number;
+        var unit_price;
+        number = $("#heans_numbers").val();
+        unit_price = $("#surplus_num").val();
+        total = number * unit_price;
+        var total_str = total.toString();
+        var index = total_str.indexOf('.');
+        var total_price = Number( total_str.slice(0, index + 3) );
+        $("#yuan").html(total_price + "<em>元</em>");
+    }
+    function release()
+    {
+        var numbers = $("#numbers").val();
+        var unit_price = $("#unit_price").val();
+        if(!(unit_price && numbers > 0)){
+            layer.msg('请填写数量和单价');
+            setTimeout(function(){
+
+            }, 1000);
+            return;
+        }
+        $.ajax({
+            url:'sell',
+            type:'post',
+            data:{'numbers':numbers,'unit_price':unit_price},
+            success:function(e){
+                if(e.code == 1){
+                    layer.msg(e.msg);
+                    setTimeout(function(){
+                        history.go(0);
+                    }, 2000);
+                }else{
+                    layer.msg(e.msg);
+                    setTimeout(function(){
+
+                    }, 2000);
+                }
+            },
+            error:function(e){
+                layer.msg('网络异常，请稍后再试');
+            }
+        });
+    }
+    function submit_order()
+    {
+        var sell_id = $("#sell_id").val();
+        var num = $("#heans_numbers").val();
+        if(!num) {
+            layer.msg('请输入购买数量');
+            return;
+        }
+        $.ajax({
+            url:'buy_beans',
+            type:'post',
+            data:{'sell_id':sell_id,'number':num},
+            success:function(e){
+                if(e.code == 1){
+                    window.location.href = "/index.php?m=Mobile&c=Cart&a=cart4&order_id=" + e.data.order_id;
+                }else{
+                    layer.msg(e.msg);
+                }
+            },
+            error:function(){
+                layer.msg('网络异常，请稍后再试');
+            }
+        });
+    }
+</script>
+</body>
+
+</html>
