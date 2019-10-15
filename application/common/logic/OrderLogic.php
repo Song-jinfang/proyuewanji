@@ -293,9 +293,9 @@ class OrderLogic
     	if($order['pay_time'] > 1570291200){//如果购买商品时间大于10-6日，则给上级加上分享收益
     	   auto($order_id,false);//取消订单减去业绩
     	}
-    	if($order['pay_time'] > 1570896000){
+    /* 	if($order['pay_time'] > 1570896000){
             agent_cost1($user_id,$order_id);
-        }
+        } */
         if($order['prom_type'] == 5){
             //活动订单可能要操作其他东西,目前只是虚拟订单才需要，以后根据业务做修改
             Db::name('vr_order_code')->where(['order_id' => $order_id])->update(['refund_lock'=>1]);
