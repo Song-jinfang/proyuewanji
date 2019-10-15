@@ -1432,12 +1432,12 @@ function auto($order_id,$status = true){
                             
                             if($status == true){//确认收货
                                 $dynamic_profit = $user['dynamic_profit'] + $rela;
-                                confirm_dynamic_profit($v,$rela,'用户确认收货活期账户收益'.$rela,$order['order_id'],3);
+                                confirm_dynamic_profit($v,$rela,'用户确认收货活期账户收益'.$rela,$order['order_id'],5);
                                 
                                 $frozen_dynamic_profit = $user['frozen_dynamic_profit'] - $rela;
                                 $frozen_dynamic_profit = $frozen_dynamic_profit < 0 ? 0:$frozen_dynamic_profit;
                                 
-                                cancel_dynamic_profit($v,$rela,'用户确认收货冻结账户解冻'.$rela.'元',$order['order_id'],3);
+                                cancel_dynamic_profit($v,$rela,'用户确认收货冻结账户解冻'.$rela.'元',$order['order_id'],5);
                                 //加活期余额
                             }else{//取消订单
                                 //减去获取余额
