@@ -1216,6 +1216,7 @@ function dynamic_profit($user_id,$money,$desc,$order_id = 0,$type){
         'user_money'    => $money,
         'add_time'   => time(),
         'desc'   => $desc,
+        'order_id'=>$order_id,
         'type'=>$type
     );
     /*更新每日订单任务信息 */
@@ -1224,10 +1225,52 @@ function dynamic_profit($user_id,$money,$desc,$order_id = 0,$type){
      );
      $update = Db::name('users')->where("user_id = $user_id")->save($update_data); */
     $update = M('users')->where("user_id = $user_id")->setInc('frozen_dynamic_profit',$money);
+    M('adv_log')->add($account_log);  
+}
+
+
+/*
+ * 购买订单给上级添加动态收益
+ */
+function confirm_dynamic_profit($user_id,$money,$desc,$order_id = 0,$type){
+    /* 插入帐户变动记录 */
+    $account_log = array(
+        'user_id'       => $user_id,
+        'user_money'    => $money,
+        'add_time'   => time(),
+        'desc'   => $desc,
+        'order_id'=>$order_id,
+        'type'=>$type
+    );
+    /*更新每日订单任务信息 */
+    /*   $update_data = array(
+     'dynamic_profit'        => ['exp','dynamic_profit+'.$money],
+     );
+     $update = Db::name('users')->where("user_id = $user_id")->save($update_data); */
+    $update = M('users')->where("user_id = $user_id")->setInc('dynamic_profit',$money);
     M('adv_log')->add($account_log);
-    
-    
-    
+}
+
+/*
+ * 购买订单给上级添加动态收益
+ */
+function cancel_dynamic_profit($user_id,$money,$desc,$order_id = 0,$type){
+    /* 插入帐户变动记录 */
+    $account_log = array(
+        'user_id'       => $user_id,
+        'user_money'    => $money,
+        'add_time'   => time(),
+        'desc'   => $desc,
+        'order_id'=>$order_id,
+        'type'=>$type
+    );
+    /*更新每日订单任务信息 */
+    /*   $update_data = array(
+     'dynamic_profit'        => ['exp','dynamic_profit+'.$money],
+     );
+     $update = Db::name('users')->where("user_id = $user_id")->save($update_data); */
+    $update = M('users')->where("user_id = $user_id")->setDec('frozen_dynamic_profit',$money);
+    M('adv_log')->add($account_log);
 }
 
 /*
@@ -1323,7 +1366,7 @@ function confirm_order($id,$user_id = 0){
 
 //根据订单查询用户所有的上级应该得到的分享收益
 function auto($order_id,$status = true){
-    $order = M('order')->field('user_id,order_amount,pay_time,user_money,total_amount')->where('order_id ='.$order_id)->find();
+    $order = M('order')->field('user_id,order_amount,pay_time,user_money,total_amount,order_id')->where('order_id ='.$order_id)->find();
     if($order['total_amount'] > 0){
         //$parentArr = explode(',',$order[''])
         $userlist = M('users')->field('pid_list')->where('user_id = '.$order['user_id'])->find();
@@ -1378,13 +1421,29 @@ function auto($order_id,$status = true){
                         }
                         if($rela > 0){
                             $user = M('users')->field('dynamic_profit,frozen_dynamic_profit')->where('user_id='.$v)->find();
+                          /*  
                             if($status == true){//确认收货
                                 //减去冻结账户加在活期账户里面
                                 $data['dynamic_profit'] = $user['dynamic_profit'] + $rela;
                             }
                             $frozen_dynamic_profit = $user['frozen_dynamic_profit'] - $rela;
                             $data['frozen_dynamic_profit'] = $frozen_dynamic_profit < 0 ? 0:$frozen_dynamic_profit;
-                            M('users')->where("user_id = $v")->update($data);
+                            M('users')->where("user_id = $v")->update($data); */
+                            
+                            if($status == true){//确认收货
+                                $dynamic_profit = $user['dynamic_profit'] + $rela;
+                                confirm_dynamic_profit($v,$rela,'用户确认收货活期账户收益'.$rela,$order['order_id'],3);
+                                
+                                $frozen_dynamic_profit = $user['frozen_dynamic_profit'] - $rela;
+                                $frozen_dynamic_profit = $frozen_dynamic_profit < 0 ? 0:$frozen_dynamic_profit;
+                                
+                                cancel_dynamic_profit($v,$rela,'用户确认收货冻结账户解冻'.$rela.'元',$order['order_id'],3);
+                                //加活期余额
+                            }else{//取消订单
+                                //减去获取余额
+                                $frozen_dynamic_profit = $user['frozen_dynamic_profit'] - $rela;
+                                cancel_dynamic_profit($v,$rela,'用户取消订单冻结账户扣款'.$rela.'元',$order['order_id'],3);
+                            }
                         }
                     }
                 }
