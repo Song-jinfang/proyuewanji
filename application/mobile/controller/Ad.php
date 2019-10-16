@@ -1009,6 +1009,10 @@ class Ad extends MobileBase
                     ->where(['a.sell_id' => $vo['sell_id'],'c.pay_status' => 0])
                     ->sum('a.number');
             }
+            $action = request()->action();
+            $controller = request()->controller();
+            $this->assign('action',$action);
+            $this->assign('controller',$controller);
             $this->assign('data',$data);
             $this->assign('mx_list',$mx_list);
             $this->assign('dd_list',$dd_list);
