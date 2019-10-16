@@ -395,13 +395,13 @@
 	    width: 5rem;
 }
 .fukuang{
- position: fixed;
- z-index: 9999;
- margin-top: 60%;
- right: 0;
- bottom: 100px;
+	position: fixed;
+	z-index: 9999;
+	margin-top: 60%;
+	right: 0;
+	bottom: 100px;
 }
 .fukuang img{
- height: 9rem;
- width: 9rem;
+	height: 9rem;
+	width: 9rem;
 }

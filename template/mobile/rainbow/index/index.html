@@ -120,17 +120,15 @@
 		<div class="swiper-container swiper-container2">
 			<div class="swiper-wrapper">
 				<volist name="favourite_goods" id="v1">
-					<a href="/Mobile/Goods/goodsInfo/id/{$v1.goods_id}">
-						<div class="swiper-slide">
-							<div class="slider-item">
-								<img src="{$v1.original_img}" alt="">
+					<div class="swiper-slide">
+						<div class="slider-item">
+								<img src="{$v1.original_img}" alt="" onclick="jump({$v1.goods_id})">
 								<div class="indous">
-									<div class="slider-item-tit ehn">{$v1.goods_name}</div>
-									<div class="slider-item-price"><i style="font-size: 1rem;">￥</i>{$v1.shop_price}</div>
+									<div class="slider-item-tit ehn" onclick="jump({$v1.goods_id})">{$v1.goods_name}</div>
+									<div class="slider-item-price" onclick="jump({$v1.goods_id})"><i style="font-size: 1rem;">￥</i>{$v1.shop_price}</div>
 								</div>
-							</div>
 						</div>
-					</a>
+					</div>
 				</volist>
 			</div>
 		</div>
@@ -139,15 +137,13 @@
 		<div class="slider-tit"><span class="Generalterm">TOP榜单</span>
 			<span class="english">TOP list</span></div>
 		<volist name="hot_goods" id="v">
-			<a href="/Mobile/Goods/goodsInfo/id/{$v.goods_id}">
 				<div class="xx-motion-footer clearfix">
-					<div class="baokuan "><img src="{$v.original_img}"></div>
+					<div class="baokuan " onclick="jump({$v.goods_id})"><img src="{$v.original_img}"></div>
 					<div class="baokuan_inpor">
-						<p class="Product_name">{$v.goods_name}</p>
-						<p class="buy_moeny"><span style="height: 30px;"><i style="font-size: 1rem;">¥&nbsp;&nbsp;</i>{$v.shop_price}</span></p>
+						<p class="Product_name" onclick="jump({$v.goods_id})">{$v.goods_name|getSubstr=0,20}</p>
+						<p class="buy_moeny" onclick="jump({$v.goods_id})"><span style="height: 30px;"><i style="font-size: 1rem;">¥&nbsp;&nbsp;</i>{$v.shop_price}</span></p>
 					</div>
 				</div>
-			</a>
 		</volist>
 	</div>
 	<div class="goods-item clearfix">
@@ -157,19 +153,16 @@
 			<ul class="wall">
 				<volist name="new_goods" id="v">
 					<li class="article">
-						<a href="/Mobile/Goods/goodsInfo/id/{$v['goods_id']}">
 							<div>
-								<img src="{$v.original_img}" />
+								<img src="{$v.original_img}" onclick="jump({$v.goods_id})" />
 							</div>
 							<div class="introduction_small">
-								<p class="indot" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap">{$v.goods_name}</p>
+								<p class="indot" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap" onclick="jump({$v.goods_id})">{$v.goods_name|getSubstr=0,20}</p>
 								<div class="clearfix" style="">
-									<p class="price_small"><small><i style="font-size: 10px;">￥&nbsp;&nbsp;</i>{$v.shop_price}</small></p>
-									<p class="buy_small">立即抢购</p>
+									<p class="price_small" onclick="jump({$v.goods_id})"><small><i style="font-size: 10px;">￥&nbsp;&nbsp;</i>{$v.shop_price}</small></p>
+									<p class="buy_small" onclick="jump({$v.goods_id})">立即抢购</p>
 								</div>
 							</div>
-							<!--<input type="button" value="投票" />-->
-						</a>
 					</li>
 				</volist>
 			</ul>
@@ -205,5 +198,10 @@ $("#header").removeClass("little-logo");
 			})
 		})
 	</script>
-
+<script>
+	function jump(goods_id)
+	{
+		window.location.href = '/Mobile/Goods/goodsInfo/id/' + goods_id;
+	}
+</script>
 </html>

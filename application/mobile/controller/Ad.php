@@ -983,37 +983,104 @@ class Ad extends MobileBase
     //豆包————新版
     public function home()
     {
+        if(request()->isGet()){
+            $session_user = session('user');
+            $uid = $session_user['user_id'];
+            $have_price  = M('users')->where(['user_id' => $uid])->value('happy_beans');
+            $data = Db::name('notify')->where(['type' => 1,'status' => 1])->select();
+            $type = Db::name('sell')->where('surplus_num','gt',0)->count();
+            $mx_list = Db::name('adv_log')->where(['user_id' => $uid,'type' => 1])->order('add_time','desc')->select();
+            $dd_list = D('order')->where(['user_id' => $uid,'pay_status' => 1,'type' => 2])->field('add_time,ywd_price')->select();
+            $zr_list = D('turn_out')->where(['uid' => $uid])->select();
+            $gm_list = Db::name('sell')
+                ->where(['user_id' => $uid])
+                ->order('add_time','desc')
+                ->select();
+            foreach ($gm_list as &$vo){
+                $number = Db::name('buy')->alias('a')
+                    ->join('ywj_sell b','a.sell_id = b.sell_id')
+                    ->join('ywj_order c','a.order_id = c.order_id')
+                    ->where(['a.sell_id' => $vo['sell_id'],'c.pay_status' => 1])
+                    ->sum('a.number');
+                $vo['available_amount'] = $number  *$vo['unit_price'];
+                $vo['count_number'] = Db::name('buy')->alias('a')
+                    ->join('ywj_sell b','a.sell_id = b.sell_id')
+                    ->join('ywj_order c','a.order_id = c.order_id')
+                    ->where(['a.sell_id' => $vo['sell_id'],'c.pay_status' => 0])
+                    ->sum('a.number');
+            }
+            $this->assign('data',$data);
+            $this->assign('mx_list',$mx_list);
+            $this->assign('dd_list',$dd_list);
+            $this->assign('zr_list',$zr_list);
+            $this->assign('gm_list',$gm_list);
+            $this->assign('type',$type);
+            $this->assign('have_price',$have_price);
+            return $this->fetch();
+        }else{
+            $data = request()->post();
+            //加密  encrypt
+            if(!($data['id'] || $data['pwd'] || $data['number'])){
+                return json([
+                    'code'  =>  -1,
+                    'msg'   =>  '请填写完整信息',
+                    'data'  =>  []
+                ]);
+            }
+            $session_user = session('user');
+            $uid = $session_user['user_id'];
+            $password = D('users')->where(['user_id' => $uid])->value('password');
+            $have_price = D('users')->where(['user_id' => $uid])->value('happy_beans');
+            $password1 = encrypt($data['pwd']);
+            if($password != $password1){
+                return json([
+                    'code'  =>  -1,
+                    'msg'   =>  '密码错误，请重新输入',
+                    'data'  =>  [],
+                ]);
+            }
+            if($have_price < $data['number']){
+                return json([
+                    'code'  =>  -1,
+                    'msg'   =>  '您的悦玩豆不足，请重新输入数值或充值',
+                    'data'  =>  [],
+                ]);
+            }
+            Db::startTrans();
+            try{
+                $pay_id = D('users')->where(['mobile' => $data['id']])->value('user_id');
+                consumption_beans($pay_id,$data['number'],'悦玩豆转入');
+                lose_beans($uid,$data['number'],'悦玩豆转出');
+                D('turn_out')->add([
+                    'uid'      =>  $uid,
+                    'pay_id'   => $pay_id,
+                    'add_time' => time(),
+                    'mobile'   => $data['id'],
+                    'number'   => $data['number'],
+                ]);
+                Db::commit();
+                return json([
+                    'code'  =>  1,
+                    'msg'   =>  '转让成功',
+                    'data'  =>  [],
+                ]);
+            }catch (Exception $exception){
+                Db::rollback();
+                return json([
+                    'code'  =>  -1,
+                    'msg'   =>  '转让失败',
+                    'data'  =>  [],
+                ]);
+            }
+        }
+    }
+
+    public function zr()
+    {
         $session_user = session('user');
         $uid = $session_user['user_id'];
-        $have_price  = M('users')->where(['user_id' => $uid])->value('happy_beans');
-        $data = Db::name('notify')->where(['type' => 1,'status' => 1])->select();
-        $type = Db::name('sell')->where('surplus_num','gt',0)->count();
-        $mx_list = Db::name('adv_log')->where(['user_id' => $uid,'type' => 1])->order('add_time','desc')->select();
-        $dd_list = D('order')->where(['user_id' => $uid,'pay_status' => 1,'type' => 2])->field('add_time,ywd_price')->select();
-        $zr_list = D('turn_out')->where(['uid' => $uid])->select();
-        $gm_list = Db::name('sell')
-            ->where(['user_id' => $uid])
-            ->order('add_time','desc')
-            ->select();
-        foreach ($gm_list as &$vo){
-            $number = Db::name('buy')->alias('a')
-                ->join('ywj_sell b','a.sell_id = b.sell_id')
-                ->join('ywj_order c','a.order_id = c.order_id')
-                ->where(['a.sell_id' => $vo['sell_id'],'c.pay_status' => 1])
-                ->sum('a.number');
-            $vo['available_amount'] = $number  *$vo['unit_price'];
-            $vo['count_number'] = Db::name('buy')->alias('a')
-                ->join('ywj_sell b','a.sell_id = b.sell_id')
-                ->join('ywj_order c','a.order_id = c.order_id')
-                ->where(['a.sell_id' => $vo['sell_id'],'c.pay_status' => 0])
-                ->sum('a.number');
-        }
-        $this->assign('data',$data);
-        $this->assign('mx_list',$mx_list);
-        $this->assign('dd_list',$dd_list);
-        $this->assign('zr_list',$zr_list);
-        $this->assign('gm_list',$gm_list);
-        $this->assign('type',$type);
+        $have_price = M('users')->where(['user_id' => $uid])->value('happy_beans');
+        $have_price = ceil($have_price);
         $this->assign('have_price',$have_price);
         return $this->fetch();
     }
