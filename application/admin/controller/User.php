@@ -748,6 +748,8 @@ class User extends Base
             $list = $withdrawalsModel->where($where)->order("id desc")->select();
             $strTable = '<table width="500" border="1">';
             $strTable .= '<tr>';
+            $strTable .= '<td style="text-align:center;font-size:12px;width:120px;">用户ID</td>';
+            $strTable .= '<td style="text-align:center;font-size:12px;width:120px;">注册账号</td>';
             $strTable .= '<td style="text-align:center;font-size:12px;width:120px;">用户昵称</td>';
             $strTable .= '<td style="text-align:center;font-size:12px;" width="100">银行机构名称</td>';
             $strTable .= '<td style="text-align:center;font-size:12px;" width="*">账户号码</td>';
@@ -761,7 +763,13 @@ class User extends Base
             $strTable .= '</tr>';
             if (is_array($list)) {
                 foreach ($list as $k => $val) {
+                    $mobile = M('Users')->where('user_id='.$val['user_id'])->value('mobile');
+                   
                     $strTable .= '<tr>';
+                    
+                    $strTable .= '<td style="text-align:center;font-size:12px;">' . $val['user_id'] . '</td>';
+                    $strTable .= '<td style="text-align:left;font-size:12px;">' . $mobile . ' </td>';
+                    
                     $strTable .= '<td style="text-align:center;font-size:12px;">' . $val['users']['nickname'] . '</td>';
                     $strTable .= '<td style="text-align:left;font-size:12px;">' . $val['bank_name'] . ' </td>';
                     $strTable .= '<td style="text-align:left;font-size:12px;">' . $val['bank_card'] . '</td>';

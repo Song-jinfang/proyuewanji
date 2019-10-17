@@ -1,29 +1,38 @@
-<div class="foohi">
+<div class="foohi" style="position:relative">
     <div class="footer">
         <ul>
             <li>
                 <a   href="{:U('Index/index')}">
                     <div class="icon">
-                        <div class="icon_tp1 icon_tps"><img src="/static/img/src/a1_gray.png"/> </div>
+                        <div class="icon_tp1 icon_tps"><img src="/static/img/home.png"/> </div>
                        <!--  <div class="icon_tp2 icon_tps"><img src="/static/img/src/a1_gray.png"/> </div> -->
                         <p>首页</p>
                     </div>
                 </a>
             </li>
+	 		 <li>
+                <a   href="{:U('/mobile/index/share')}">
+                    <div class="icon">
+                        <div class="icon_tp1 icon_tps"><img src="__IMG__/li1.png"/> </div>
+                       <!--  <div class="icon_tp2 icon_tps"><img src="/static/img/src/a1_gray.png"/> </div> -->
+                        <p>分享</p>
+                    </div>
+                </a>
+            </li>
+	 		
             <li>
                 <a href="{:U('Ad/home')}">
                     <div class="icon">
-                    	<div class="icon_tp1 icon_tps"><img src="/static/img/src/a2_gray.png"/> </div>
-                        <div class="icon_tp2 icon_tps"><img src="/static/img/src/a2_gray.png"/> </div>
-                        <p>豆包</p>
+                    	<div class="icon_tp1 icon_tps"><img src="/static/img/top.png" style="position:absolute;top:-0.8rem;width:2.5rem;left:42%;"/> </div>
+                        <div class="icon_tp2 icon_tps"><img src="/static/img/top.png" style="position:absolute;top:-0.8rem;width:2.5px;left:42%;"/> </div>
                     </div>
                 </a>
             </li>
             <li>
                 <a href="{:U('Cart/index')}">
                     <div class="icon">
-                        	<div class="icon_tp1 icon_tps"><img src="/static/img/src/a3_gray.png"/> </div>
-                       		 <div class="icon_tp2 icon_tps"><img src="/static/img/src/a3_gray.png"/> </div>
+                        	<div class="icon_tp1 icon_tps"><img src="/static/img/top3.png"/> </div>
+                       		 <div class="icon_tp2 icon_tps"><img src="/static/img/top3.png"/> </div>
                         <p>购物车</p>
                     </div>
                 </a>
@@ -32,8 +41,8 @@
                 <a <if condition="CONTROLLER_NAME eq 'User'">class="yello" </if> href="{:U('User/index')}">
                     <div class="icon">
                         		
-                        	<div class="icon_tp2 icon_tps"><img src="/static/img/src/a4_red.png"/> </div>
-                        	 <div class="icon_tp1 icon_tps"><img src="/static/img/src/a4_gray.png"/> </div>                       	
+                        	<div class="icon_tp2 icon_tps"><img src="/static/img/top5.png"/> </div>
+                        	 <div class="icon_tp1 icon_tps"><img src="/static/img/top5.png"/> </div>                       	
                         <p>我的</p>
                     </div>
                 </a>

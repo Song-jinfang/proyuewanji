@@ -160,6 +160,73 @@ class User extends MobileBase
         $this->assign('orderList',$orderList);
         return $this->fetch();
     }
+    
+    
+    
+    /*
+     * 总收益
+     */
+    public function earnings1(){
+        $param = I('get.');
+        $p = $param['p']?$param['p']:'1';
+        $orderList = M('order')->field("order_id,order_amount,order_point,order_sn,FROM_UNIXTIME(add_time,'%Y.%m.%d') add_time,seven_days,
+                    fourteen_days,fifteen_days,fifteen_status,twenty_eight_days,seven_status,fourteen_status,is_resale,order_status,order_point_status,total_amount")
+                    ->where('user_id = '.$this->user_id .' and pay_status = 1 and type = 1 and join_t = 1 and order_status !=3')->order('order_id','desc')->select();
+                    $time = time();
+                    $confBeans = M('config')->column('value','name');
+                    foreach($orderList as $k=>$v){
+                        if($v['seven_days']){
+                            $orderList[$k]['status_7'] = 1;//默认可以领取
+                            $orderList[$k]['money_7'] = ($confBeans['seven_profit']/100) * $v['total_amount'];
+                            if($v['seven_days'] > $time){//还没有到第七天
+                                //没有到领取时间
+                                $orderList[$k]['status_7'] = 2;
+                                $orderList[$k]['seven_days'] = date('Y.m.d',$v['seven_days']);
+                            }
+                            if($v['seven_status'] == 1){
+                                $orderList[$k]['status_7'] = 3;
+                            }
+                        }
+                        if($v['fourteen_days']){
+                            $orderList[$k]['status_14'] = 1;//默认可以领取
+                            $orderList[$k]['money_14'] = ($confBeans['fourteen_profit']/100) * $v['total_amount'];
+                            if($v['fourteen_days'] > $time){
+                                $orderList[$k]['status_14'] = 2; //没有到领取时间
+                                $orderList[$k]['fourteen_days'] = date('Y.m.d',$v['fourteen_days']);
+                            }
+                            if($v['fourteen_status'] == 1){
+                                $orderList[$k]['status_14'] = 3;
+                            }
+                        }
+                        /*      if($v['twenty_one_days']){
+                         $orderList[$k]['twenty_one_status'] = 1;//默认可以领取
+                         if($v['twenty_one_days'] > $time){
+                         $orderList[$k]['twenty_one_status'] = 2; //没有到领取时间
+                         $orderList[$k]['twenty_one_days'] = date('Y.m.d',$v['twenty_one_days']);
+                         }else{
+                         if($v['twenty_one_days'] + (6*3600) < $time){
+                         $orderList[$k]['twenty_one_status'] = 2; //没有到领取时间
+                         $orderList[$k]['twenty_one_days'] = '已过期';
+                         }
+                         }
+                         } */
+                        $orderList[$k]['adv_task'] = 1;
+                        $time = strtotime(date('Y-m-d'));
+                        $user_task_count = M('user_task')->where('user_id='.$this->user_id.' and order_id='.$v['order_id'].' and add_time >'.$time)->count();
+                        if($user_task_count > 0){
+                            $orderList[$k]['adv_task'] = 2;
+                        }
+                    }
+                    $profitArr['adv_profit'] = M('adv_log')->where('type=2 and user_id='.$this->user_id)->sum('user_money');
+                    $profitArr['share_profit'] = M('adv_log')->where('type=3 and user_id='.$this->user_id)->sum('user_money');
+                    $profitArr['order_profit'] = M('withdrawal_balance')->where('user_id='.$this->user_id .' and type=1')->sum('money');
+                    $this->assign('profitArr',$profitArr);
+                    $this->assign('orderList',$orderList);
+                    return $this->fetch();
+    }
+    
+    
+    
     /*
      * 广告收益
      */

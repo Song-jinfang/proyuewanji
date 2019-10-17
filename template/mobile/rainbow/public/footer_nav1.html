@@ -1,12 +1,13 @@
 <div class="footer-icon border-top">
-	<div class="home icon-active">
-		 <a href="/mobile/index/index">
-			 <if condition="$controller eq Index">
-				 <div><img style="height: 40px;" src="__IMG__/top0.png" /></div>
-			 <else/>
-				 <div><img src="__IMG__/top100.png" /></div>
-				 <div>首页</div>
-			 </if>
+<style>
+	.border-top img{width:20px;}
+</style>
+	 <div class="sort">
+		 <a href="/">
+			 <div>
+				 <img src="__IMG__/home.png" />
+			 </div>
+			 <div>首页</div>
 		 </a>
 	 </div>
 	 <div class="sort">
@@ -21,11 +22,13 @@
 		 <input type="hidden" value="{$controller}">
 		 <a href="/mobile/ad/home">
 			  <if condition="$controller eq Ad">
-				 <div><img src="__IMG__/top200.png" /></div>
+				 <div><img src="__IMG__/top.png"style="position:absolute;top:-1.3rem;left:42%;width:50px" /></div>
+				 <div style="color:#c99a67">豆包</div>
 			  <else/>
-				 <div><img src="__IMG__/top.png" /></div>
+				 <div><img src="__IMG__/top.png"style="position:absolute;top:-1.3rem;left:42%;width:50px" /></div>
+				 <div>豆包</div>
+				 
 			  </if>
-			 <div>豆包</div>
 		 </a>
 	 </div>
 

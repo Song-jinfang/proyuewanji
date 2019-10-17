@@ -121,7 +121,7 @@ class Ad extends Base{
     
     public function adHandle(){
     	$data = I('post.');
-    	
+    	if($data['goodss_id']){$data['goods_id'] = $data['goodss_id'];unset($data['goodss_id']);}
     	$data['start_time'] = strtotime($data['begin']);
     	$data['end_time'] = strtotime($data['end']);
     	$media_type = $data['media_type'];

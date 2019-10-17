@@ -90,11 +90,11 @@
 		</header>
 		<div class="swiper-container swiper-container1">
 			<div class="swiper-wrapper">
-				<div class="swiper-slide">
-					<img src="__IMG__/lunbo.png" alt="">
-				</div>
-				<div class="swiper-slide"><img src="__IMG__/lunbo.png" alt=""></div>
-				<div class="swiper-slide"><img src="__IMG__/lunbo.png" alt=""></div>
+				<adv pid ="9" limit="5" item="v">
+					<div class="swiper-slide">
+						<a href="{$v.ad_link}"><img src="{$v[ad_code]}" alt=""></a>
+					</div>
+				</adv>
 			</div>
 			<!-- 如果需要分页器 -->
 			<div class="swiper-pagination"></div>
@@ -138,9 +138,9 @@
 			<span class="english">TOP list</span></div>
 		<volist name="hot_goods" id="v">
 				<div class="xx-motion-footer clearfix">
-					<div class="baokuan " onclick="jump({$v.goods_id})"><img src="{$v.original_img}"></div>
+					<div class="baokuan " onclick="jump({$v.goods_id})"><img src="{$v.ad_code}"></div>
 					<div class="baokuan_inpor">
-						<p class="Product_name" onclick="jump({$v.goods_id})">{$v.goods_name|getSubstr=0,20}</p>
+						<p class="Product_name" onclick="jump({$v.goods_id})">{$v.goods_name|getSubstr=0,16}</p>
 						<p class="buy_moeny" onclick="jump({$v.goods_id})"><span style="height: 30px;"><i style="font-size: 1rem;">¥&nbsp;&nbsp;</i>{$v.shop_price}</span></p>
 					</div>
 				</div>

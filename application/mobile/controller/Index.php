@@ -677,7 +677,15 @@ class Index extends MobileBase {
         /**商品新品**/
         $new_goods = M('goods')->field('goods_id,original_img,shop_price,market_price,goods_name,sales_sum')->where("is_on_sale=1")->order('last_update desc')->limit(40)->cache(true,TPSHOP_CACHE_TIME)->select();//
         //热卖商品
-        $hot_goods = M('goods')->field('goods_id,original_img,shop_price,market_price,goods_name,sales_sum')->where("is_on_sale=1 and is_hot=1")->order('last_update desc')->limit(10)->cache(true,TPSHOP_CACHE_TIME)->select();//
+       // $hot_goods = M('goods')->field('goods_id,original_img,shop_price,market_price,goods_name,sales_sum')->where("is_on_sale=1 and is_hot=1")->order('last_update desc')->limit(10)->cache(true,TPSHOP_CACHE_TIME)->select();//
+       
+        $hot_goods = Db::name('ad')->alias('a')
+        ->join('ywj_goods b','a.goods_id = b.goods_id')
+        ->where(['a.pid' => 547,'b.is_on_sale'=>1])
+        ->field('a.*,goods_name,shop_price')
+        ->order('sort','asc')
+        ->select();
+        
         $this->assign('new_goods',$new_goods);
         $goodsCategory = M('goods_category')->field('id,adv_id')->where('is_hot=1')->select();
         if(!empty($goodsCategory)){

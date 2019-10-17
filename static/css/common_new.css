@@ -82,7 +82,7 @@ blockquote:before, blockquote:after, q:before, q:after { content: ''; content: n
 }
 
  .footer-icon a {
-    color: #333;
+    color: #b38b61;
     display: flex;
     flex-direction: column;
     align-items: center;
