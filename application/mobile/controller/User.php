@@ -490,8 +490,27 @@ class User extends MobileBase
            }
         }
     }
-    
-    
+
+    /**
+     *
+     */
+    public function getAgentToMoney()
+    {
+        $dynamic_profit = M('users')->field('agent_dynamic_profit,happy_beans')->where('user_id='.$this->user_id)->find();
+        $confBeans = M('config')->where("name='profit_cons_beans'")->value('value');
+        $beans = intval(($confBeans/100)*$dynamic_profit['agent_dynamic_profit']);//应付悦玩豆
+        if($dynamic_profit['happy_beans'] < $beans){
+            $this->ajaxReturn(['status'=>-1,'msg'=>'悦玩豆不足']);
+        }
+        if($dynamic_profit['agent_dynamic_profit']){
+            accountLog($this->user_id,$dynamic_profit['agent_dynamic_profit'],0,'领取管理津贴',0);
+            withdrawal_balance_finance($this->user_id,$dynamic_profit['agent_dynamic_profit'],'领取管理津贴',0,4);
+            $update =  M('users')->where('user_id='.$this->user_id)->update(['agent_dynamic_profit'=>0]);
+            if($update){
+                $this->ajaxReturn(['status'=>'1','msg'=>'领取成功']);
+            }
+        }
+    }
     
     function time_days($end_time){
         /*活动倒计时*/
@@ -505,18 +524,22 @@ class User extends MobileBase
         return  '剩余：'.$str;
     }
 
-    
+
     public function index()
     {
      /*    if(!$this->user['mobile']){
             header("location:" . U('Mobile/User/bind_guide'));
             exit;//微信浏览器, 调到绑定账号引导页面
         } */
+        $userInfo = session('user');
+        $user_id = $userInfo['user_id'];
+        $is_agent = Db::name('users')->where(['user_id' => $user_id])->value('agent_lv');
         $MenuCfg = new MenuCfg();
-        $menu_list = $MenuCfg->where('is_show', 1)->order('menu_id asc')->select();
+        $menu_list = $MenuCfg->where('is_show', 1)->order('sort desc')->select();
         $action = request()->action();
         $controller = request()->controller();
         $this->assign('action',$action);
+        $this->assign('is_agent',$is_agent);
         $this->assign('controller',$controller);
         $this->assign('menu_list', $menu_list);
         return $this->fetch();
@@ -2254,6 +2277,21 @@ class User extends MobileBase
             ]);
         }
     }
-    
-    
+
+    /**
+     * 城市分占
+     */
+    public function agent()
+    {
+        $userInfo = session('user');
+        $user_id = $userInfo['user_id'];
+        $data = Db::name('users')
+            ->where(['user_id' => $user_id])
+            ->field('frozen_ahent_profit,agent_address,agent_dynamic_profit,agent_total_money')
+            ->find();
+        $list = Db::name('agent_log')->where(['user_id' => $user_id])->order('add_time','desc')->select();
+        $this->assign('data',$data);
+        $this->assign('list',$list);
+        return $this->fetch();
+    }
 }

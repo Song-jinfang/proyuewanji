@@ -1075,7 +1075,7 @@ function update_pay_status($order_sn,$ext=array())
                                 }
                             }
                         }
-                       // agent_cost($order['user_id'],$order['order_id']);
+                        agent_cost($order['user_id'],$order['order_id']);
                     }
                 }
                 /*
@@ -1324,10 +1324,10 @@ function confirm_order($id,$user_id = 0){
         $row = M('order')->where(array('order_id'=>$id))->save($data);
         if(!$row)
             return array('status'=>-3,'msg'=>'操作失败');
-           /*  $response = relieve_frozen_money($user_id,$id);
+            $response = relieve_frozen_money($user_id,$id);
             if(!$response){
                 return array('status'=>-3,'msg'=>'操作失败');
-            } */
+            }
             if($order['pay_time'] > 1570291200){//如果购买商品时间大于10-6日，则给上级加上分享收益
                 auto($id,true);//计算团队业绩
             }
@@ -2153,7 +2153,7 @@ function agent_cost($user_id = 0,$order_id = 0)
                     $userId = $vo;
                 }
             }
-            dynamic_profit1($userId,$money,'获得区域代理收益',$order_id,5,1);
+            dynamic_profit1($userId,$money,'获得管理津贴收益',$order_id,5,1);
         }
     }
     return $province;
@@ -2219,7 +2219,7 @@ function agent_cost1($user_id = 0,$order_id = 0)
                     $userId = $vo;
                 }
             }
-            dynamic_profit1($userId,0 - $money,'因订单取消扣除区域代理收益',$order_id,5,1);
+            dynamic_profit1($userId,0 - $money,'扣除管理津贴收益',$order_id,5,1);
         }
     }
     return $province;
@@ -2248,18 +2248,18 @@ function relieve_frozen_money($user_id = 0,$order_id = 0)
             foreach ($agent_user_id_arr as $vo){
                 $agent_lv = Db::name('users')->where(['user_id' => $vo])->value('agent_lv');
                 if($agent_lv == 3){
-                    Db::name('users')->where(['user_id' => $vo])->setInc('dynamic_profit',$total_amount * 0.01);
+                    Db::name('users')->where(['user_id' => $vo])->setInc('agent_dynamic_profit',$total_amount * 0.01);
                     Db::name('users')->where(['user_id' => $vo])->setDec('frozen_ahent_profit',$total_amount * 0.01);
                     $money = $total_amount * 0.01;
                     $area = 1;
                     $userId = $vo;
                 }elseif($agent_lv == 2){
                     if($area == 1){
-                        Db::name('users')->where(['user_id' => $vo])->setInc('dynamic_profit',$total_amount * 0.01);
+                        Db::name('users')->where(['user_id' => $vo])->setInc('agent_dynamic_profit',$total_amount * 0.01);
                         Db::name('users')->where(['user_id' => $vo])->setDec('frozen_ahent_profit',$total_amount * 0.01);
                         $money = $total_amount * 0.01;
                     }else{
-                        Db::name('users')->where(['user_id' => $vo])->setInc('dynamic_profit',$total_amount * 0.02);
+                        Db::name('users')->where(['user_id' => $vo])->setInc('agent_dynamic_profit',$total_amount * 0.02);
                         Db::name('users')->where(['user_id' => $vo])->setDec('frozen_ahent_profit',$total_amount * 0.02);
                         $money = $total_amount * 0.02;
                     }
@@ -2268,19 +2268,19 @@ function relieve_frozen_money($user_id = 0,$order_id = 0)
                 }elseif($agent_lv == 1){
                     if($province == 0){
                         if($city == 1){
-                            Db::name('users')->where(['user_id' => $vo])->setInc('dynamic_profit',$total_amount * 0.01);
+                            Db::name('users')->where(['user_id' => $vo])->setInc('agent_dynamic_profit',$total_amount * 0.01);
                             Db::name('users')->where(['user_id' => $vo])->setDec('frozen_ahent_profit',$total_amount * 0.01);
                             $money = $total_amount * 0.01;
                             $province = ($total_amount * 0.01) * 0.2;
                         }else{
-                            Db::name('users')->where(['user_id' => $vo])->setInc('dynamic_profit',$total_amount * 0.03);
+                            Db::name('users')->where(['user_id' => $vo])->setInc('agent_dynamic_profit',$total_amount * 0.03);
                             Db::name('users')->where(['user_id' => $vo])->setDec('frozen_ahent_profit',$total_amount * 0.03);
                             $money = $total_amount * 0.03;
                             $province = ($total_amount * 0.03) * 0.2;
                         }
                         $userId = $vo;
                     }else{
-                        Db::name('users')->where(['user_id' => $vo])->setInc('dynamic_profit',$province);
+                        Db::name('users')->where(['user_id' => $vo])->setInc('agent_dynamic_profit',$province);
                         Db::name('users')->where(['user_id' => $vo])->setDec('frozen_ahent_profit',$province);
                         $money = $province;
                         $province = $province * 0.2;
