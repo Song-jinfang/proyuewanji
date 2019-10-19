@@ -290,9 +290,22 @@ class OrderLogic
     	if (!$result) {
     		return ['status' => 0, 'msg' => '操作失败'];
     	}
-    	if($order['pay_time'] > 1570291200){//如果购买商品时间大于10-6日，则给上级加上分享收益
+    /* 	if($order['pay_time'] > 1570291200){//如果购买商品时间大于10-6日，则给上级加上分享收益
     	   auto($order_id,false);//取消订单减去业绩
+    	} */
+    	if($order['pay_time'] > 1571472600){//如果购买商品时间大于10-6日，则给上级加上分享收益
+    	    $rs = M('agent_log')->where('order_id='.$order_id.' and type=2')->select();
+    	    if(!empty($rs)){
+    	        foreach($rs as $k=>$v){
+    	            M('users')->where('user_id='.$v['user_id'])->setDec('frozen_dynamic_profit',$v['user_money']);
+    	            dynamic_profit1($v['user_id'],'-'.$v['user_money'],'团队用户取消订单',$order_id,3,3);
+    	        }
+    	    }
+    	}else{
+    	    auto($order_id,false);//取消订单减去业绩
     	}
+    	
+    	
         if($order['pay_time'] > 1570896000){
             agent_cost1($user_id,$order_id);
         }

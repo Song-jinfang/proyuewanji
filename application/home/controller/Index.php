@@ -203,6 +203,7 @@ class Index extends Base {
         $user_id =  input('get.user_id');
         $rs = $this->team_num2($user_id);
         dump($rs);
+        dump($total_money);
     }
     
     /***获取团队总人数***/

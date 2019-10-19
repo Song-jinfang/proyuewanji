@@ -1070,7 +1070,11 @@ function update_pay_status($order_sn,$ext=array())
                                         }
                                     }
                                     if($rela >0){
-                                        dynamic_profit($v,$rela,'团队用户购买商品获得收益',$order['order_id'],3);
+                                        if($order['pay_time'] > 1571472600){
+                                            dynamic_profit_new($v,$rela,'团队用户购买商品获得收益',$order['order_id'],2);
+                                        }else{
+                                            dynamic_profit_old($v,$rela,'团队用户购买商品获得收益',$order['order_id'],3);
+                                        }
                                     }
                                 }
                             }
@@ -1209,7 +1213,7 @@ function getUserBurn($uid,$order_amount){
 /*
  * 购买订单给上级添加动态收益
  */
-function dynamic_profit($user_id,$money,$desc,$order_id = 0,$type){
+function dynamic_profit_new($user_id,$money,$desc,$order_id = 0,$type){
     /* 插入帐户变动记录 */
     $account_log = array(
         'user_id'       => $user_id,
@@ -1225,8 +1229,25 @@ function dynamic_profit($user_id,$money,$desc,$order_id = 0,$type){
      );
      $update = Db::name('users')->where("user_id = $user_id")->save($update_data); */
     $update = M('users')->where("user_id = $user_id")->setInc('frozen_dynamic_profit',$money);
-    M('adv_log')->add($account_log);  
+    M('agent_log')->add($account_log);  
 }
+
+
+/*
+ * 购买订单给上级添加动态收益
+ */
+  function dynamic_profit_old($user_id,$money,$desc,$order_id = 0,$type){
+    $account_log = array(
+        'user_id'       => $user_id,
+        'user_money'    => $money,
+        'add_time'   => time(),
+        'desc'   => $desc,
+        'order_id'=>$order_id,
+        'type'=>$type
+    );
+    $update = M('users')->where("user_id = $user_id")->setInc('frozen_dynamic_profit',$money);
+    M('adv_log')->add($account_log);
+} 
 
 
 /*
@@ -1252,7 +1273,7 @@ function confirm_dynamic_profit($user_id,$money,$desc,$order_id = 0,$type){
 }
 
 /*
- * 购买订单给上级添加动态收益
+ * 取消订单
  */
 function cancel_dynamic_profit($user_id,$money,$desc,$order_id = 0,$type){
     /* 插入帐户变动记录 */
@@ -1324,14 +1345,25 @@ function confirm_order($id,$user_id = 0){
         $row = M('order')->where(array('order_id'=>$id))->save($data);
         if(!$row)
             return array('status'=>-3,'msg'=>'操作失败');
-            $response = relieve_frozen_money($user_id,$id);
-            if(!$response){
-                return array('status'=>-3,'msg'=>'操作失败');
+            if($order['pay_time'] > 1570896000){
+                $response = relieve_frozen_money($user_id,$id);
+                if(!$response){
+                    return array('status'=>-3,'msg'=>'操作失败');
+                }
             }
-            if($order['pay_time'] > 1570291200){//如果购买商品时间大于10-6日，则给上级加上分享收益
+            if($order['pay_time'] > 1571472600){//如果购买商品时间大于10-19  16：00日，则给上级加上分享收益
+                //auto($id,true);//计算团队业绩
+                //确认收货
+                $rs = M('agent_log')->where('order_id='.$id.' and type=2')->select();
+                if(!empty($rs)){
+                    foreach($rs as $k=>$v){
+                        M('users')->where('user_id='.$v['user_id'])->setDec('frozen_dynamic_profit',$v['user_money']);
+                        M('users')->where('user_id='.$v['user_id'])->setInc('dynamic_profit',$v['user_money']);
+                    }
+                }
+            }else{
                 auto($id,true);//计算团队业绩
             }
-            
             // 商品待评价提醒
             $order_goods = M('order_goods')->field('goods_id,goods_name,rec_id')->where(["order_id" => $id])->find();
             $goods = M('goods')->where(["goods_id" => $order_goods['goods_id']])->field('original_img')->find();
