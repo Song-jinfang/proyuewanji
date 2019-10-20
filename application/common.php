@@ -1070,7 +1070,7 @@ function update_pay_status($order_sn,$ext=array())
                                         }
                                     }
                                     if($rela >0){
-                                        if($order['pay_time'] > 1571472600){
+                                        if(time() > 1571472600){
                                             dynamic_profit_new($v,$rela,'团队用户购买商品获得收益',$order['order_id'],2);
                                         }else{
                                             dynamic_profit_old($v,$rela,'团队用户购买商品获得收益',$order['order_id'],3);
@@ -1359,6 +1359,7 @@ function confirm_order($id,$user_id = 0){
                     foreach($rs as $k=>$v){
                         M('users')->where('user_id='.$v['user_id'])->setDec('frozen_dynamic_profit',$v['user_money']);
                         M('users')->where('user_id='.$v['user_id'])->setInc('dynamic_profit',$v['user_money']);
+                        dynamic_profit1($v['user_id'],$v['user_money'],'用户确认收货，获得收益',$id,3,3);
                     }
                 }
             }else{

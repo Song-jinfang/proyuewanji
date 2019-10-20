@@ -251,6 +251,12 @@ class Order extends MobileBase
      */
     public function order_confirm()
     {
+        //如果token为空则生成一个token
+        if(!isset($_SESSION['token_'.$this->user_id]) || $_SESSION['token_'.$this->user_id]=='') {
+            $this->set_token();
+        }else{
+            $this->error('禁止重复提交',U('Mobile/Order/order_list'));
+        }
         $id = I('id/d', 0);
         $data = confirm_order($id, $this->user_id);
         if(request()->isAjax()){
@@ -259,6 +265,7 @@ class Order extends MobileBase
         if ($data['status'] != 1) {
             $this->error($data['msg'],U('Mobile/Order/order_list'));
         } else {
+            unset($_SESSION['token_'.$this->user_id]);
             $model = new UsersLogic();
             $order_goods = $model->get_order_goods($id);
             $this->assign('order_goods', $order_goods);
@@ -266,6 +273,10 @@ class Order extends MobileBase
             exit;
         }
     }
+    public function set_token(){
+        $_SESSION['token_'.$this->user_id] = md5(microtime(true));
+    }
+    
     //订单支付后取消订单
     public function refund_order()
     {
