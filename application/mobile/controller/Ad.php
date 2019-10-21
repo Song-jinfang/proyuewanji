@@ -961,6 +961,12 @@ class Ad extends MobileBase
     //交易大厅————新版
     public function buy_new()
     {
+        $type = Db::name('sell')->where('surplus_num','gt',0)->count();
+        if($type == 0){
+            $price = Db::name('config')->where(['name' => 'beans_price'])->value('value');
+            $this->assign('price',$price);
+            return $this->fetch('purchase');
+        }
         $data = Db::name('sell')->alias('a')
             ->join('users b','a.user_id = b.user_id')
             ->where('surplus_num','gt',0)
@@ -1087,5 +1093,15 @@ class Ad extends MobileBase
         $have_price = ceil($have_price);
         $this->assign('have_price',$have_price);
         return $this->fetch();
+    }
+
+    //购买悦玩豆
+    public function purchase()
+    {
+        if(request()->isGet()){
+            $price = Db::name('config')->where(['name' => 'beans_price'])->value('value');
+            $this->assign('price',$price);
+            return $this->fetch();
+        }
     }
 }

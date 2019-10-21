@@ -224,7 +224,12 @@
 	<div class="wrapper">
 		<ul class="wall">
 			<li class="article doubao_artice">
-				<a href="buy_new">
+
+				<a href=<if condition="$type eq 0">
+				"purchase"
+				<else/>
+				"buy_new"
+				</if>>
 					<img src="__IMG__/doubaoicon2.png" />
 					<div class="namerjiaoyi">交易大厅</div>
 					<div class="pro_doubao">用于悦玩豆交易</div>

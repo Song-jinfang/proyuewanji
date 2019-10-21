@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta charset="UTF-8">
+        <title>交易大厅</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="format-detection" content="telephone=no">
+        <meta http-equiv="Expires" content="0">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Cache-control" content="no-cache">
+        <meta http-equiv="Cache" content="no-cache">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <link rel="stylesheet" href="__CSS__/common_new.css">
+        <link rel="stylesheet" href="__CSS__/base_new.css">
+        <script type="text/javascript" src="__JS__/jquery-1.8.3.min.js"></script>
+        <script type="text/javascript" src="__JS__/jquery-progress.js"></script>
+        <script type="text/javascript">
+            $(function() {
+                //加的效果
+                $(".product-add").click(function() {
+                    var n = $(this).prev().val();
+                    var num = parseInt(n) + 1;
+                    if(num == 99) {
+                        return;
+                    }
+                    $(this).prev().val(num);
+
+                });
+                //减的效果
+                $(".product-jian").click(function() {
+                    var n = $(this).next().val();
+                    var num = parseInt(n) - 1;
+                    if(num == 0) {
+                        return;
+                    }
+                    $(this).next().val(num);
+
+                });
+            });
+        </script>
+        <style>
+            .one_centent {
+                /*   -webkit-box-shadow: 0px 3px 3px #c8c8c8; */
+                -moz-box-shadow: 0px 3px 3px #c8c8c8;
+                /*     box-shadow: 0px 3px 3px #c8c8c8; */
+                margin: 1rem;
+                /*  border:0.07rem solid #9d6122; */
+                border-radius: 0.8rem;
+                background-color: white;
+            }
+
+            .center_content {
+                padding: 10px 30px;
+            }
+
+            .product-amount {
+                /* position: absolute;*/
+                right: 15px;
+                bottom: 0;
+                height: 30px;
+                display: INLINE-BLOCK;
+                border: 1px solid #9d6122;
+                border-radius: 3px;
+                vertical-align: middle;
+                width: 10rem;
+            }
+
+            .product-amount .product-jian {
+                float: left;
+                width: 30px;
+                font-style: normal;
+                height: 30px;
+                border-right: 1px solid #9d6122;
+                text-align: center;
+                line-height: 30px;
+                font-size: 20px;
+                color: #333;
+                border-radius: 3px;
+            }
+
+            .product-amount .product-num {
+                width: 3.5rem;
+                height: 30px;
+                float: left;
+                border-radius: 0;
+                font-size: 1.2rem;
+                text-align: center;
+            }
+            .product-num1{
+                width: 10rem;
+                height: 30px;
+                float: left;
+                border-radius: 0;
+                font-size: 1.2rem;
+                text-align: center;
+            }
+
+            .number_guamai {
+                border-radius: 3px;
+                border: 1px solid #976027;
+                width: 7rem;
+                height: 2.5rem;
+                text-align: center;
+            }
+
+            .product-amount .product-add {
+                float: right;
+                width: 30px;
+                font-style: normal;
+                height: 30px;
+                background: #976027;
+                text-align: center;
+                line-height: 30px;
+                font-size: 20px;
+                color: #fff;
+                border-radius: 3px;
+            }
+
+            .title_name {
+                color: #c07b51;
+                font-size: 1.5rem;
+                line-height: 4rem;
+                font-weight: 600;
+            }
+
+            .center_content img,
+            .content_sure img {
+                height: 2.15rem;
+                margin: 0 1.8rem 0 0.5rem;
+                vertical-align: middle;
+            }
+
+            .but_surn {
+                line-height: 3rem;
+                width: 100%;
+                display: block;
+                text-align: center;
+                background-color: #9a5f23;
+                font-size: 1.2rem;
+                letter-spacing: 2px;
+                color: #fff;
+                border-radius: 40px;
+                margin: 1rem 0;
+            }
+
+            .zhushi {
+                color: #976027;
+                font-size: 1rem;
+                margin-left: 0.5rem;
+            }
+
+            .one_centent ul li.xxx {
+                padding: 1rem 0;
+            }
+
+            .one_centent ul li.xxx {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+
+            .one_centent ul li {
+                float: left;
+                height: 6.8rem;
+            }
+
+            .one_centent ul {
+                height: 8.5rem;
+            }
+
+            .one_centent ul li img {
+                height: 4rem;
+            }
+
+            .one_centent ul li .xxx p {
+                line-height: 2rem;
+            }
+
+            .one_centent ul li p em {
+                color: #333;
+            }
+
+            .one_centent ul li p img {
+                height: 1rem;
+            }
+
+            .none_xx {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+
+            .one_centent ul li.samllll {
+                width: 39%;
+                padding-top: 0.5rem;
+                line-height: 2.4rem;
+                color: #976027;
+                font-size: 1.2rem;
+
+            }
+            @media only screen and (min-width: 640px) and (max-width: 1280px) {
+                .one_centent ul .but_buy {
+                    background: url(__IMG__/bdbt.png) no-repeat;
+                    width: 20%;
+                }
+            }
+            .one_centent ul .but_buy {
+                text-align: center;
+                background: url(__IMG__/bdbt.png) no-repeat 100%;
+                background-size: cover;
+                color: #fff;
+                display: block;
+                float: right;
+                height: 100%;
+                line-height: 8.5rem;
+                border-top-right-radius: 0.8rem;
+                border-bottom-right-radius: 0.8rem;
+                position: relative;
+            }
+
+            .but_buy {
+                position: relative;
+                width: 100px;
+                height: 50px;
+                color: #ffff00;
+            }
+
+            .promote_mask,
+            .seeimg_mask {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                display: none;
+                margin: 0 auto;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                z-index: 99999;
+            }
+
+            .promote_mask>div {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: 0 auto;
+                display: none;
+                width: 100%;
+                /* height:60%;*/
+                z-index: 3;
+                background: #fff;
+                border-top-right-radius: 1rem;
+                border-top-left-radius: 1rem;
+            }
+
+            .seeimg_mask>div {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: 0 auto;
+                display: none;
+                width: 100%;
+                height: 4.78rem;
+                z-index: 3;
+                background: #fff;
+            }
+
+            .promote_mask .operate {
+                padding: 0 0.3rem;
+                width: 100%;
+                height: 4rem;
+                font-size: 0.32rem;
+                box-sizing: border-box;
+                text-align: center;
+            }
+
+            .promote_mask .operate span img {
+                width: 1.8rem;
+                vertical-align: middle;
+                float: right;
+                margin-top: 1rem;
+                margin-right: 1rem;
+            }
+
+            .promote_mask .operate .determine {
+                color: #FF6602;
+                text-align: right;
+            }
+
+            .promote_mask .h2 {
+                font-size: 1.5rem;
+                text-align: center;
+                line-height: 4rem;
+                color: #333;
+            }
+
+            .content_sure {
+                padding: 0 2.5rem;
+                padding-top: 2rem;
+            }
+        </style>
+    </head>
+
+<body>
+<div class="order-header">
+    <a href="/mobile/ad/home">
+        <img src="__IMG__/return.png" alt="">
+    </a>
+    <h5>购买悦玩豆</h5>
+
+</div>
+<div class="one_centent" style="">
+    <img src="__IMG__/bg.png" style="width: 100%;" />
+    <p style="text-align: center;color: #9d6122;font-size: 2rem; font-weight: 700;letter-spacing: 4px;line-height: 4rem;">购买悦玩豆</p>
+
+    <div class="center_content">
+        <div style="height: 5rem;">
+            <span class="title_name">购买个数&nbsp;:&nbsp;</span>
+            <label><img src="__IMG__/icon3.png" /></label>
+            <form class="product-amount">
+                <input type="text" value="1" id="number1" class="product-num" maxlength="4">
+            </form>
+        </div>
+        <div style="height: 5rem;">
+            <span class="title_name">单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;价&nbsp;:&nbsp;</span>
+            <label><img src="__IMG__/icon.png" /></label>
+            <form class="product-amount">
+                <input type="text" value="{$price}元"  class="product-num" readonly="readonly">
+            </form>
+        </div>
+        <div>
+            <a class="but_surn" id="submit">确认购买</a>
+        </div>
+
+    </div>
+</div>
+<!--<p style="margin: 2rem 1rem;font-size: 1.5rem;font-weight: 600;">自选交易<i class="zhushi">Optional transaction</i></p>-->
+<!--<div style="height: 1rem;"></div>-->
+
+</body>
+<script src="__JS__/layer.js"  type="text/javascript" ></script>
+<script>
+    $('#submit').click(function(){
+        var number = $("#number1").val();
+        // var formData = new FormData();
+        // formData.append('id',id);
+        // formData.append('pwd',pwd);
+        // formData.append('number',number);
+        // console.log(formData);
+        if(!(number > 0)){
+            layer.msg('请输入正确的数额');
+            return;
+        }
+        $.ajax({
+            url:'buy_ywd',
+            type:'post',
+            data:{'number':number},
+            success:function(e){
+                if(e.code == 1){
+                    window.location.href = "/index.php?m=Mobile&c=Cart&a=cart4&order_id=" + e.data.order_id;
+                }else{
+                    layer.msg(e.msg);
+                }
+            },
+            error:function(){
+                layer.msg('请求出错，请重新再试');
+            }
+        });
+    });
+</script>
+</html>
