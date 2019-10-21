@@ -2330,3 +2330,94 @@ function relieve_frozen_money($user_id = 0,$order_id = 0)
         }
    
 }
+function receive_limit($user_id = 0)
+{
+    if($user_id == 0){
+        return false;
+    }
+    $start_time = strtotime(date('Y-m-d',time()));
+    $end_time = $start_time + 24*3600;
+    $withdrawal_balance = Db::name('withdrawal_balance')
+                            ->where(['user_id' => $user_id])
+                            ->where('add_time','between',"$start_time,$end_time")
+                            ->find();
+    if($withdrawal_balance){
+        return [
+            'code'  =>  -1,
+            'msg'   =>  '每天只能领取一次，今日次数已用',
+            'data'  =>  [],
+        ];
+    }
+    //直推有效人数
+    $s = array();
+    $pidCount = M('users')->where("first_leader ='$user_id'")->column('user_id');
+    if(!empty($pidCount)){
+        foreach($pidCount as $k1=>$v1){
+            //$order_id = $order['order_id'];//can_receive  = 0 || fifteen_status in (0,1,2)   can_receive为0是没有匹配上，大于0匹配上了，
+            $p = M('order')->where("user_id = ".$v1." and pay_status = 1 and type = 1 and (can_receive  = 0 || fifteen_status =2)")->count();
+            if($p>0){
+                $s[] = $v1;
+            }
+        }
+    }
+    //团队有效人数
+    $count_s = count($s);
+    $s1 = team_num($user_id);
+    try{
+        $dynamic_profit = Db::name('users')->where(['user_id' => $user_id])->value('dynamic_profit');
+        if($count_s < 6){
+            if($dynamic_profit > 300){
+                Db::name('users')->where(['user_id' => $user_id])->setDec('dynamic_profit',300);
+                Db::name('users')->where(['user_id' => $user_id])->setInc('user_money',300);
+                $money = 300;
+            }else{
+                Db::name('users')->where(['user_id' => $user_id])->update(['dynamic_profit' => 0]);
+                Db::name('users')->where(['user_id' => $user_id])->setInc('user_money',$dynamic_profit);
+                $money = $dynamic_profit;
+            }
+        }elseif ($count_s >= 20 && $s1 >= 300){
+            if($dynamic_profit > 5000){
+                Db::name('users')->where(['user_id' => $user_id])->setDec('dynamic_profit',5000);
+                Db::name('users')->where(['user_id' => $user_id])->setInc('user_money',5000);
+                $money = 5000;
+            }else{
+                Db::name('users')->where(['user_id' => $user_id])->update(['dynamic_profit' => 0]);
+                Db::name('users')->where(['user_id' => $user_id])->setInc('user_money',$dynamic_profit);
+                $money = $dynamic_profit;
+            }
+        }else{
+            if($dynamic_profit > 2000){
+                Db::name('users')->where(['user_id' => $user_id])->setDec('dynamic_profit',2000);
+                Db::name('users')->where(['user_id' => $user_id])->setInc('user_money',2000);
+                $money = 2000;
+            }else{
+                Db::name('users')->where(['user_id' => $user_id])->update(['dynamic_profit' => 0]);
+                Db::name('users')->where(['user_id' => $user_id])->setInc('user_money',$dynamic_profit);
+                $money = $dynamic_profit;
+            }
+        }
+        $withdrawal_balance_data = [
+            'user_id'   => $user_id,
+            'money'     => $money,
+            'add_time'  => time(),
+            'order_id'  => 0,
+            'type'      => 2,
+            'desc'      => '领取分享收益'
+        ];
+        Db::name('withdrawal_balance')->insert($withdrawal_balance_data);
+        Db::commit();
+        return [
+            'code'  =>  1,
+            'msg'   =>  '领取成功',
+            'data'  =>  [],
+        ];
+    }catch (Exception $exception){
+        Db::rollback();
+        return [
+            'code'  =>  -1,
+//            'msg'   =>  $exception->getMessage(),
+            'msg'   =>  '网络异常，领取失败',
+            'data'  =>  [],
+        ];
+    }
+}
