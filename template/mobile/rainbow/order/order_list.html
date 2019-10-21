@@ -155,13 +155,26 @@
         });
     }
 
+    var checkSubmitFlg = false;
+    function check() {
+            if (!checkSubmitFlg) {
+                checkSubmitFlg = true;
+                return true;
+            }else {
+                alert('禁止重复提交!');
+                return false;
+        }
+    }
     /**
      * 确定收货
      */
     function orderConfirm(id){
         if(!confirm("确定收到该订单商品吗?"))
             return false;
-        location.href = "/index.php?m=Mobile&c=Order&a=order_confirm&id="+id;
+       var s = check();
+       if(s == true){
+    	   location.href = "/index.php?m=Mobile&c=Order&a=order_confirm&id="+id;
+       }
     }
 
     var  page = 1;

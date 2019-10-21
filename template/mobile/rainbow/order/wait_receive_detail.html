@@ -181,7 +181,8 @@
         <p>是否收到该订单商品？</p>
         <div class="weiyi p">
             <a href="javascript:void(0);">未收货</a>
-            <a class="eno" href="{:U('Mobile/Order/order_confirm',array('id'=>$order.order_id))}">已收货</a>
+           <!--  <a class="eno" href="{:U('Mobile/Order/order_confirm',array('id'=>$order.order_id))}">已收货</a> -->
+           <a class="eno" onclick="orderConfirm('{$order.order_id}')">已收货</a>
         </div>
     </div>
 <!--确认收货弹窗-e-->
@@ -190,6 +191,37 @@
 <!--添加购物车JS-->
 <script src="__PUBLIC__/js/mobile_common.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
+	var checkSubmitFlg = false;
+	function check() {
+	        if (!checkSubmitFlg) {
+	            checkSubmitFlg = true;
+	            return true;
+	        }else {
+	            alert('禁止重复提交!');
+	            return false;
+	    }
+	}
+	/**
+	 * 确定收货
+	 */
+	function orderConfirm(id){
+	    if(!confirm("确定收到该订单商品吗?"))
+	        return false;
+	   var s = check();
+	   if(s == true){
+		   location.href = "/index.php?m=Mobile&c=Order&a=order_confirm&id="+id;
+	   }
+	}
+
+
+
+
+
+
+
+
+
+
     //取消订单按钮
     $('.closeorder_butt').click(function(){
         $('.mask-filter-div').show();
