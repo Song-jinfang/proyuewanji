@@ -172,12 +172,14 @@
 			</ul>
 		</div>
 	</div>
-
+	<input type="hidden" id="is_coupon" value="{$is_coupon}">
+	<input type="hidden" id="is_coupon1" value="{$is_notice1}">
 	<include file="public/footer_nav1" title="个人中心" body=""/>
 
 </div>
 </body>
 <script src="__JS__/jquery-1.8.3.min.js"></script>
+<script src="__JS__/layer-v3/mobile/layer.js"  type="text/javascript" ></script>
 <script src="__JS__/jaliswall.js"></script>
 <script src="__JS__/index.js"></script>
 <script src="/static/node_modules/swiper/dist/js/swiper.js"></script>
@@ -207,5 +209,71 @@ $("#header").removeClass("little-logo");
 	{
 		window.location.href = '/Mobile/Goods/goodsInfo/id/' + goods_id;
 	}
+	
+	var is_coupon;
+	var is_coupon1;
+	$(function(){
+	   is_coupon = $("#is_coupon").val();
+	   is_coupon1 = $("#is_coupon1").val();
+	   if(is_coupon == 1){
+	      layer.open({
+	         type: 1,
+	         title: false,
+	         closeBtn: 0,
+	         shadeClose: true,
+	         skin: 'yourclass',
+	         content: "<div class='img_div' onclick='s()'><img src='__IMG__/activity.png' style='width:400px'/></div>",
+	      });
+	   }else if(is_coupon1 == 1){
+	      layer.open({
+	         type: 1,
+	         title: false,
+	         closeBtn: 0,
+	         shadeClose: true,
+	         skin: 'yourclass',
+	         content: "<div class='img_div' onclick='ss()'><img src='__IMG__/notice.png' style='width:400px'/></div>",
+	      });
+	   }
+	   $(".layui-m-layer-yourclass").css('top','30px');
+	   $(".layui-m-layer-yourclass").css('left','0px');
+	   $(".layui-m-layer-yourclass").css('background-color','rgba(0,0,0,0)');
+	});
+	function s(){
+	   $.ajax({
+	      url:'/mobile/index/first_order_coupon',
+	      type:'post',
+	      success:function(e){
+	         if(is_coupon1 == 1){
+	            layer.open({
+	               type: 1,
+	               title: false,
+	               closeBtn: 0,
+	               shadeClose: true,
+	               skin: 'yourclass',
+	               content: "<div class='img_div' onclick='ss()'><img src='__IMG__/notice.png' style='width:400px'/></div>",
+	            });
+	         }else{
+	            layer.msg(e.msg);
+	            setTimeout(function(){history.go(0)},2000);
+	         }
+	      },
+	      error:function(){
+	         layer.msg('网络异常，请稍后再试');
+	      }
+	   });
+	}
+	function ss(){
+	   $.ajax({
+	      url:'/mobile/index/national_day_notice',
+	      type:'post',
+	      success:function(e){
+	         setTimeout(function(){history.go(0)},2000);
+	      },
+	      error:function(){
+	         layer.msg('网络异常，请稍后再试');
+	      }
+	   });
+	}
+	
 </script>
 </html>
