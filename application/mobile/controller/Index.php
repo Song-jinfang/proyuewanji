@@ -167,7 +167,7 @@ class Index extends MobileBase {
         Db::name('first_order_coupon')->insert([
             'user_id'  =>  $user_id,
             'add_time' =>   time(),
-            'type'     =>   2,
+            'type'     =>   3,
         ]);
         return json([
             'code'  =>  1,
@@ -676,6 +676,9 @@ class Index extends MobileBase {
         //  $this->assign('hot_goods',$hot_goods);
         /**商品新品**/
         $new_goods = M('goods')->field('goods_id,original_img,shop_price,market_price,goods_name,sales_sum')->where("is_on_sale=1")->order('last_update desc')->limit(40)->cache(true,TPSHOP_CACHE_TIME)->select();//
+        $data_key = array_column($new_goods,'shop_price');
+        array_multisort($data_key,SORT_ASC,$new_goods);
+        
         //热卖商品
        // $hot_goods = M('goods')->field('goods_id,original_img,shop_price,market_price,goods_name,sales_sum')->where("is_on_sale=1 and is_hot=1")->order('last_update desc')->limit(10)->cache(true,TPSHOP_CACHE_TIME)->select();//
        
@@ -730,10 +733,16 @@ class Index extends MobileBase {
         $start_time=strtotime(date("Y-m-d",time()));
         $end_time=$start_time+60*60*24;
         $notice = Db::name('first_order_coupon')->where(['user_id' => $user_id,'type' => 2])->where('add_time','between',"$start_time,$end_time")->value('id');
+        $notice1 = Db::name('first_order_coupon')->where(['user_id' => $user_id,'type' => 3])->where('add_time','between',"$start_time,$end_time")->value('id');
         $is_notice = 1;
         if($notice){
             $is_notice =2;
         }
+        $is_notice1 = 1;
+        if($notice1){
+            $is_notice1 =2;
+        }
+        
         $status = 1;
         $order_id = Db::name('order')->where(['user_id' => $user_id,'pay_status' => 1])->value('order_id');
         if($order_id){
@@ -747,6 +756,7 @@ class Index extends MobileBase {
         $this->assign('status',$status);
         $this->assign('is_coupon',$is_coupon);
         $this->assign('is_notice',$is_notice);
+        $this->assign('is_notice1',$is_notice1);
         $this->assign('action',$action);
         $this->assign('data',$data);
         $this->assign('controller',$controller);

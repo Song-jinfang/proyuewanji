@@ -667,10 +667,17 @@ class Ad extends MobileBase
         $beans_price_float = M('config')->where(['name' => 'beans_price_float'])->value('value');
         $min = $beans_price * (1-$beans_price_float);
         $max = $beans_price * (1+$beans_price_float);
-        if(!(($unit_price >= $min) && ($unit_price <= $max))){
+        /* if(!(($unit_price >= $min) && ($unit_price <= $max))){
             return json([
                 'code'  =>  -1,
                 'msg'   =>  "发布价格请在$min". "---" .$max . "之间",
+                'data'  =>  [],
+            ]);
+        } */
+        if($unit_price != 6){
+            return json([
+                'code'  =>  -1,
+                'msg'   =>  "发布价格固定6元一个",
                 'data'  =>  [],
             ]);
         }
@@ -980,6 +987,20 @@ class Ad extends MobileBase
                 ->where(['b.user_id' => $vo['user_id'],'c.pay_status' => 1])
                 ->sum('a.number');
         }
+        
+        $array = [120,122,124,1069,1726];
+        shuffle($array);
+        $top_arr = [];
+        foreach ($data as $k => $value){
+            if(in_array($value['user_id'],$array)){
+                $top_arr[] = $value;
+                unset($data[$k]);
+            }
+        }
+        foreach ($top_arr as $v){
+            array_unshift($data,$v);
+        }
+        
         $beans_price = Db::name('config')->where(['name' => 'beans_price'])->value('value');
         $this->assign('beans_price',$beans_price);
         $this->assign('data',$data);

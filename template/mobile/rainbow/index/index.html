@@ -222,7 +222,7 @@ $("#header").removeClass("little-logo");
 	         closeBtn: 0,
 	         shadeClose: true,
 	         skin: 'yourclass',
-	         content: "<div class='img_div' onclick='s()'><img src='__IMG__/activity.png' style='width:400px'/></div>",
+	         content: "<div class='img_div' onclick='s()'><img src='__IMG__/activity.png' style='width:300px'/></div>",
 	      });
 	   }else if(is_coupon1 == 1){
 	      layer.open({
@@ -231,27 +231,36 @@ $("#header").removeClass("little-logo");
 	         closeBtn: 0,
 	         shadeClose: true,
 	         skin: 'yourclass',
-	         content: "<div class='img_div' onclick='ss()'><img src='__IMG__/notice.png' style='width:400px'/></div>",
+	         content: "<div class='img_div'  onclick='ss()'><img src='__IMG__/notice.png' style='width:300px'/></div>",
 	      });
 	   }
-	   $(".layui-m-layer-yourclass").css('top','30px');
+	   $(".layui-m-layer-yourclass").css('top','0px');
 	   $(".layui-m-layer-yourclass").css('left','0px');
 	   $(".layui-m-layer-yourclass").css('background-color','rgba(0,0,0,0)');
+	   $(".layui-m-layershade").css('background-color','rgba(0,0,0,0.6)') 
 	});
+	var index2;
 	function s(){
 	   $.ajax({
 	      url:'/mobile/index/first_order_coupon',
 	      type:'post',
 	      success:function(e){
 	         if(is_coupon1 == 1){
-	            layer.open({
-	               type: 1,
-	               title: false,
-	               closeBtn: 0,
-	               shadeClose: true,
-	               skin: 'yourclass',
-	               content: "<div class='img_div' onclick='ss()'><img src='__IMG__/notice.png' style='width:400px'/></div>",
-	            });
+	        	 layer.open({
+	        		  type: 2,
+	        		  shadeClose: true,
+	        		  content: e.msg //iframe的url
+	        		}); 
+	        	 setTimeout(function(){
+	        		  index2 =  layer.open({
+	   	               type: 1,
+	   	               title: false,
+	   	               closeBtn: 0,
+	   	               shadeClose: true,
+	   	               skin: 'yourclass',
+	   	               content: "<div class='img_div' onclick='ss()'><img src='__IMG__/notice.png' style='width:300px'/></div>",
+	   	            });
+	        	 },1000);
 	         }else{
 	            layer.msg(e.msg);
 	            setTimeout(function(){history.go(0)},2000);
@@ -267,7 +276,8 @@ $("#header").removeClass("little-logo");
 	      url:'/mobile/index/national_day_notice',
 	      type:'post',
 	      success:function(e){
-	         setTimeout(function(){history.go(0)},2000);
+	         //setTimeout(function(){history.go(0)},2000);
+	         layer.closeAll(index2);
 	      },
 	      error:function(){
 	         layer.msg('网络异常，请稍后再试');

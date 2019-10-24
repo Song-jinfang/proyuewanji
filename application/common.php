@@ -1045,10 +1045,10 @@ function update_pay_status($order_sn,$ext=array())
                                     $userBurn = M('users')->where("user_id = $v")->value('burn');  //$userBurn为1要进行烧伤   2针对部分用户不进行烧伤
                                     $rela = 0;
                                     $team_num = team_num($v);
-                                    $order_amount = $order['total_amount'];
+                                    $order_amount = $order['order_amount'];
                                     if($userBurn == 1){
                                         //查询上级最后一个订单的金额，进行烧伤处理
-                                        $order_amount = getUserBurn($v,$order['total_amount']);
+                                        $order_amount = getUserBurn_new($v,$order['order_amount']);
                                     }
                                     if($k == 1 || $k == 2){
                                         if((count($s) >=20 && $team_num >=300) || in_array($v,$arr)){
@@ -1210,6 +1210,20 @@ function getUserBurn($uid,$order_amount){
 }
 
 
+function getUserBurn_new($uid,$order_amount){
+    //查询上级最后一个订单的金额，进行烧伤
+    $parentOrder = M('order')->field('order_amount')
+    ->where('user_id='.$uid.' and pay_status = 1 and type=1')
+    ->order('order_id','desc')
+    ->limit(1)->find();
+    if($parentOrder['order_amount'] >= $order_amount){
+        $order_amount1 = $order_amount;
+    }else{
+        $order_amount1 = $parentOrder['order_amount'];
+    }
+    return $order_amount1;
+}
+
 /*
  * 购买订单给上级添加动态收益
  */
@@ -1230,6 +1244,7 @@ function dynamic_profit_new($user_id,$money,$desc,$order_id = 0,$type){
      $update = Db::name('users')->where("user_id = $user_id")->save($update_data); */
     $update = M('users')->where("user_id = $user_id")->setInc('frozen_dynamic_profit',$money);
     M('agent_log')->add($account_log);  
+    M('adv_log')->add($account_log);  
 }
 
 
@@ -1331,6 +1346,9 @@ function confirm_order($id,$user_id = 0){
         $where['user_id'] = $user_id;
     }
     $order = M('order')->where($where)->find();
+    if($order['order_status'] >= 2){
+        return array('status'=>-3,'msg'=>'不能重复确认');
+    }
     if($order['order_status'] != 1  && $order['is_deposit'] ==2)
         return array('status'=>-1,'msg'=>'该订单不能收货确认');
         if(empty($order['pay_time']) || $order['pay_status'] != 1){
