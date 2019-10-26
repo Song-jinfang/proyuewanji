@@ -112,6 +112,7 @@ class Index extends Base {
             }
             dump($rs);
             dump($total_money);
+            dump(implode(',',$s));
         }
         return $s;
     }
@@ -241,7 +242,7 @@ class Index extends Base {
     public function auto2(){
         $order_id =  input('get.order_id');
         $order = M('order')->field('user_id,order_amount,pay_time,user_money,total_amount')->where('order_id ='.$order_id)->find();
-        if($order['order_amount'] > 0){
+        if($order['total_amount'] > 0){
             //$parentArr = explode(',',$order[''])
             $userlist = M('users')->field('pid_list')->where('user_id = '.$order['user_id'])->find();
             if($userlist){
@@ -303,35 +304,6 @@ class Index extends Base {
             }
         }
     }
-    
-    
-    /*原版*/
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     public function index(){

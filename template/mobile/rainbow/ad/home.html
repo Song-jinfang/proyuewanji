@@ -321,7 +321,12 @@
 						<tr>
 							<td>{$vo.add_time|date="Y-m-d h:i",###}</td>
 							<td><em class="add-num">{$vo.number}</em></td>
-							<td>转让给{$vo.mobile}悦玩豆</td>
+							<eq name="$vo.uid" value="$uid">
+							   <td>转让给{$vo.mobile}悦玩豆</td>
+							</eq>
+							<eq name="$vo.pay_id" value="$uid">
+							   <td>{$vo.phone}转让给我悦玩豆</td>
+							</eq>
 						</tr>
 					</volist>
 					</tbody>

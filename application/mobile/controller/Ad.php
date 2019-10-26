@@ -1018,7 +1018,15 @@ class Ad extends MobileBase
             $type = Db::name('sell')->where('surplus_num','gt',0)->count();
             $mx_list = Db::name('adv_log')->where(['user_id' => $uid,'type' => 1])->order('add_time','desc')->select();
             $dd_list = D('order')->where(['user_id' => $uid,'pay_status' => 1,'type' => 2])->field('add_time,ywd_price')->select();
-            $zr_list = D('turn_out')->where(['uid' => $uid])->select();
+            //$zr_list = D('turn_out')->where(['uid' => $uid])->select();
+            $zr_list = Db::name('turn_out')->alias('a')
+            ->join('ywj_users b','a.uid = b.user_id')
+            ->where(['a.uid' => $uid])
+            ->whereOr(['a.pay_id' => $uid])
+            ->field('a.*,b.mobile as phone')
+            ->select();
+            
+            
             $gm_list = Db::name('sell')
                 ->where(['user_id' => $uid])
                 ->order('add_time','desc')
@@ -1047,6 +1055,7 @@ class Ad extends MobileBase
             $this->assign('gm_list',$gm_list);
             $this->assign('type',$type);
             $this->assign('have_price',$have_price);
+            $this->assign('uid',$uid);
             return $this->fetch();
         }else{
             $data = request()->post();

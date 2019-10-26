@@ -1071,7 +1071,7 @@ function update_pay_status($order_sn,$ext=array())
                                     }
                                     if($rela >0){
                                         if(time() > 1571472600){
-                                            dynamic_profit_new($v,$rela,'团队用户购买商品获得收益',$order['order_id'],2);
+                                            dynamic_profit_new($v,$rela,'团队用户购买商品获得收益',$order['order_id'],3);
                                         }else{
                                             dynamic_profit_old($v,$rela,'团队用户购买商品获得收益',$order['order_id'],3);
                                         }
